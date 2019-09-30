@@ -144,12 +144,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="fms_Bell.h" />
+    <ClInclude Include="fms_sequence_apply.h" />
     <ClInclude Include="fms_sequence_binop.h" />
     <ClInclude Include="fms_sequence_cache.h" />
+    <ClInclude Include="fms_sequence_concatenate.h" />
     <ClInclude Include="fms_sequence_constant.h" />
     <ClInclude Include="fms_sequence_factorial.h" />
     <ClInclude Include="fms_option.h" />
     <ClInclude Include="fms_Hermite.h" />
+    <ClInclude Include="fms_sequence_iota.h" />
+    <ClInclude Include="fms_sequence_pointer.h" />
     <ClInclude Include="fms_sequence_reverse.h" />
     <ClInclude Include="fms_sequence.h" />
     <ClInclude Include="fms_sequence_skip.h" />
@@ -167,8 +171,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Bell.t.cpp" />
+    <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />
+    <ClCompile Include="fms_sequence_concatenate.t.cpp" />
     <ClCompile Include="fms_sequence_factorial.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -177,6 +183,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_sequence_iota.t.cpp" />
     <ClCompile Include="fms_sequence_take.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

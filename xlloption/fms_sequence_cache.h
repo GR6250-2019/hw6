@@ -1,5 +1,6 @@
 // fms_sequence_cache.h - Cache a sequence
 #pragma once
+#include <compare>
 #include <vector>
 
 namespace fms::sequence {
@@ -7,12 +8,20 @@ namespace fms::sequence {
     template<class S>
     struct cache {
         S s;
-        mutable std::vector<decltype(*S)> s_;
+        mutable std::vector<decltype(*s)> s_;
         size_t n; // current index into cache
     public:
         cache(S s)
             : s(s), n(0)
         { }
+        bool operator==(const cache& c) const
+        {
+            return n == c.n && s == c.s && std::equal(s_.begin(), s_.end(), c.s_.begin(), c.s_.end());
+        }
+        bool operator!=(const cache& c) const
+        {
+            return !operator==(c);
+        }
         size_t size() const
         {
             return s_.size();
@@ -24,6 +33,10 @@ namespace fms::sequence {
         void clear()
         {
             s_.clear();
+        }
+        const auto& buffer() const
+        {
+            return s_;
         }
         operator bool() const
         {
@@ -56,7 +69,9 @@ namespace fms::sequence {
         }
         cache& operator--()
         {
-            --n;
+            if (n > 0) {
+                --n;
+            }
 
             return *this;
         }

@@ -1,41 +1,31 @@
 // fms_sequence_take.h - iterators with operator bool() const
 #pragma once
+#include <compare>
 
 namespace fms::sequence {
 
-    template<class X>
+    template<class S>
     class take {
         size_t n;
-        const X* x;
+        S s;
     public:
-        take(size_t n, const X* x)
-            : n(n), x(x)
+        take(size_t n, S s)
+            : n(n), s(s)
         { }
-        size_t size() const
-        {
-            return n;
-        }
-        const X* begin() const
-        {
-            return x;
-        }
-        const X* end() const
-        {
-            return x + n;
-        }
+        const auto operator<=>(const take&) const = default;
         operator bool() const
         {
             return n != 0;
         }
-        X operator*() const
+        auto operator*() const
         {
-            return *x;
+            return *s;
         }
         take& operator++()
         {
             if (n != 0) {
                 --n;
-                ++x;
+                ++s;
             }
 
             return *this;

@@ -1,5 +1,6 @@
 // fms_sequence_binop.h - binary operators on sequences
 #pragma once
+#include <compare>
 #include <functional>
 
 namespace fms::sequence {
@@ -13,6 +14,7 @@ namespace fms::sequence {
         binop(I i, J j)
             : i(i), j(j)
         { }
+        const auto operator<=>(const binop&) const = default;
         operator bool() const
         {
             return i && j;

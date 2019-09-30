@@ -6,12 +6,12 @@ namespace fms::sequence {
     template<class S>
     inline S skip(size_t n, S s)
     {
-        while (s && n > 0) {
+        while (n > 0 && s) {
             --n;
             ++s;
         }
 
-        return s
+        return s;
     }
 
 }
