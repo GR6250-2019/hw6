@@ -1,8 +1,8 @@
-// fms_constant.h - constant sequence
+// fms_sequence_constant.h - constant sequence
 #pragma once
 #include <compare>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class X = double>
     class constant {

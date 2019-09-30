@@ -1,8 +1,8 @@
-// fms_factorial.h - factorial and Pochhammer symbols
+// fms_sequence_factorial.h - factorial and Pochhammer symbols
 #pragma once
 #include <compare>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class X = double>
     class factorial {

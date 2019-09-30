@@ -1,8 +1,8 @@
-// binop.h - binary operators on sequences
+// fms_sequence_binop.h - binary operators on sequences
 #pragma once
 #include <functional>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class Op, class I, class J>
     class binop {
@@ -38,27 +38,27 @@ inline auto operator+(I i, J j)
 {
     using T = std::common_type_t<decltype(*i), decltype(*j)>;
 
-    return fms::binop<std::plus<T>, I, J>(i, j);
+    return fms::sequence::binop<std::plus<T>, I, J>(i, j);
 }
 template<class I, class J>
 inline auto operator-(I i, J j)
 {
     using T = std::common_type_t<decltype(*i), decltype(*j)>;
 
-    return fms::binop<std::minus<T>, I, J>(i, j);
+    return fms::sequence::binop<std::minus<T>, I, J>(i, j);
 }
 template<class I, class J>
 inline auto operator*(I i, J j)
 {
     using T = std::common_type_t<decltype(*i), decltype(*j)>;
 
-    return fms::binop<std::multiplies<T>, I, J>(i, j);
+    return fms::sequence::binop<std::multiplies<T>, I, J>(i, j);
 }
 template<class I, class J>
 inline auto operator/(I i, J j)
 {
     using T = std::common_type_t<decltype(*i), decltype(*j)>;
 
-    return fms::binop<std::divides<T>, I, J>(i, j);
+    return fms::sequence::binop<std::divides<T>, I, J>(i, j);
 }
 

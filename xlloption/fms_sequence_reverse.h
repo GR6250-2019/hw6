@@ -1,8 +1,8 @@
-// fms_reverse.h - reverse sequence if it has operator--()
+// fms_sequence_reverse.h - reverse sequence if it has operator--()
 #pragma once
 #include <compare>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class S>
     class reverse {

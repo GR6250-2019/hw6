@@ -1,8 +1,8 @@
-// fms_cache.h - Cache a sequence
+// fms_sequence_cache.h - Cache a sequence
 #pragma once
 #include <vector>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class S>
     struct cache {

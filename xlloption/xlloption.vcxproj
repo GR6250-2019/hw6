@@ -144,16 +144,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="fms_Bell.h" />
-    <ClInclude Include="fms_binop.h" />
-    <ClInclude Include="fms_cache.h" />
-    <ClInclude Include="fms_constant.h" />
-    <ClInclude Include="fms_factorial.h" />
+    <ClInclude Include="fms_sequence_binop.h" />
+    <ClInclude Include="fms_sequence_cache.h" />
+    <ClInclude Include="fms_sequence_constant.h" />
+    <ClInclude Include="fms_sequence_factorial.h" />
     <ClInclude Include="fms_option.h" />
     <ClInclude Include="fms_Hermite.h" />
-    <ClInclude Include="fms_reverse.h" />
+    <ClInclude Include="fms_sequence_reverse.h" />
     <ClInclude Include="fms_sequence.h" />
-    <ClInclude Include="fms_skip.h" />
-    <ClInclude Include="fms_sum.h" />
+    <ClInclude Include="fms_sequence_skip.h" />
+    <ClInclude Include="fms_sequence_sum.h" />
+    <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="xll_option.h" />
   </ItemGroup>
   <ItemGroup>
@@ -166,9 +167,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Bell.t.cpp" />
-    <ClCompile Include="fms_binop.t.cpp" />
-    <ClCompile Include="fms_cache.t.cpp" />
-    <ClCompile Include="fms_factorial.t.cpp">
+    <ClCompile Include="fms_sequence_binop.t.cpp" />
+    <ClCompile Include="fms_sequence_cache.t.cpp" />
+    <ClCompile Include="fms_sequence_factorial.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -176,11 +177,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="fms_sequence.t.cpp">
+    <ClCompile Include="fms_sequence_take.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="fms_sum.t.cpp" />
+    <ClCompile Include="fms_sequence_sum.t.cpp" />
     <ClCompile Include="xll_option.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,8 +1,8 @@
-// fms_factorial.t.cpp - test factorial and Pochhammer symbols
+// fms_sequence_factorial.t.cpp - test factorial and Pochhammer symbols
 #include <cassert>
-#include "fms_factorial.h"
+#include "fms_sequence_factorial.h"
 
-using namespace fms;
+using namespace fms::sequence;
 
 int test_factorial()
 {

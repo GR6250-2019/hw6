@@ -1,8 +1,8 @@
-// fms_sum.h - sum a sequence
+// fms_sequence_sum.h - sum a sequence
 #pragma once
 #include <type_traits>
 
-namespace fms {
+namespace fms::sequence {
 
     template<class S>
     inline auto sum(S s, decltype(*s) x = 0)

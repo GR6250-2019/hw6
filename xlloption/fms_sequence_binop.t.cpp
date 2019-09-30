@@ -1,13 +1,13 @@
-// fms_binop.t.cpp - test binary operations on sequences
+// fms_sequence_binop.t.cpp - test binary operations on sequences
 #include <cassert>
-#include "fms_binop.h"
-#include "fms_sequence.h"
+#include "fms_sequence_binop.h"
+#include "fms_sequence_take.h"
 
 int test_binop()
 {
     {
         double x[] = { 1, 2, 3 };
-        fms::sequence s2(2, x), s3(3, x);
+        fms::sequence::take s2(2, x), s3(3, x);
 
         auto add = s2 + s3;
         assert(add);

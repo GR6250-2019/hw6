@@ -1,15 +1,15 @@
 // fms_sequence.t.cpp - test sequences
 #include <cassert>
-#include "fms_sequence.h"
+#include "fms_sequence_take.h"
 
-using namespace fms;
+using namespace fms::sequence;
 
 template<class X>
-int test_sequence()
+int test_sequence_take()
 {
     X x[] = { 1, 2, 3 };
     {
-        sequence s(3, x);
+        take s(3, x);
         assert(s);
         assert(*s == 1);
         ++s;
@@ -25,7 +25,7 @@ int test_sequence()
     return 0;
 }
 
-int test_sequence_int = test_sequence<int>();
-int test_sequence_float = test_sequence<float>();
-int test_sequence_double = test_sequence<double>();
+int test_sequence_take_int = test_sequence_take<int>();
+int test_sequence_take_float = test_sequence_take<float>();
+int test_sequence_take_double = test_sequence_take<double>();
 

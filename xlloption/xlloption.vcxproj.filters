@@ -26,28 +26,31 @@
     <ClInclude Include="fms_Bell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_sum.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="fms_sequence.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_factorial.h">
+    <ClInclude Include="fms_sequence_binop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_reverse.h">
+    <ClInclude Include="fms_sequence_cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_skip.h">
+    <ClInclude Include="fms_sequence_constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_binop.h">
+    <ClInclude Include="fms_sequence_factorial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_constant.h">
+    <ClInclude Include="fms_sequence_reverse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_cache.h">
+    <ClInclude Include="fms_sequence_skip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_sum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_take.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -58,22 +61,22 @@
     <ClCompile Include="xll_option.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fms_sequence.t.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fms_sum.t.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fms_factorial.t.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fms_binop.t.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="fms_Bell.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fms_cache.t.cpp">
+    <ClCompile Include="fms_sequence_binop.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_cache.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_factorial.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_sum.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_take.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

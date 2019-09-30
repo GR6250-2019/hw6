@@ -1,7 +1,7 @@
-// fms_skip.h - skip elements of a sequence
+// fms_sequence_skip.h - skip elements of a sequence
 #pragma once
 
-namespace fms {
+namespace fms::sequence {
 
     template<class S>
     inline S skip(size_t n, S s)

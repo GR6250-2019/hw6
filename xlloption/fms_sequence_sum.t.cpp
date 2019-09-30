@@ -1,17 +1,17 @@
-// fms_sum.t.cpp - test sum
+// fms_sequence_sum.t.cpp - test sum
 #include <cassert>
-#include "fms_sum.h"
-#include "fms_sequence.h"
+#include "fms_sequence_sum.h"
+#include "fms_sequence_take.h"
 
-using namespace fms;
+using namespace fms::sequence;
 
 template<class X>
 int test_sum()
 {
     X x[] = { 1, 2, 3 };
-    X s = sum(sequence(3, x));
+    X s = sum(take(3, x));
     assert(s == 6);
-    assert(sum(sequence(2, x)) == 3);
+    assert(sum(take(2, x)) == 3);
 
     return 0;
 }
