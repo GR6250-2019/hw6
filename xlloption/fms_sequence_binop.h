@@ -2,6 +2,7 @@
 #pragma once
 #include <compare>
 #include <functional>
+#include "fms_sequence_traits.h"
 
 namespace fms::sequence {
 
@@ -35,7 +36,7 @@ namespace fms::sequence {
 
 }
 
-template<class I, class J>
+template<class I, class J, class = fms::has_operator_bool<I>>
 inline auto operator+(I i, J j)
 {
     using T = std::common_type_t<decltype(*i), decltype(*j)>;

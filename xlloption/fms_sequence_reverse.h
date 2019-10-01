@@ -6,24 +6,32 @@ namespace fms::sequence {
 
     template<class S>
     class reverse {
-        S s;
+        const S b; // begin
+        S e;       // end
+        bool done;
     public:
         // Constructor should be the last element of the sequence, not one past the end.
-        reverse(S s)
-            : s(s)
+        // [b, ..., e) -> [--e, ..., b]
+        reverse(S b, S e)
+            : b(b), e(--e), done(false)
         { }
         const auto operator<=>(const reverse&) const = default;
         operator bool() const
         {
-            return true; //!!! unchecked
+            return !done; //!!! unchecked
         }
         auto operator*() const
         {
-            return *s;
+            return *e;
         }
         reverse& operator++()
         {
-            --s;
+            if (b == e) {
+                done = true;
+            }
+            else {
+                --e;
+            }
 
             return *this;
         }

@@ -159,6 +159,7 @@
     <ClInclude Include="fms_sequence_skip.h" />
     <ClInclude Include="fms_sequence_sum.h" />
     <ClInclude Include="fms_sequence_take.h" />
+    <ClInclude Include="fms_sequence_traits.h" />
     <ClInclude Include="xll_option.h" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="fms_sequence_iota.t.cpp" />
+    <ClCompile Include="fms_sequence_reverse.t.cpp" />
     <ClCompile Include="fms_sequence_take.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>

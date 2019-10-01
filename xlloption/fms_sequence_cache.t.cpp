@@ -29,7 +29,7 @@ int test_cache()
     assert(b.size() == 3);
     assert(b[0] == 1 && b[1] == 2 && b[2] == 3);
 
-    auto rc = reverse(--c);
+    auto rc = reverse(b.begin(), b.end());
     assert(rc);
     assert(*rc == 3);
     assert(++rc);

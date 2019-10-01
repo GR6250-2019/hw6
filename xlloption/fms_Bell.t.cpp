@@ -16,11 +16,11 @@ int test_bell()
 {
     sequence::constant one(1.);
     bell b(one);
-    double b_ = *b;
-    b_ = *++b;
-    b_ = *++b;
-    b_ = *++b;
-    b_ = *++b;
+    assert(*b == 1./1);
+    assert(*++b == 1./1);
+    assert(*++b == 2. / 2);
+    assert(*++b == 5./(2*3));
+    assert(*++b == 15./(2*3*4));
 
     return 0;
 }

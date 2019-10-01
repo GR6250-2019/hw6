@@ -9,25 +9,27 @@ namespace fms {
     class bell {
         K kappa;
         using X = decltype(*kappa);
-        X b;
+        std::vector<X> b; // cached values
         size_t n;
-        auto b_ = sequence::cache(bell(kappa));
     public:
         bell(K kappa)
-            : kappa(sequence::concatenate(kappa, sequence::constant(X(0)))), b(1), n(0)
+            : kappa(sequence::concatenate(kappa, sequence::constant(X(0)))), b({ X(1) }), n(0)
         { }
+        void reset()
+        {
+            n = 0;
+        }
         operator bool() const
         {
             return true;
         }
         X operator*() const
         {
-            return b;
+            return b[n];
         }
         // b_{n+1} = 1/(n + 1) sum_{k=0}^n b_{n-k} kappa_{k+1}/k!
         bell& operator++()
         {
-            using fms::sequence::cache;
             using fms::sequence::factorial;
             using fms::sequence::reverse;
             using fms::sequence::skip;
@@ -35,14 +37,12 @@ namespace fms {
             using fms::sequence::take;
 
             ++n;
-            auto b_ = cache(bell(kappa));
-            b_ = skip(n - 1, b_);
-            
-            auto r = take(n - 1, reverse(b_));
-            b = sum(r * skip(1, kappa));
-            //b = sum(take(n-1,reverse(skip(n - 1, bell(kappa)))) * skip(1, kappa) / factorial<X>{});
-            b /= n;
-
+            assert(n <= b.size());
+            if (n == b.size()) {
+                auto rnb = take(n, reverse(b.begin(), b.end()));
+                b.push_back(sum(rnb * skip(1, kappa) / factorial<X>{})/n);
+            }
+ 
             return *this;
         }
 
