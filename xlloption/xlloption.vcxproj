@@ -198,6 +198,7 @@
     <ClCompile Include="fms_sequence_sum.t.cpp" />
     <ClCompile Include="xll_Hermit.cpp" />
     <ClCompile Include="xll_option.cpp" />
+    <ClCompile Include="xll_sequence.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

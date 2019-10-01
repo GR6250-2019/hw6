@@ -124,5 +124,8 @@
     <ClCompile Include="xll_Hermit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="xll_sequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
