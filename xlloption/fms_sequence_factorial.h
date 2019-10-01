@@ -37,6 +37,7 @@ namespace fms::sequence {
 
     };
 
-    using Pochhammer = factorial;
+    template<class X = double>
+    using Pochhammer = factorial<X>;
 
 }

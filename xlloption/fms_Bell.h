@@ -37,10 +37,11 @@ namespace fms {
             using fms::sequence::take;
 
             ++n;
-            assert(n <= b.size());
-            if (n == b.size()) {
-                auto rnb = take(n, reverse(b.begin(), b.end()));
-                b.push_back(sum(rnb * skip(1, kappa) / factorial<X>{})/n);
+            if (n >= b.size()) {
+                for (size_t m = b.size(); m <= n; ++m) {
+                    auto rmb = take(m, reverse(b.begin(), b.end()));
+                    b.push_back(sum(rmb * skip(1, kappa) / factorial<X>{}) / m);
+                }
             }
  
             return *this;
