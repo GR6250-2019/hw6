@@ -128,6 +128,33 @@ HANDLEX WINAPI xll_sequence_plus(HANDLEX h)
     return h;
 }
 
+static AddIn xai_sequence_take(
+    Function(XLL_FP, L"?xll_sequence_take", L"XLL.SEQUENCE.TAKE")
+    .Arg(XLL_WORD, L"count", L"is then number of items to take from the handle.")
+    .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
+    .Category(L"XLL")
+    .FunctionHelp(L"Returns the next count rows from the sequence.")
+);
+_FP12* WINAPI xll_sequence_take(WORD n, HANDLEX h)
+{
+#pragma XLLEXPORT
+    static xll::FP12 result;
+
+    try {
+        handle<xll::sequence<double>> h_(h);
+        result.resize(n, 1);
+        for (WORD i = 0; i < n; ++i) {
+            result[i] = *(*h_);
+            ++(*h_);
+        }
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result.get();
+}
+
 static AddIn xai_sequence_iota(
     Function(XLL_HANDLE, L"?xll_sequence_iota", L"XLL.SEQUENCE.IOTA")
     .Arg(XLL_DOUBLE, L"start", L"is the starting value for iota. Default is 0.")
