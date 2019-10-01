@@ -5,6 +5,7 @@
 #include "fms_sequence_cache.h"
 #include "fms_sequence_concatenate.h"
 #include "fms_sequence_constant.h"
+#include "fms_sequence_copy.h"
 #include "fms_sequence_epsilon.h"
 #include "fms_sequence_factorial.h"
 #include "fms_sequence_iota.h"

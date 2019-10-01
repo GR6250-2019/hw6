@@ -149,6 +149,7 @@
     <ClInclude Include="fms_sequence_cache.h" />
     <ClInclude Include="fms_sequence_concatenate.h" />
     <ClInclude Include="fms_sequence_constant.h" />
+    <ClInclude Include="fms_sequence_copy.h" />
     <ClInclude Include="fms_sequence_epsilon.h" />
     <ClInclude Include="fms_sequence_factorial.h" />
     <ClInclude Include="fms_option.h" />
@@ -163,7 +164,7 @@
     <ClInclude Include="fms_sequence_sum.h" />
     <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="fms_sequence_traits.h" />
-    <ClInclude Include="xll_option.h" />
+    <ClInclude Include="xlloption.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xll12\xll12.vcxproj">
@@ -195,6 +196,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="fms_sequence_sum.t.cpp" />
+    <ClCompile Include="xll_Hermit.cpp" />
     <ClCompile Include="xll_option.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
