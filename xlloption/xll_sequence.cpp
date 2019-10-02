@@ -17,7 +17,7 @@ BOOL WINAPI xll_sequence_bool(HANDLEX h)
     BOOL result = FALSE;
 
     try {
-        handle<xll::sequence<double>> h_(h);
+        handle<sequence<>> h_(h);
         result = !!(*h_);
     }
     catch (const std::exception & ex) {
@@ -39,7 +39,7 @@ double WINAPI xll_sequence_star(HANDLEX h)
     double result = std::numeric_limits<double>::quiet_NaN();
 
     try {
-        handle<xll::sequence<double>> h_(h);
+        handle<sequence<>> h_(h);
         result = *(*h_);
     }
     catch (const std::exception & ex) {
@@ -59,7 +59,7 @@ HANDLEX WINAPI xll_sequence_incr(HANDLEX h)
 {
 #pragma XLLEXPORT
     try {
-        handle<xll::sequence<double>> h_(h);
+        handle<sequence<>> h_(h);
         ++(*h_);
     }
     catch (const std::exception & ex) {
@@ -71,23 +71,28 @@ HANDLEX WINAPI xll_sequence_incr(HANDLEX h)
 
 static AddIn xai_sequence_take(
     Function(XLL_FP, L"?xll_sequence_take", L"XLL.SEQUENCE.TAKE")
-    .Arg(XLL_WORD, L"count", L"is then number of items to take from the handle.")
+    .Arg(XLL_LONG, L"count", L"is then number of items to take from the handle.")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
     .Category(L"XLL")
     .FunctionHelp(L"Returns the next count rows from the sequence.")
 );
-_FP12* WINAPI xll_sequence_take(WORD n, HANDLEX h)
+_FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
 {
 #pragma XLLEXPORT
     static xll::FP12 result;
 
     try {
-        handle<xll::sequence<double>> h_(h);
+        if (n < 0) {
+            n = -n; // take reverse!!!
+        }
+        handle<sequence<>> h_(h);
         result.resize(n, 1);
         copy(take(n, sequence_ref(*h_)), result.begin());
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
+        
+        return 0;
     }
 
     return result.get();
@@ -103,13 +108,9 @@ static AddIn xai_sequence_iota(
 HANDLEX WINAPI xll_sequence_iota(double start)
 {
 #pragma XLLEXPORT
-    handlex h;
-
-    handle<xll::sequence<double>> h_ = new xll::sequence_impl(iota(start));
-    h = h_.get();
-
-    return h;
-}
+ 
+    return handle<sequence<>>(new sequence_impl(iota(start))).get();
+ }
 
 static AddIn xai_sequence_pow(
     Function(XLL_HANDLE, L"?xll_sequence_pow", L"XLL.SEQUENCE.POW")
@@ -121,10 +122,7 @@ static AddIn xai_sequence_pow(
 HANDLEX WINAPI xll_sequence_pow(double x)
 {
 #pragma XLLEXPORT
-    handlex h;
 
-    handle<xll::sequence<double>> h_ = new xll::sequence_impl(power(x));
-    h = h_.get();
-
-    return h;
+    return handle<sequence<>>(new sequence_impl(power(x))).get();
 }
+

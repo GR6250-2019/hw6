@@ -201,6 +201,7 @@
     </ClCompile>
     <ClCompile Include="fms_sequence_sum.t.cpp" />
     <ClCompile Include="xll_Bell.cpp" />
+    <ClCompile Include="xll_cumulant.cpp" />
     <ClCompile Include="xll_Hermit.cpp" />
     <ClCompile Include="xll_option.cpp" />
     <ClCompile Include="xll_sequence.cpp" />

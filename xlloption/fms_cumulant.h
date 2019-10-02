@@ -4,6 +4,33 @@
 
 namespace fms::cumulant {
 
+    // Cumulants of a scalar multiple of a random variable.
+    template<class S>
+    class scale {
+        S s;
+        using X = decltype(*s);
+        X c, cn;
+    public:
+        scale(X c, S s)
+            : s(s), c(c), cn(1)
+        { }
+        operator bool() const
+        {
+            return s;
+        }
+        X operator*() const
+        {
+            return cn * (*s);
+        }
+        scale& operator++()
+        {
+            cn *= c;
+
+            return *this;
+        }
+    };
+
+
     template<class S = double>
     struct normal {
         static S cumulant(S s)
