@@ -16,12 +16,12 @@ namespace xll {
         }
         sequence& operator++()
         {
-            return op_plus();
+            return op_incr();
         }
     private:
         virtual bool op_bool() const = 0;
         virtual X op_star() const = 0;
-        virtual sequence<X>& op_plus() = 0;
+        virtual sequence<X>& op_incr() = 0;
     };
 
     template<class S, class X = double>
@@ -39,7 +39,7 @@ namespace xll {
         {
             return *s;
         }
-        sequence_impl& op_plus() override
+        sequence_impl& op_incr() override
         {
             ++s;
 
@@ -62,7 +62,7 @@ namespace xll {
         {
             return *s;
         }
-        sequence_ref& op_plus() override
+        sequence_ref& op_incr() override
         {
             ++s;
 
