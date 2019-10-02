@@ -16,7 +16,6 @@ static AddIn xai_bell(
 HANDLEX xll_bell(HANDLEX x)
 {
 #pragma XLLEXPORT
-    _crtBreakAlloc = 1505;
     handlex h;
 
     try {

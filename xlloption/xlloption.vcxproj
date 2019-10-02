@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="fms_Bell.h" />
+    <ClInclude Include="fms_cumulant.h" />
     <ClInclude Include="fms_sequence_apply.h" />
     <ClInclude Include="fms_sequence_binop.h" />
     <ClInclude Include="fms_sequence_cache.h" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Bell.t.cpp" />
+    <ClCompile Include="fms_cumulant.t.cpp" />
     <ClCompile Include="fms_option.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
