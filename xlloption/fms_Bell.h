@@ -4,7 +4,7 @@
 
 namespace fms {
 
-    // b_{n+1}
+    // Reduced Bell polynomials: b_n = B_n/n!
     template<class K>
     class bell {
         K kappa;
@@ -27,7 +27,6 @@ namespace fms {
         {
             return b[n];
         }
-        // b_{n+1} = 1/(n + 1) sum_{k=0}^n b_{n-k} kappa_{k+1}/k!
         bell& operator++()
         {
             using fms::sequence::factorial;
@@ -38,6 +37,7 @@ namespace fms {
 
             ++n;
             if (n >= b.size()) {
+                // b_{n+1} = (sum_{k=0}^n b_{n-k} kappa_{k+1}/k))/(n+1)
                 for (size_t m = b.size(); m <= n; ++m) {
                     auto rmb = take(m, reverse(b.begin(), b.end()));
                     b.push_back(sum(rmb * skip(1, kappa) / factorial<X>{}) / m);
