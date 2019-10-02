@@ -1,68 +1,9 @@
 // xll_sequence.cpp - Excel add-in for sequences
 #include "../xll12/xll/xll.h"
-#include "fms_sequence.h"
+#include "xll_sequence.h"
 
 using namespace fms::sequence;
 using namespace xll;
-
-namespace xll {
-    template<class X = double> // a sequence of X
-    struct sequence {
-        operator bool() const
-        {
-            return op_bool();
-        }
-        X operator*() const
-        {
-            return op_star();
-        }
-        sequence& operator++()
-        {
-            return op_plus();
-        }
-    private:
-        virtual bool op_bool() const = 0;
-        virtual X op_star() const = 0;
-        virtual sequence<X>& op_plus() = 0;
-    };
-    template<class S, class X = double>
-    class sequence_impl : public sequence<X> {
-        S s;
-    public:
-        sequence_impl(S s)
-            : s(s)
-        { }
-        bool op_bool() const override
-        {
-            return s;
-        }
-        X op_star() const override
-        {
-            return *s;
-        }
-        sequence_impl<S,X>& op_plus() override
-        {
-            ++s;
-
-            return *this;
-        }
-    };
-    template<class S>
-    inline auto make_sequence_impl(S s)
-    {
-        return sequence_impl<S,double>(s);
-    }
-}
-
-test test_sequence([] {
-
-    iota i(0);
-    auto msi = make_sequence_impl(iota(0.));
-    auto si = sequence_impl(iota(0.));
-
-    });
-
-
 
 static AddIn xai_sequence_bool(
     Function(XLL_BOOL, L"?xll_sequence_bool", L"XLL.SEQUENCE.BOOL")
@@ -108,13 +49,13 @@ double WINAPI xll_sequence_star(HANDLEX h)
     return result;
 }
 
-static AddIn xai_sequence_plus( //!!! change to incr
-    Function(XLL_HANDLE, L"?xll_sequence_plus", L"XLL.SEQUENCE.INCR")
+static AddIn xai_sequence_incr( //!!! change to incr
+    Function(XLL_HANDLE, L"?xll_sequence_incr", L"XLL.SEQUENCE.INCR")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
     .Category(L"XLL")
     .FunctionHelp(L"Increment handle and return it. ")
 );
-HANDLEX WINAPI xll_sequence_plus(HANDLEX h)
+HANDLEX WINAPI xll_sequence_incr(HANDLEX h)
 {
 #pragma XLLEXPORT
     try {
@@ -143,10 +84,7 @@ _FP12* WINAPI xll_sequence_take(WORD n, HANDLEX h)
     try {
         handle<xll::sequence<double>> h_(h);
         result.resize(n, 1);
-        for (WORD i = 0; i < n; ++i) {
-            result[i] = *(*h_);
-            ++(*h_);
-        }
+        copy(take(n, sequence_ref(*h_)), result.begin());
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
@@ -168,6 +106,24 @@ HANDLEX WINAPI xll_sequence_iota(double start)
     handlex h;
 
     handle<xll::sequence<double>> h_ = new xll::sequence_impl(iota(start));
+    h = h_.get();
+
+    return h;
+}
+
+static AddIn xai_sequence_pow(
+    Function(XLL_HANDLE, L"?xll_sequence_pow", L"XLL.SEQUENCE.POW")
+    .Arg(XLL_DOUBLE, L"x", L"is the number whos powers form the sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the sequence 1, x, x^2, ...")
+);
+HANDLEX WINAPI xll_sequence_pow(double x)
+{
+#pragma XLLEXPORT
+    handlex h;
+
+    handle<xll::sequence<double>> h_ = new xll::sequence_impl(power(x));
     h = h_.get();
 
     return h;

@@ -13,7 +13,7 @@ namespace fms {
         size_t n;
     public:
         bell(K kappa)
-            : kappa(sequence::concatenate(kappa, sequence::constant(X(0)))), b({ X(1) }), n(0)
+            : kappa(kappa), b({ X(1) }), n(0)
         { }
         void reset()
         {

@@ -3,26 +3,26 @@
 #include "fms_sequence_copy.h"
 #include "fms_sequence_take.h"
 #include "xlloption.h"
+#include "xll_sequence.h"
 
 using namespace xll;
 using namespace fms;
 
 static AddIn xai_Hermite(
-    Function(XLL_FP, L"?xll_Hermite", CATEGORY L".HERMITE")
-    .Arg(XLL_WORD, L"n", L"is the number of polynomial values to return.")
+    Function(XLL_HANDLE, L"?xll_Hermite", CATEGORY L".HERMITE")
     .Arg(XLL_DOUBLE, L"x", L"is the value at which to compute the polynomials.")
+    .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return the first n values of the Hermite polynomials.")
 );
-_FP12* WINAPI xll_Hermite(WORD n, double x)
+HANDLEX WINAPI xll_Hermite(double x)
 {
 #pragma XLLEXPORT
-    static xll::FP12 result;
+    handlex h;
 
     try {
-        result.resize(n, 1);
-        Hermite H(x);
-        sequence::copy(sequence::take(n, H), result.begin());
+        handle<xll::sequence<>> h_(new sequence_impl(Hermite(x)));
+        h = h_.get();
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
@@ -30,5 +30,5 @@ _FP12* WINAPI xll_Hermite(WORD n, double x)
         return 0;
     }
 
-    return result.get();
+    return h;
 }

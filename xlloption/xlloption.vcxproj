@@ -165,6 +165,7 @@
     <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="fms_sequence_traits.h" />
     <ClInclude Include="xlloption.h" />
+    <ClInclude Include="xll_sequence.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\xll12\xll12.vcxproj">
@@ -176,6 +177,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Bell.t.cpp" />
+    <ClCompile Include="fms_option.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />
@@ -196,6 +198,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="fms_sequence_sum.t.cpp" />
+    <ClCompile Include="xll_Bell.cpp" />
     <ClCompile Include="xll_Hermit.cpp" />
     <ClCompile Include="xll_option.cpp" />
     <ClCompile Include="xll_sequence.cpp" />

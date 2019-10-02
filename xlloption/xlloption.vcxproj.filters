@@ -80,6 +80,9 @@
     <ClInclude Include="xlloption.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="xll_sequence.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -125,6 +128,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="xll_sequence.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_Bell.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_option.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
