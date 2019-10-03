@@ -3,6 +3,7 @@
 #include "fms_sequence_apply.h"
 #include "fms_sequence_binop.h"
 #include "fms_sequence_cache.h"
+#include "fms_sequence_choose.h"
 #include "fms_sequence_concatenate.h"
 #include "fms_sequence_constant.h"
 #include "fms_sequence_copy.h"

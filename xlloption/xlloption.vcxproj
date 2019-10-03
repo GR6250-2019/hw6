@@ -148,6 +148,7 @@
     <ClInclude Include="fms_sequence_apply.h" />
     <ClInclude Include="fms_sequence_binop.h" />
     <ClInclude Include="fms_sequence_cache.h" />
+    <ClInclude Include="fms_sequence_choose.h" />
     <ClInclude Include="fms_sequence_concatenate.h" />
     <ClInclude Include="fms_sequence_constant.h" />
     <ClInclude Include="fms_sequence_copy.h" />
@@ -183,6 +184,7 @@
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />
+    <ClCompile Include="fms_sequence_choose.t.cpp" />
     <ClCompile Include="fms_sequence_concatenate.t.cpp" />
     <ClCompile Include="fms_sequence_epsilon.t.cpp" />
     <ClCompile Include="fms_sequence_factorial.t.cpp">

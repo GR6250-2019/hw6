@@ -15,12 +15,6 @@ namespace fms::sequence {
         reverse(S b, S e)
             : b(b), e(--e), done(false)
         { }
-        /*
-        template<class C>
-        reverse(C& c)
-            : reverse(c.begin(), c.end())
-        { }
-        */
         const auto operator<=>(const reverse&) const = default;
         operator bool() const
         {
@@ -42,5 +36,10 @@ namespace fms::sequence {
             return *this;
         }
     };
+    template<class C>
+    inline auto make_reverse(C& c)
+    {
+        return reverse(c.begin(), c.end());
+    }
 
 }

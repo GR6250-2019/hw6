@@ -23,9 +23,8 @@ int test_reverse()
         ++r;
         assert(!r);
     }
-    /*
     {
-        auto r = reverse(s);
+        auto r = make_reverse(s);
         assert(r);
         assert(*r == 3);
         ++r;
@@ -37,7 +36,6 @@ int test_reverse()
         ++r;
         assert(!r);
     }
-    */
 
     return 0;
 }
