@@ -15,10 +15,16 @@ namespace fms::sequence {
         reverse(S b, S e)
             : b(b), e(--e), done(false)
         { }
+        /*
+        template<class C>
+        reverse(C& c)
+            : reverse(c.begin(), c.end())
+        { }
+        */
         const auto operator<=>(const reverse&) const = default;
         operator bool() const
         {
-            return !done; //!!! unchecked
+            return !done;
         }
         auto operator*() const
         {

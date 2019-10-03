@@ -80,7 +80,9 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
         auto ch = [pc,ph](WORD i) {
             return scale(pc->array[i], sequence_ref(*handle<sequence<>>(ph->array[i])));
         };
-        auto hs = [](auto s) { return handle<sequence<>>(new sequence_impl(s)).get(); };
+        auto hs = [](auto s) { 
+            return handle<sequence<>>(new sequence_impl(s)).get(); 
+        };
 
         auto n = size(*pc);
         if (n == 1) {
