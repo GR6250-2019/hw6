@@ -5,10 +5,9 @@
 namespace fms {
 
     // Bell polynomials
-    template<class K>
+    template<class K, class X = sequence::value_type<K>>
     class Bell {
         K kappa;
-        using X = decltype(*kappa);
         std::vector<X> B; // cached values
         size_t n;
     public:
@@ -49,10 +48,9 @@ namespace fms {
     };
     
     // Reduced Bell polynomials: b_n = B_n/n!
-    template<class K>
+    template<class K, class X = sequence::value_type<K>>
     class bell {
         K kappa;
-        using X = decltype(*kappa);
         std::vector<X> b; // cached values
         size_t n;
     public:

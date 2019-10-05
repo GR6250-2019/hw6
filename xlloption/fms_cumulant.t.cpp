@@ -1,9 +1,10 @@
 // fms_cumulant.t.cpp - Test cumulant and cumulants
 #include <cassert>
+#include "fms_sequence.h"
 #include "fms_cumulant.h"
 
+using namespace fms::sequence;
 using namespace fms::cumulant;
-
 
 template<class X>
 int test_cumulant_scale()
@@ -26,6 +27,42 @@ int test_cumulant_scale()
 }
 
 int test_cumulant_scale_double = test_cumulant_scale<double>();
+
+int test_cumulant_sum_product()
+{
+    {
+        constant<> one(1);
+        double c[] = { 1, 2, 3 };
+        auto t = std::tuple{ one, one, one };
+        auto sp = sum_product(&c[0], 3, one, one, one);
+        assert(sp);
+        assert(*sp == 1 + 2 + 3);
+        ++sp;
+        assert(sp);
+        assert(*sp == 1 + 4 + 9);
+        ++sp;
+        assert(sp);
+        assert(*sp == 1 + 8 + 27);
+    }
+    {
+        constant<> one(1);
+        double c[] = { 1, 2, 3 };
+        auto t = std::tuple{ one, one, one };
+        auto sp = sum_product(&c[0], 3, one, one, iota{});
+        assert(sp);
+        assert(*sp == 1 + 2 + 3*0);
+        ++sp;
+        assert(sp);
+        assert(*sp == 1 + 4 + 9*1);
+        ++sp;
+        assert(sp);
+        assert(*sp == 1 + 8 + 27*2);
+    }
+
+    return 0;
+}
+
+int test_cumulant_sum_product_ = test_cumulant_sum_product();
 
 template<class S>
 int test_cumulant_normal()
