@@ -41,7 +41,7 @@ namespace fms::sequence {
         }
         operator bool() const
         {
-            return s;
+            return s || n < s_.size();
         }
         auto operator*() const
         {

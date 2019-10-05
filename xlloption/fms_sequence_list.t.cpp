@@ -1,13 +1,15 @@
 // fms_sequence_list.t.cpp - Test list sequence
 #include <cassert>
 #include "fms_sequence_list.h"
-
+#include "fms_sequence_cache.h"
+#include "fms_sequence_concatenate.h"
+#include "fms_sequence_length.h"
 using namespace fms::sequence;
 
 template<class S>
 void test_list(S s)
 {
-    assert(s.size() == 3);
+    assert(length(s) == 3);
     assert(s);
     assert(*s == 1);
     ++s;
@@ -43,6 +45,10 @@ int test_sequence_list()
     std::vector<X> s{ 1, 2, 3 };
     test_list(list(s));
     test_list(list(3, &s[0]));
+    X one = 1, two = 2, three = 3;
+    auto l = cache(concatenate(list(1, &one), concatenate(list(1, &two), list(1, &three))));
+    assert(length(l) == 3);
+    test_list(l);
 
     return 0;
 }
