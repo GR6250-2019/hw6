@@ -3,6 +3,7 @@
 #include <compare>
 
 namespace fms::sequence {
+
     template<class X = double>
     class power {
         X x, xn; // x, x^n

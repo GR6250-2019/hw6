@@ -1,17 +1,17 @@
 // fms_sequence_epsilon.h - terminate at machine epsilon
 #pragma once
 #include <compare>
-#include <type_traits>
+#include "fms_sequence_traits.h"
 
 namespace fms::sequence {
 
     // machine epsilon terminated sequence
-    template<class S>
+    template<class S, class X = value_type<S>>
     class epsilon {
         S s;
-        using X = decltype(*s);
         X one;
     public:
+        // one should be the average size of the values
         epsilon(S s, X one = 1)
             : s(s), one(one)
         { }

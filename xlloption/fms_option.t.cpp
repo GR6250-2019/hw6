@@ -25,7 +25,7 @@ int test_moneyness_ = test_moneyness();
 int test_option_cdf()
 {
     {
-        auto kappas = normal<>::cumulants();
+        auto kappas = normal<>();
 
         for (double x : {-1., 0., 1., 1.1}) {
             auto P = cdf(x, kappas);

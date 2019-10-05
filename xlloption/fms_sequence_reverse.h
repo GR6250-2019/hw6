@@ -10,7 +10,6 @@ namespace fms::sequence {
         S e;       // end
         bool done;
     public:
-        // Constructor should be the last element of the sequence, not one past the end.
         // [b, ..., e) -> [--e, ..., b]
         reverse(S b, S e)
             : b(b), e(--e), done(false)

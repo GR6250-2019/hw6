@@ -2,13 +2,14 @@
 #pragma once
 #include <compare>
 #include <vector>
+#include "fms_sequence_traits.h"
 
 namespace fms::sequence {
 
-    template<class S>
+    template<class S, class X = value_type<S>>
     struct cache {
         S s;
-        mutable std::vector<decltype(*s)> s_;
+        mutable std::vector<X> s_;
         size_t n; // current index into cache
     public:
         cache(S s)

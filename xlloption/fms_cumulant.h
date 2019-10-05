@@ -43,82 +43,77 @@ namespace fms::cumulant {
         X mean = *kappa;
         ++kappa;
         X variance = *kappa;
-        X sigma = sqrt(variance);
         ++kappa;
 
+        X sigma = sqrt(variance);
         auto kappa3 = scale(1 / sigma, kappa) / sequence::constant(variance);
 
         return std::tuple(mean, sigma, kappa3);
     }
 
+    // Linear combination of cumulants
+    template<class ...Kappas>
+    class sum_product {
+        std::tuple<Kappas...> kappas;
+        //using X = std::common_type_t<decltype *ss>
+    public:
+        sum_product()
+        { }
+    };
+
+    // 0, 1, 0, ...
     template<class S = double>
-    struct normal {
-        static S cumulant(S s)
+    class normal {
+        size_t n;
+    public:
+        S operator()(S s)
         {
             return s * s / 2;
         }
-        // 0, 1, 0, ...
-        class cumulants {
-            size_t n;
-        public:
-            cumulants()
-                : n(0)
-            { }
-            operator bool() const
-            {
-                return true;
-            }
-            S operator*() const
-            {
-                return S(n == 1);
-            }
-            cumulants& operator++()
-            {
-                ++n;
+        normal()
+            : n(0)
+        { }
+        operator bool() const
+        {
+            return true;
+        }
+        S operator*() const
+        {
+            return S(n == 1);
+        }
+        normal& operator++()
+        {
+            ++n;
 
-                return *this;
-            }
-        };
+            return *this;
+        }
     };
 
+    // lambda, lambda, ....
     template<class S = double>
     class Poisson {
         S lambda;
     public:
+        S operator()(S s)
+        {
+            return lambda * (exp(s) - 1);
+        }
         Poisson(S lambda = 0)
             : lambda(lambda)
         { }
 
-        S cumulant(S s)
+        operator bool() const
         {
-            return lambda*(exp(s) - 1);
+            return true;
         }
-        static S cumulant(S s, S lambda_)
+        S operator*() const
         {
-            return lambda_ * (exp(s) - 1);
+            return lambda;
         }
-        // lambda, lambda, ....
-        class cumulants {
-            S lambda;
-        public:
-            cumulants(S lambda = 0)
-                : lambda(lambda)
-            { }
-
-            operator bool() const
-            {
-                return true;
-            }
-            S operator*() const
-            {
-                return lambda;
-            }
-            cumulants& operator++()
-            {
-                return *this;
-            }
-        };
-
+        Poisson& operator++()
+        {
+            return *this;
+        }
     };
 
 }

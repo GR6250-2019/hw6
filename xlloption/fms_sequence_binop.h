@@ -36,32 +36,24 @@ namespace fms::sequence {
 
 }
 
-template<class S, class T, class = fms::has_operator_bool<S>>
+template<class S, class T, class X = fms::sequence::common_value_type<S, T>>
 inline auto operator+(S s, T t)
 {
-    using X = std::common_type_t<decltype(*s), decltype(*t)>;
-
     return fms::sequence::binop<std::plus<X>, S, T>(s, t);
 }
-template<class S, class T>
+template<class S, class T, class X = fms::sequence::common_value_type<S, T>>
 inline auto operator-(S s, T t)
 {
-    using X = std::common_type_t<decltype(*s), decltype(*t)>;
-
     return fms::sequence::binop<std::minus<X>, S, T>(s, t);
 }
-template<class S, class T>
+template<class S, class T, class X = fms::sequence::common_value_type<S, T>>
 inline auto operator*(S s, T t)
 {
-    using X = std::common_type_t<decltype(*s), decltype(*t)>;
-
     return fms::sequence::binop<std::multiplies<X>, S, T>(s, t);
 }
-template<class S, class T>
+template<class S, class T, class X = fms::sequence::common_value_type<S, T>>
 inline auto operator/(S s, T t)
 {
-    using X = std::common_type_t<decltype(*s), decltype(*t)>;
-
     return fms::sequence::binop<std::divides<X>, S, T>(s, t);
 }
 

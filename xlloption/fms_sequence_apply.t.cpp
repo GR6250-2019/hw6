@@ -5,6 +5,22 @@
 
 using namespace fms::sequence;
 
+#include <type_traits>
+
+struct A {
+    int foo(int i)
+    {
+        return i;
+    }
+};
+
+int test_A()
+{
+    using X = std::invoke_result_t<decltype(&A::foo), A, int>;
+
+    return 0;
+}
+
 template<class X>
 int test_apply()
 {

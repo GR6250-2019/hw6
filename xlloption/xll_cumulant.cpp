@@ -19,7 +19,7 @@ static AddIn xai_cumulant_normal(
 double WINAPI xll_cumulant_normal(double s)
 {
 #pragma XLLEXPORT
-    return normal<>::cumulant(s);
+    return normal<>()(s);
 }
 
 static AddIn xai_cumulants_normal(
@@ -31,7 +31,7 @@ static AddIn xai_cumulants_normal(
 double WINAPI xll_cumulants_normal()
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new sequence_impl(normal<>::cumulants())).get();
+    return handle<sequence<>>(new sequence_impl(normal<>())).get();
 }
 
 static AddIn xai_cumulant_Poisson(
@@ -44,7 +44,7 @@ static AddIn xai_cumulant_Poisson(
 double WINAPI xll_cumulant_Poisson(double s, double lambda)
 {
 #pragma XLLEXPORT
-    return Poisson<>::cumulant(s, lambda);
+    return Poisson<>(lambda)(s);
 }
 
 static AddIn xai_cumulants_Poisson(
@@ -57,7 +57,7 @@ static AddIn xai_cumulants_Poisson(
 double WINAPI xll_cumulants_Poisson(double lambda)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new sequence_impl(Poisson<>::cumulants(lambda))).get();
+    return handle<sequence<>>(new sequence_impl(Poisson<>(lambda))).get();
 }
 
 static AddIn xai_cumulant_sum_product(

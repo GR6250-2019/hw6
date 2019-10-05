@@ -2,8 +2,14 @@
 #pragma once
 #include <type_traits>
 
-namespace fms {
+namespace fms::sequence {
 
+    template<class S>
+    using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
+
+    template<class... S>
+    using common_value_type = std::common_type_t<value_type<S>...>;
+    
     // using IsSequence = ...
     template<class, class = void>
     struct has_operator_bool
