@@ -10,14 +10,15 @@ namespace fms::sequence {
     class epsilon {
         S s;
         using X = decltype(*s);
+        X one;
     public:
-        epsilon(S s)
-            : s(s)
+        epsilon(S s, X one = 1)
+            : s(s), one(one)
         { }
         const auto operator<=>(const epsilon&) const = default;
         operator bool() const
         {
-            return *s + X(1) != X(1);
+            return *s + one != one;
         }
         auto operator*() const
         {

@@ -13,7 +13,7 @@ namespace fms::sequence {
         { }
         operator bool() const
         {
-            return s ? true : !!t;
+            return s ? s : t;
         }
         auto operator*() const
         {

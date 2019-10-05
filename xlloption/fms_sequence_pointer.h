@@ -43,5 +43,4 @@ namespace fms::sequence {
             return *this;
         }
     };
-
 }

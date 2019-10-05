@@ -4,6 +4,29 @@
 
 using namespace fms::cumulant;
 
+
+template<class X>
+int test_cumulant_scale()
+{
+    Poisson<>::cumulants kappa(1);
+    auto kappa_ = scale(0.5, kappa);
+    assert(*kappa == 1);
+    assert(kappa_);
+    assert(*kappa_ == 0.5);
+    ++kappa;
+    ++kappa_;
+    assert(*kappa == 1);
+    assert(*kappa_ == 0.25);
+    ++kappa;
+    ++kappa_;
+    assert(*kappa == 1);
+    assert(*kappa_ == 0.125);
+
+    return 0;
+}
+
+int test_cumulant_scale_double = test_cumulant_scale<double>();
+
 template<class S>
 int test_cumulant_normal()
 {
