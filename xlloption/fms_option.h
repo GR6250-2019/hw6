@@ -29,6 +29,7 @@ namespace fms::option {
         using fms::sequence::list;
         using fms::sequence::skip;
         using fms::sequence::sum;
+        using fms::sequence::take;
 
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
@@ -38,7 +39,7 @@ namespace fms::option {
         bell b(concatenate(list({ 0, 0 }), kappa3)); // reduced Bell polynomial
         auto b3 = skip(3, b);
 
-        auto s = sum(epsilon(constant(normal::pdf(x_)) * b3 * H2));
+        auto s = sum(take(100,epsilon(constant(normal::pdf(x_)) * b3 * H2)));
 
         return normal::cdf(x_) - s;
     }

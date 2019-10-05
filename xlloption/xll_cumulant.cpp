@@ -1,4 +1,5 @@
 // xll_cumulant.cpp - Excel add-in for cumulants.
+#include <utility>
 #include "../xll12/xll/xll.h"
 #include "xll_sequence.h"
 #include "fms_cumulant.h"
@@ -60,6 +61,13 @@ double WINAPI xll_cumulants_Poisson(double lambda)
     return handle<sequence<>>(new sequence_impl(Poisson<>(lambda))).get();
 }
 
+template<size_t... I>
+auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
+{
+    auto t = std::tuple(sequence_ref(*handle<sequence<>>(h[I]))...);
+    return handle<sequence<>>(new sequence_impl(sum_product(c, sizeof...(I), t))).get();
+}
+
 static AddIn xai_cumulant_sum_product(
     Function(XLL_HANDLE, L"?xll_cumulant_sum_product", L"XLL.CUMULANT.SUM.PRODUCT")
     .Arg(XLL_FP, L"coefficients", L"is an array of weights to use for the cumulants.")
@@ -72,7 +80,7 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
 {
 #pragma XLLEXPORT
     handlex h;
-
+//    _crtBreakAlloc = 4321;
     try {
         ensure(size(*pc) == size(*ph));
 
@@ -86,31 +94,31 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
 
         auto n = size(*pc);
         if (n == 1) {
-            return hs(ch(0));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<1>{});
         }
         if (n == 2) {
-            return hs(ch(0)+ch(1));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<2>{});
         }
         if (n == 3) {
-            return hs(ch(0) + ch(1) + ch(2));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<3>{});
         }
         if (n == 4) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<4>{});
         }
         if (n == 5) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3) + ch(4));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<5>{});
         }
         if (n == 6) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3) + ch(4) + ch(5));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<6>{});
         }
         if (n == 7) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3) + ch(4) + ch(5) + ch(6));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<7>{});
         }
         if (n == 8) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3) + ch(4) + ch(5) + ch(6) + ch(7));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<8>{});
         }
         if (n == 9) {
-            return hs(ch(0) + ch(1) + ch(2) + ch(3) + ch(4) + ch(5) + ch(6) + ch(7) + ch(8));
+            return make_sum_product(pc->array, ph->array, std::make_index_sequence<9>{});
         }
 
     }

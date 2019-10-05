@@ -21,7 +21,7 @@ double WINAPI xll_option_cdf(double x, HANDLEX kappa)
     try {
         handle<xll::sequence<>> kappa_(kappa);
 
-        return option::cdf(x, sequence_ref(*kappa_));
+        result = option::cdf(x, sequence_ref(*kappa_));
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
