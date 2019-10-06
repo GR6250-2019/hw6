@@ -169,5 +169,11 @@
     <ClCompile Include="fms_sequence_equal.t.cpp">
       <Filter>sequence</Filter>
     </ClCompile>
+    <ClCompile Include="fms_sequence_constant.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_copy.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

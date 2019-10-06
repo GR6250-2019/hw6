@@ -188,6 +188,8 @@
     <ClCompile Include="fms_sequence_cache.t.cpp" />
     <ClCompile Include="fms_sequence_choose.t.cpp" />
     <ClCompile Include="fms_sequence_concatenate.t.cpp" />
+    <ClCompile Include="fms_sequence_constant.t.cpp" />
+    <ClCompile Include="fms_sequence_copy.t.cpp" />
     <ClCompile Include="fms_sequence_epsilon.t.cpp" />
     <ClCompile Include="fms_sequence_equal.t.cpp" />
     <ClCompile Include="fms_sequence_factorial.t.cpp">
