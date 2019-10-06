@@ -1,5 +1,6 @@
 // xll_sequence.h - Sequences for Excel
 #pragma once
+#include <set>
 #include "fms_sequence.h"
 
 namespace xll {
@@ -18,6 +19,11 @@ namespace xll {
         {
             return op_incr();
         }
+        // Return a pointer to a copy of the base class.
+        virtual sequence* clone() = 0;
+        // Delete the copy returned by clone.
+        virtual void destroy(sequence*) = 0;
+       
     private:
         virtual bool op_bool() const = 0;
         virtual X op_star() const = 0;
@@ -27,6 +33,8 @@ namespace xll {
     template<class S, class X = double>
     class sequence_impl : public sequence<X> {
         S s;
+        using SI = sequence_impl<S, X>;
+        static inline std::set<SI*> pool; // keep track of clones
     public:
         sequence_impl(S s)
             : s(s)
@@ -45,26 +53,63 @@ namespace xll {
 
             return *this;
         }
+        sequence_impl* clone() override
+        {
+            SI* pi = new SI(*this);
+            if (pool.insert(pi).second == false) {
+                throw std::runtime_error("squence_impl::clone: duplicate pointer");
+            }
+
+            return pi;
+        }
+        void destroy(sequence<X>* ps) override
+        {
+            SI* pi = reinterpret_cast<SI*>(ps);
+            if (auto i = pool.find(pi); i != pool.end()) {
+                delete *i;
+                pool.erase(i);
+            }
+        }
     };
-    // Reference to a sequence to use with handles.
-    template<class S, class X = double>
-    class sequence_ref : public sequence<X> {
-        S& s;
+
+    // Make a copy of sequence.
+    template<class X = double>
+    class sequence_proxy {
+        sequence<X>* pr;
     public:
-        sequence_ref(S& s)
-            : s(s)
-        { }
-        bool op_bool() const override
+        sequence_proxy(sequence<X> & r)
+            : pr(r.clone())
+        {  }
+        sequence_proxy(const sequence_proxy& p)
         {
-            return s;
+            pr = p.pr->clone();
         }
-        X op_star() const override
+        sequence_proxy& operator=(const sequence_proxy& p)
         {
-            return *s;
+            if (this != &pr) {
+                pr->destroy(pr);
+                pr = p.pr->clone();
+            }
+
+            return *this;
         }
-        sequence_ref& op_incr() override
+        ~sequence_proxy()
         {
-            ++s;
+            if (pr) {
+                pr->destroy(pr);
+            }
+        }
+        operator bool() const
+        {
+            return *pr;
+        }
+        X operator*() const
+        {
+            return *(*pr);
+        }
+        sequence_proxy& operator++() 
+        {
+            ++(*pr);
 
             return *this;
         }

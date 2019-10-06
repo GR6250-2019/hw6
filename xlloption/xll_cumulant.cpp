@@ -64,7 +64,8 @@ double WINAPI xll_cumulants_Poisson(double lambda)
 template<size_t... I>
 auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
 {
-    auto t = std::tuple(sequence_ref(*handle<sequence<>>(h[I]))...);
+    auto t = std::tuple(sequence_proxy(*handle<sequence<>>(h[I]))...);
+
     return handle<sequence<>>(new sequence_impl(sum_product(c, sizeof...(I), t))).get();
 }
 
@@ -80,17 +81,9 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
 {
 #pragma XLLEXPORT
     handlex h;
-//    _crtBreakAlloc = 4321;
+//    _crtBreakAlloc = 26200;
     try {
         ensure(size(*pc) == size(*ph));
-
-        // scaled cumulant i
-        auto ch = [pc,ph](WORD i) {
-            return scale(pc->array[i], sequence_ref(*handle<sequence<>>(ph->array[i])));
-        };
-        auto hs = [](auto s) { 
-            return handle<sequence<>>(new sequence_impl(s)).get(); 
-        };
 
         auto n = size(*pc);
         if (n == 1) {

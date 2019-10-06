@@ -20,7 +20,7 @@ HANDLEX xll_bell(HANDLEX x)
 
     try {
         handle<xll::sequence<>> x_(x);
-        handle<xll::sequence<>> h_(new sequence_impl(bell(sequence_ref(*x_))));
+        handle<xll::sequence<>> h_(new sequence_impl(bell(sequence_proxy(*x_))));
         h = h_.get();
     }
     catch (const std::exception & ex) {

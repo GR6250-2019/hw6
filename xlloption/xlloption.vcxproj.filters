@@ -112,9 +112,6 @@
     <ClCompile Include="fms_Bell.t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xll_Hermit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll_sequence.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -173,6 +170,9 @@
       <Filter>sequence</Filter>
     </ClCompile>
     <ClCompile Include="fms_sequence_copy.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_Hermite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

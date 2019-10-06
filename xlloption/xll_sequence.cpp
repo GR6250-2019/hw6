@@ -85,9 +85,9 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         if (n < 0) {
             n = -n; // take reverse!!!
         }
-        handle<sequence<>> h_(h);
+        sequence_proxy<> h_(*handle<sequence<>>(h));
         result.resize(n, 1);
-        copy(take(n, sequence_ref(*h_)), result.begin());
+        copy(take(n, h_), result.begin());
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
