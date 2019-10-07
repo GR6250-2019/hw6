@@ -46,7 +46,7 @@ int test_cumulant_sum_ = test_cumulant_sum();
 int test_cumulant_sum_product()
 {
     {
-        constant<> one(1);
+        Poisson<> one(1);
         double c[] = { 1, 2, 3 };
         auto sp = sum_product(&c[0], 3, one, one, one);
         assert(sp);
@@ -59,7 +59,7 @@ int test_cumulant_sum_product()
         assert(*sp == 1 + 8 + 27);
     }
     {
-        constant<> one(1);
+        Poisson<> one(1);
         double c[] = { 1, 2, 3 };
         auto t = std::tuple{ one, one, one };
         auto sp = sum_product(&c[0], 3, one, one, iota{});

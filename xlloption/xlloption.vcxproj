@@ -169,6 +169,7 @@
     <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="fms_sequence_traits.h" />
     <ClInclude Include="xlloption.h" />
+    <ClInclude Include="xll_cumulant.h" />
     <ClInclude Include="xll_sequence.h" />
   </ItemGroup>
   <ItemGroup>

@@ -34,7 +34,7 @@ int test_option_cdf()
     }
     {
         double mu = 0.5;
-        auto kappas = concatenate(list({ mu, 1. }), constant(0.));
+        auto kappas = normal( mu, 1. );
 
         for (double x : {-1., 0., 1., 1.1}) {
             auto P = cdf(x, kappas);
@@ -44,7 +44,7 @@ int test_option_cdf()
     {
         double mu = 0.5;
         double sigma = 2;
-        auto kappas = concatenate(list({ mu, sigma*sigma }), constant(0.));
+        auto kappas = normal(mu, sigma);
 
         for (double x : {-1., 0., 1., 1.1}) {
             auto P = cdf(x, kappas);

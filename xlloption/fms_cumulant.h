@@ -3,23 +3,28 @@
 #include <cmath>
 #include <stdexcept>
 #include <tuple>
+#include <type_traits>
 #include <valarray>
 #include "fms_sequence.h"
 
 namespace fms::cumulant {
 
+    // K is cumulant sequence
+    template<class K>
+    using value_type = std::invoke_result_t<decltype(&K::operator*), K>;
+
     // Cumulants of a scalar multiple of a random variable.
     // kappa^{cX}_n = c^n kappa^X_n
-    template<class S, class X = sequence::value_type<S>>
+    template<class K, class S = value_type<K>>
     class scale {
-        S s;
-        X c;
-        X cn; // c^n
+        K s;
+        S c;
+        S cn; // c^n
     public:
-        scale(X c, S s)
+        scale(S c, K s)
             : s(s), c(c), cn(c)
         { }
-        X operator()(X x) const 
+        S operator()(S x) const 
         {
             return c * s(x);
         }
@@ -27,7 +32,7 @@ namespace fms::cumulant {
         {
             return s;
         }
-        X operator*() const
+        S operator*() const
         {
             return cn * (*s);
         }
@@ -40,92 +45,120 @@ namespace fms::cumulant {
         }
     };
 
-    // Convert to mean 0, variance 1: X -> X' = (X - mu)/sigma
+    // Convert to mean 0, variance 1: X' = (X - mu)/sigma
     // kappa'_1 = kappa_1 - mu = 0, kappa'_2 = kappa_2/sigma^2 = 1, kappa_n' = kappa_n/sigma^n for n > 2.
     // Return original mean, standard, deviation, and normalized kappa_n, n >= 3.
-    template<class Kappa, class X = sequence::value_type<Kappa>>
-    inline auto normalize(Kappa kappa)
+    template<class K, class S = value_type<K>>
+    inline auto normalize(K kappa)
     {
-        X mean = *kappa;
+        S mean = *kappa;
         ++kappa;
-        X variance = *kappa;
+        S variance = *kappa;
         ++kappa;
 
-        X sigma = sqrt(variance);
+        S sigma = sqrt(variance);
         auto kappa3 = scale(1 / sigma, kappa) / sequence::constant(variance);
 
         return std::tuple(mean, sigma, kappa3);
     }
 
-    template<size_t I, class X, class... Ss>
-    constexpr auto tuple_sum_product(const std::valarray<X>& cn, const std::tuple<Ss...>& ss)
+    template<size_t I, class S, class... Ks>
+    constexpr auto tuple_sum_product(const std::valarray<S>& cn, const std::tuple<Ks...>& ks)
     {
-        if constexpr (I == sizeof...(Ss) - 1) {
-            return cn[I]*(*std::get<I>(ss));
+        if constexpr (I == sizeof...(Ks) - 1) {
+            return cn[I]*(*std::get<I>(ks));
         }
         else {
-            return cn[I]*(*std::get<I>(ss)) + tuple_sum_product<I + 1>(cn, ss);
+            return cn[I]*(*std::get<I>(ks)) + tuple_sum_product<I + 1>(cn, ks);
         }
     }
 
-    template<size_t I, class X, class... Ss>
-    constexpr X tuple_sum(const std::valarray<X>& c, const std::tuple<Ss...>& ss, X s)
+    template<size_t I, class S, class... Ks>
+    constexpr S tuple_sum(const std::valarray<S>& c, const std::tuple<Ks...>& ks, S s)
     {
-        if constexpr (I == sizeof...(Ss) - 1) {
-            return c[I] * (std::get<I>(ss)(s));
+        if constexpr (I == sizeof...(Ks) - 1) {
+            return c[I] * (std::get<I>(ks)(s));
         }
         else {
-            return c[I] * (std::get<I>(ss)(s)) + tuple_sum<I + 1>(c, ss, s);
+            return c[I] * (std::get<I>(ks)(s)) + tuple_sum<I + 1>(c, ks, s);
         }
     }
 
     // Linear combination of cumulants
-    template<class ...Kappas>
+    template<class ...Ks>
     class sum_product {
-        using X = sequence::common_value_type<Kappas...>;
-        std::valarray<X> c;
-        std::valarray<X> cn; // coefficients, c^n
-        std::tuple<Kappas...> kappas;
+        using S = sequence::common_value_type<Ks...>;
+        std::valarray<S> c;
+        std::valarray<S> cn; // coefficients, c^n
+        std::tuple<Ks...> ks;
     public:
-        sum_product(const X* c, size_t n, const std::tuple<Kappas ...>& kappas)
-            : c(c, n), cn(c, n), kappas(kappas)
+        sum_product(const S* c, size_t n, const std::tuple<Ks ...>& ks)
+            : c(c, n), cn(c, n), ks(ks)
         {
-            if (n != std::tuple_size<std::tuple<Kappas...>>::value) {
+            if (n != std::tuple_size<std::tuple<Ks...>>::value) {
                 throw std::invalid_argument("fms::cumulant::sum_product: coefficients and sequences must have the same size");
             }
         }
-        sum_product(const X* c, size_t n, Kappas ...kappas)
-            : sum_product(c, n, std::tuple<Kappas...>(kappas...))
+        sum_product(const S* c, size_t n, Ks ...ks)
+            : sum_product(c, n, std::tuple<Ks...>(ks...))
         { }
-        X operator()(X s) const
+        S operator()(S s) const
         {
-            return tuple_sum<0>(c, kappas, s);
+            return tuple_sum<0>(c, ks, s);
         }
         operator bool() const
         {
             return true;
         }
-        X operator*() const
+        S operator*() const
         {
-            return tuple_sum_product<0>(cn, kappas);
+            return tuple_sum_product<0>(cn, ks);
         }
         sum_product& operator++()
         {
             cn *= c;
-            std::apply([](auto& ...kappa) { (++kappa,...); }, kappas);
+            std::apply([](auto& ...k) { (++k,...); }, ks);
 
             return *this;
         }
-        sum_product& _(X s) const
+        sum_product& _(S s) const
         {
-            auto kappas_ = kappas;
-            std::apply([s](auto& ...kappa_) { (kappa_._(s),...); }, kappas_);
+            auto ks_ = ks;
+            std::apply([s](auto& ...k_) { (k_._(s),...); }, ks_);
 
-            return sum_product(c, c.size(), kappas_);
+            return sum_product(c, c.size(), ks_);
         }
     };
 
-    // 0, 1, 0, ...
+    // Cumulants of a constant random variable: c, 0, 0, ...
+    template<class S = double>
+    class constant {
+        S c;
+        size_t n = 0;
+    public:
+        constant(S c = 1)
+            : c(c), n(0)
+        { }
+        S operator()(S s) const
+        {
+            return c * s;
+        }
+        operator bool() const
+        {
+            return true;
+        }
+        S operator*() const
+        {
+            return n == 0 ? c : S(0);
+        }
+        constant& operator++() {
+            ++n;
+
+            return *this;
+        }
+    };
+
+    // Cumulants of a normal random variable: mu, sigma^2, 0, ...
     template<class S = double>
     class normal {
         S mu;
@@ -160,7 +193,7 @@ namespace fms::cumulant {
         }
     };
 
-    // lambda, lambda, ....
+    // Cumulants of a Poisson random variable: lambda, lambda, ....
     template<class S = double>
     class Poisson {
         S lambda;

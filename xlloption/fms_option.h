@@ -21,7 +21,7 @@ namespace fms::option {
     {
         using Z = decltype((kappa(s) + log(k / f)) / s);
         auto scale = std::max(f, std::max(s, k));
-        auto infinity = std::numeric_limits<Z>::infinity();
+        constexpr auto infinity = std::numeric_limits<Z>::infinity();
 
         if (f < 0) {
             throw std::invalid_argument("fms::option::moneyness: the forward must be non-negative");
@@ -51,8 +51,8 @@ namespace fms::option {
     // Probability X <= x where X has cumulants kappa.
     // Phi(x) - phi(x) sum_{n>3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
-    template<class X, class Kappa>
-    inline auto cdf(X x, Kappa kappa)
+    template<class X, class K>
+    inline auto cdf(X x, K kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::constant;

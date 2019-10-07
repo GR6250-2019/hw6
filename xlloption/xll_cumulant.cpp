@@ -11,6 +11,31 @@
 using namespace xll;
 using namespace fms::cumulant;
 
+static AddIn xai_cumulant_constant(
+    Function(XLL_DOUBLE, L"?xll_cumulant_constant", L"XLL.CUMULANT.constant")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the constant cumulant.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the constant cumulant.")
+);
+double WINAPI xll_cumulant_constant(double s)
+{
+#pragma XLLEXPORT
+    return constant<>()(s);
+}
+
+static AddIn xai_cumulants_constant(
+    Function(XLL_HANDLE, L"?xll_cumulants_normal", L"XLL.CUMULANTS.CONSTANT")
+    .Arg(XLL_DOUBLE, L"c", L"is the constant value (mean) of the random variable.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return a handle to the sequence of cumulants for a constant random variable.")
+);
+double WINAPI xll_cumulants_constant(double c)
+{
+#pragma XLLEXPORT
+    return handle<sequence<>>(new sequence_impl(constant<>(c))).get();
+}
+
 static AddIn xai_cumulant_normal(
     Function(XLL_DOUBLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
     .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the normal cumulant.")
