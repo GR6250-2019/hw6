@@ -1,4 +1,4 @@
-// fms_cumulant.h - Cumulant and cumulants
+// fms_cumulant.h - A cumulant is a sequence of cumulants and operator() for the cumulant
 #pragma once
 #include <cmath>
 #include <stdexcept>
@@ -17,28 +17,28 @@ namespace fms::cumulant {
     // kappa^{cX}_n = c^n kappa^X_n
     template<class K, class S = value_type<K>>
     class scale {
-        K s;
+        K k;
         S c;
         S cn; // c^n
     public:
-        scale(S c, K s)
-            : s(s), c(c), cn(c)
+        scale(const S& c, const K& k)
+            : k(k), c(c), cn(c)
         { }
-        S operator()(S x) const 
+        S operator()(const S& s) const 
         {
-            return c * s(x);
+            return c * k(s);
         }
         operator bool() const
         {
-            return s;
+            return k;
         }
         S operator*() const
         {
-            return cn * (*s);
+            return cn * (*k);
         }
         scale& operator++()
         {
-            ++s;
+            ++k;
             cn *= c;
 
             return *this;
@@ -74,7 +74,7 @@ namespace fms::cumulant {
     }
 
     template<size_t I, class S, class... Ks>
-    constexpr S tuple_sum(const std::valarray<S>& c, const std::tuple<Ks...>& ks, S s)
+    constexpr S tuple_sum(const std::valarray<S>& c, const std::tuple<Ks...>& ks, const S& s)
     {
         if constexpr (I == sizeof...(Ks) - 1) {
             return c[I] * (std::get<I>(ks)(s));
@@ -102,7 +102,7 @@ namespace fms::cumulant {
         sum_product(const S* c, size_t n, Ks ...ks)
             : sum_product(c, n, std::tuple<Ks...>(ks...))
         { }
-        S operator()(S s) const
+        S operator()(const S& s) const
         {
             return tuple_sum<0>(c, ks, s);
         }
@@ -121,7 +121,7 @@ namespace fms::cumulant {
 
             return *this;
         }
-        sum_product& _(S s) const
+        sum_product& _(const S& s) const
         {
             auto ks_ = ks;
             std::apply([s](auto& ...k_) { (k_._(s),...); }, ks_);
@@ -139,7 +139,7 @@ namespace fms::cumulant {
         constant(S c = 1)
             : c(c), n(0)
         { }
-        S operator()(S s) const
+        S operator()(const S& s) const
         {
             return c * s;
         }
@@ -169,7 +169,7 @@ namespace fms::cumulant {
             : mu(mu), sigma(sigma), n(0)
         { }
         // Normal cumulant
-        S operator()(S s) const
+        S operator()(const S& s) const
         {
             return mu*s + sigma * sigma * s * s / 2;
         }

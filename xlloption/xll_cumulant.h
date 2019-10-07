@@ -1,27 +1,86 @@
 // xll_cumlant.h - Cumulants for Excel
 #pragma once
+#include "fms_cumulant.h"
+#include "xll_sequence.h"
 
 namespace xll {
 
     template<class S = double>
-    struct cumulant {
+    struct cumulant : public sequence<S> {
         virtual ~cumulant()
         { }
-        S operator()(S s)
+        S operator()(const S& s)
         {
             return op_value(s);
         }
+    private:
+        virtual S op_value(const S&) const = 0;
+    };
+    template<class K, class S = fms::cumulant::value_type<K>>
+    class cumulant_impl : public cumulant<S> {
+        K k;
+    public:
+        cumulant_impl(const K& k)
+            : k(k)
+        { }
+        ~cumulant_impl()
+        { }
+        S op_value(const S& s) const
+        {
+            return k(s);
+        }
+        bool op_bool() const override
+        {
+            return k;
+        }
+        S op_star() const override
+        {
+            return *k;
+        }
+        cumulant_impl& op_incr() override
+        {
+            ++k;
+
+            return *this;
+        }
+        cumulant_impl* clone() const override
+        {
+            return new cumulant_impl(k);
+        }
+    };
+
+    // Copies of a cumulant.
+    template<class S = double>
+    class cumulant_copy {
+        std::shared_ptr<sequence<S>> pk;
+    public:
+        cumulant_copy(const sequence<S>& s)
+            : pk(s.clone())
+        { }
+        ~cumulant_copy()
+        { }
+        S operator()(const S& s) const
+        {
+            cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk.get());
+            if (pc == nullptr) {
+                throw std::runtime_error("xll::cumulant_copy: dynamic cast failed");
+            }
+            
+            return (*pc)(s);
+        }
         operator bool() const
         {
-            return op_bool();
+            return *pk;
         }
         S operator*() const
         {
-            return op_star();
+            return  *(*pk);
         }
-        cumulant& operator++()
+        cumulant_copy& operator++()
         {
-            return op_incr();
+            ++(*pk);
+
+            return *this;
         }
     };
 

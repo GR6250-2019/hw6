@@ -50,13 +50,13 @@ int test_cumulant_sum_product()
         double c[] = { 1, 2, 3 };
         auto sp = sum_product(&c[0], 3, one, one, one);
         assert(sp);
-        assert(*sp == 1 + 2 + 3);
+        assert(*sp == 1. + 2. + 3.);
         ++sp;
         assert(sp);
-        assert(*sp == 1 + 4 + 9);
+        assert(*sp == 1. + 4. + 9.);
         ++sp;
         assert(sp);
-        assert(*sp == 1 + 8 + 27);
+        assert(*sp == 1. + 8. + 27.);
     }
     {
         Poisson<> one(1);
@@ -64,13 +64,13 @@ int test_cumulant_sum_product()
         auto t = std::tuple{ one, one, one };
         auto sp = sum_product(&c[0], 3, one, one, iota{});
         assert(sp);
-        assert(*sp == 1 + 2 + 3*0);
+        assert(*sp == 1. + 2. + 3.*0.);
         ++sp;
         assert(sp);
-        assert(*sp == 1 + 4 + 9*1);
+        assert(*sp == 1. + 4. + 9.*1.);
         ++sp;
         assert(sp);
-        assert(*sp == 1 + 8 + 27*2);
+        assert(*sp == 1. + 8. + 27.*2.);
     }
 
     return 0;

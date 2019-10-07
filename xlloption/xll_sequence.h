@@ -61,7 +61,7 @@ namespace xll {
     class sequence_copy {
         std::shared_ptr<sequence<X>> ps;
     public:
-        sequence_copy(sequence<X>& s)
+        sequence_copy(const sequence<X>& s)
             : ps(s.clone())
         { }
         operator bool() const

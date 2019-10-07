@@ -2,7 +2,7 @@
 #include <utility>
 #include "../xll12/xll/xll.h"
 #include "xll_sequence.h"
-#include "fms_cumulant.h"
+#include "xll_cumulant.h"
 
 #ifndef CATEGORY
 #define CATEGORY L"XLL"
@@ -12,86 +12,80 @@ using namespace xll;
 using namespace fms::cumulant;
 
 static AddIn xai_cumulant_constant(
-    Function(XLL_DOUBLE, L"?xll_cumulant_constant", L"XLL.CUMULANT.constant")
-    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the constant cumulant.")
-    .Category(CATEGORY)
-    .FunctionHelp(L"Return the value of the constant cumulant.")
-);
-double WINAPI xll_cumulant_constant(double s)
-{
-#pragma XLLEXPORT
-    return constant<>()(s);
-}
-
-static AddIn xai_cumulants_constant(
-    Function(XLL_HANDLE, L"?xll_cumulants_normal", L"XLL.CUMULANTS.CONSTANT")
-    .Arg(XLL_DOUBLE, L"c", L"is the constant value (mean) of the random variable.")
+    Function(XLL_HANDLE, L"?xll_cumulant_constant", L"XLL.CUMULANT.CONSTANT")
+    .Arg(XLL_DOUBLE, L"c", L"is the value of the constant random variable.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to the sequence of cumulants for a constant random variable.")
+    .FunctionHelp(L"Return a handle to the cumulant of a constant random variable.")
 );
-double WINAPI xll_cumulants_constant(double c)
+HANDLEX WINAPI xll_cumulant_constant(double c)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new sequence_impl(constant<>(c))).get();
+    return handle<sequence<>>(new cumulant_impl(constant(c))).get();
 }
 
 static AddIn xai_cumulant_normal(
-    Function(XLL_DOUBLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
-    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the normal cumulant.")
-    .Category(CATEGORY)
-    .FunctionHelp(L"Return the value of the normal cumulant.")
-);
-double WINAPI xll_cumulant_normal(double s)
-{
-#pragma XLLEXPORT
-    return normal<>()(s);
-}
-
-static AddIn xai_cumulants_normal(
-    Function(XLL_HANDLE, L"?xll_cumulants_normal", L"XLL.CUMULANTS.NORMAL")
+    Function(XLL_HANDLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
+    .Arg(XLL_DOUBLE, L"mu", L"is the mean. Default is 0.")
+    .Arg(XLL_DOUBLE, L"sigma", L"is the standard deviation of the normal. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to the sequence of normal cumulants.")
+    .FunctionHelp(L"Return a handle to a normal cumulant.")
 );
-double WINAPI xll_cumulants_normal()
+HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new sequence_impl(normal<>())).get();
+    if (sigma == 0) {
+        sigma = 1;
+    }
+
+    return handle<sequence<>>(new cumulant_impl(normal(mu, sigma))).get();
 }
 
 static AddIn xai_cumulant_Poisson(
-    Function(XLL_DOUBLE, L"?xll_cumulant_Poisson", L"XLL.CUMULANT.POISSON")
-    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the Poisson cumulant.")
-    .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
-    .Category(CATEGORY)
-    .FunctionHelp(L"Return the value of the Poisson cumulant.")
-);
-double WINAPI xll_cumulant_Poisson(double s, double lambda)
-{
-#pragma XLLEXPORT
-    return Poisson<>(lambda)(s);
-}
-
-static AddIn xai_cumulants_Poisson(
-    Function(XLL_HANDLE, L"?xll_cumulants_Poisson", L"XLL.CUMULANTS.POISSON")
+    Function(XLL_HANDLE, L"?xll_cumulant_Poisson", L"XLL.CUMULANT.POISSON")
     .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to the sequence of Poisson cumulants.")
+    .FunctionHelp(L"Return a handle to a Poisson cumulant.")
 );
-double WINAPI xll_cumulants_Poisson(double lambda)
+HANDLEX WINAPI xll_cumulant_Poisson(double lambda)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new sequence_impl(Poisson<>(lambda))).get();
+    return handle<sequence<>>(new cumulant_impl(Poisson(lambda))).get();
+}
+
+static AddIn xai_cumulant(
+    Function(XLL_DOUBLE, L"?xll_cumulant", L"XLL.CUMULANT")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant.")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the cumulant at s.")
+);
+double WINAPI xll_cumulant(HANDLEX k, double s)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<sequence<>> k_(k);
+        cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
+        ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
+        result = (*pk)(s);
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
 }
 
 template<size_t... I>
 auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
 {
-    auto t = std::tuple(sequence_copy(*handle<sequence<>>(h[I]))...);
+    auto t = std::tuple(cumulant_copy(*handle<sequence<>>(h[I]))...);
 
-    return handle<sequence<>>(new sequence_impl(sum_product(c, sizeof...(I), t))).get();
+    return handle<sequence<>>(new cumulant_impl(sum_product(c, sizeof...(I), t))).get();
 }
 
 static AddIn xai_cumulant_sum_product(
@@ -110,6 +104,11 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
     try {
         ensure(size(*pc) == size(*ph));
 
+        sequence<>* ps;
+        ps = handle<sequence<>>(ph->array[0]).ptr();
+        auto pr = cumulant_copy<>(*ps);
+        pr = pr;
+        
         auto n = size(*pc);
         if (n == 1) {
             return make_sum_product(pc->array, ph->array, std::make_index_sequence<1>{});
@@ -138,7 +137,6 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
         if (n == 9) {
             return make_sum_product(pc->array, ph->array, std::make_index_sequence<9>{});
         }
-
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
