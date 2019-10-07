@@ -23,9 +23,6 @@ namespace xll {
         }
         // Return a pointer to a copy of the base class.
         virtual sequence* clone() const = 0;
-        // Delete the copy returned by clone.
-        virtual void destroy(sequence<X>*) const = 0;
-
     private:
         virtual bool op_bool() const = 0;
         virtual X op_star() const = 0;
@@ -70,60 +67,29 @@ namespace xll {
         {
             return new sequence_impl(s);
         }
-        void destroy(sequence<X>* p) const override
-        {
-            delete dynamic_cast<sequence_impl<S, X>*>(p);
-        }
     };
 
-    // Make a copy of sequence.
+    // Copies of a sequence.
     template<class X = double>
-    class sequence_proxy : public sequence<X> {
-        sequence<X>* ps;
+    class sequence_proxy {
+        std::shared_ptr<sequence<X>> ps;
     public:
         sequence_proxy(sequence<X>& s)
             : ps(s.clone())
         {  }
-        sequence_proxy(const sequence_proxy& s)
-            : ps(s.clone())
-        {
-        }
-        sequence_proxy& operator=(const sequence_proxy& s)
-        {
-            if (this != &s) {
-                ps = s.clone();
-            }
-
-            return *this;
-        }
-        ~sequence_proxy()
-        {
-            if (ps) {
-                ps->destroy(ps);
-                ps = nullptr;
-            }
-        }
-        bool op_bool() const
+        operator bool() const
         {
             return *ps;
         }
-        X op_star() const
+        X operator*() const
         {
             return  *(*ps);
         }
-        sequence_proxy& op_incr() 
+        sequence_proxy& operator++()
         {
             ++(*ps);
 
             return *this;
         }
-        sequence_proxy* clone() const override
-        {
-            return new sequence_proxy(*ps);
-        }
-        void destroy(sequence<X>* p) const override
-        {
-            p->~sequence();
-        }
     };
-}
+ }

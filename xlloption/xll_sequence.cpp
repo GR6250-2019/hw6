@@ -131,7 +131,6 @@ HANDLEX WINAPI xll_sequence_pow(double x)
 
 int test_sequence()
 {
-    /*
     //_crtBreakAlloc = 25177;
     auto si = sequence_impl(iota{});
     auto si2(si);
@@ -150,7 +149,7 @@ int test_sequence()
     ensure(*hp == 0);
     ++hp;
     ensure(*hp == 1);
-    */
+    
     return TRUE;
 }
 Auto<OpenAfter> xoa_test_sequence(test_sequence);

@@ -70,7 +70,7 @@ auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I..
 }
 
 static AddIn xai_cumulant_sum_product(
-    Function(XLL_HANDLE, L"?xll_cumulant_sum_product", L"XLL.CUMULANT.SUM.PRODUCT")
+    Function(XLL_HANDLE, L"?xll_cumulant_sum_product", L"XLL.CUMULANTS.SUM.PRODUCT")
     .Arg(XLL_FP, L"coefficients", L"is an array of weights to use for the cumulants.")
     .Arg(XLL_FP, L"handles", L"is an array of handles to cumulant sequences.")
     .Uncalced()
