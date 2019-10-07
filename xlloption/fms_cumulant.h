@@ -19,12 +19,10 @@ namespace fms::cumulant {
         scale(X c, S s)
             : s(s), c(c), cn(c)
         { }
-        /*
         X operator()(X x) const 
         {
             return c * s(x);
         }
-        */
         operator bool() const
         {
             return s;
