@@ -36,19 +36,6 @@ namespace xll {
         sequence_impl(S s)
             : s(s)
         { }
-        sequence_impl(const sequence_impl& rs)
-            : s(rs.s)
-        {  }
-        sequence_impl& operator=(const sequence_impl& rs)
-        {
-            if (this != &rs) {
-                s = rs.s;
-            }
-
-            return *this;
-        }
-        ~sequence_impl()
-        { }
         bool op_bool() const override
         {
             return s;
@@ -71,10 +58,10 @@ namespace xll {
 
     // Copies of a sequence.
     template<class X = double>
-    class sequence_proxy {
+    class sequence_copy {
         std::shared_ptr<sequence<X>> ps;
     public:
-        sequence_proxy(sequence<X>& s)
+        sequence_copy(sequence<X>& s)
             : ps(s.clone())
         {  }
         operator bool() const
@@ -85,7 +72,7 @@ namespace xll {
         {
             return  *(*ps);
         }
-        sequence_proxy& operator++()
+        sequence_copy& operator++()
         {
             ++(*ps);
 

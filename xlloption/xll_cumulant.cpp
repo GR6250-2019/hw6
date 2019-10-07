@@ -64,7 +64,7 @@ double WINAPI xll_cumulants_Poisson(double lambda)
 template<size_t... I>
 auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
 {
-    auto t = std::tuple(sequence_proxy(*handle<sequence<>>(h[I]))...);
+    auto t = std::tuple(sequence_copy(*handle<sequence<>>(h[I]))...);
 
     return handle<sequence<>>(new sequence_impl(sum_product(c, sizeof...(I), t))).get();
 }

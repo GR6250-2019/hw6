@@ -88,7 +88,7 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         if (n < 0) {
             n = -n; // take reverse!!!
         }
-        sequence_proxy<> h_(*handle<sequence<>>(h));
+        sequence_copy<> h_(*handle<sequence<>>(h));
         result.resize(n, 1);
         copy(take(n, h_), result.begin());
     }
@@ -144,7 +144,7 @@ int test_sequence()
     handle<sequence<>> h(new sequence_impl(iota{}));
     HANDLEX h_ = h.get();
     auto hs = handle<sequence<>>(h_);
-    auto hp = sequence_proxy<>(*hs);
+    auto hp = sequence_copy<>(*hs);
     ensure(hp);
     ensure(*hp == 0);
     ++hp;
