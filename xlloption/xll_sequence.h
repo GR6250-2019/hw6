@@ -7,6 +7,8 @@ namespace xll {
     // NVI type erasure for sequence
     template<class X = double> // a sequence of X
     struct sequence {
+        virtual ~sequence()
+        { }
         operator bool() const
         {
             return op_bool();
@@ -20,10 +22,10 @@ namespace xll {
             return op_incr();
         }
         // Return a pointer to a copy of the base class.
-        virtual sequence* clone() = 0;
+        virtual sequence* clone() const = 0;
         // Delete the copy returned by clone.
-        virtual void destroy(sequence*) = 0;
-       
+        virtual void destroy(sequence<X>*) const = 0;
+
     private:
         virtual bool op_bool() const = 0;
         virtual X op_star() const = 0;
@@ -33,11 +35,22 @@ namespace xll {
     template<class S, class X = double>
     class sequence_impl : public sequence<X> {
         S s;
-        using SI = sequence_impl<S, X>;
-        static inline std::set<SI*> pool; // keep track of clones
     public:
         sequence_impl(S s)
             : s(s)
+        { }
+        sequence_impl(const sequence_impl& rs)
+            : s(rs.s)
+        {  }
+        sequence_impl& operator=(const sequence_impl& rs)
+        {
+            if (this != &rs) {
+                s = rs.s;
+            }
+
+            return *this;
+        }
+        ~sequence_impl()
         { }
         bool op_bool() const override
         {
@@ -53,65 +66,64 @@ namespace xll {
 
             return *this;
         }
-        sequence_impl* clone() override
+        sequence_impl* clone() const override
         {
-            SI* pi = new SI(*this);
-            if (pool.insert(pi).second == false) {
-                throw std::runtime_error("squence_impl::clone: duplicate pointer");
-            }
-
-            return pi;
+            return new sequence_impl(s);
         }
-        void destroy(sequence<X>* ps) override
+        void destroy(sequence<X>* p) const override
         {
-            SI* pi = reinterpret_cast<SI*>(ps);
-            if (auto i = pool.find(pi); i != pool.end()) {
-                delete *i;
-                pool.erase(i);
-            }
+            delete dynamic_cast<sequence_impl<S, X>*>(p);
         }
     };
 
     // Make a copy of sequence.
     template<class X = double>
-    class sequence_proxy {
-        sequence<X>* pr;
+    class sequence_proxy : public sequence<X> {
+        sequence<X>* ps;
     public:
-        sequence_proxy(sequence<X> & r)
-            : pr(r.clone())
+        sequence_proxy(sequence<X>& s)
+            : ps(s.clone())
         {  }
-        sequence_proxy(const sequence_proxy& p)
+        sequence_proxy(const sequence_proxy& s)
+            : ps(s.clone())
         {
-            pr = p.pr->clone();
         }
-        sequence_proxy& operator=(const sequence_proxy& p)
+        sequence_proxy& operator=(const sequence_proxy& s)
         {
-            if (this != &pr) {
-                pr->destroy(pr);
-                pr = p.pr->clone();
+            if (this != &s) {
+                ps = s.clone();
             }
 
             return *this;
         }
         ~sequence_proxy()
         {
-            if (pr) {
-                pr->destroy(pr);
+            if (ps) {
+                ps->destroy(ps);
+                ps = nullptr;
             }
         }
-        operator bool() const
+        bool op_bool() const
         {
-            return *pr;
+            return *ps;
         }
-        X operator*() const
+        X op_star() const
         {
-            return *(*pr);
+            return  *(*ps);
         }
-        sequence_proxy& operator++() 
+        sequence_proxy& op_incr() 
         {
-            ++(*pr);
+            ++(*ps);
 
             return *this;
+        }
+        sequence_proxy* clone() const override
+        {
+            return new sequence_proxy(*ps);
+        }
+        void destroy(sequence<X>* p) const override
+        {
+            p->~sequence();
         }
     };
 }

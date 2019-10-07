@@ -82,6 +82,9 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
     static xll::FP12 result;
 
     try {
+        if (n == 0) {
+            return 0;
+        }
         if (n < 0) {
             n = -n; // take reverse!!!
         }
@@ -126,3 +129,28 @@ HANDLEX WINAPI xll_sequence_pow(double x)
     return handle<sequence<>>(new sequence_impl(power(x))).get();
 }
 
+int test_sequence()
+{
+    /*
+    //_crtBreakAlloc = 25177;
+    auto si = sequence_impl(iota{});
+    auto si2(si);
+    si = si2;
+    ensure(si);
+    ensure(*si == 0);
+    ++si;
+    ensure(*si == 1);
+    ensure(*si2 == 0);
+
+    handle<sequence<>> h(new sequence_impl(iota{}));
+    HANDLEX h_ = h.get();
+    auto hs = handle<sequence<>>(h_);
+    auto hp = sequence_proxy<>(*hs);
+    ensure(hp);
+    ensure(*hp == 0);
+    ++hp;
+    ensure(*hp == 1);
+    */
+    return TRUE;
+}
+Auto<OpenAfter> xoa_test_sequence(test_sequence);
