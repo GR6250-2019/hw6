@@ -6,7 +6,7 @@
 
 namespace fms::sequence {
 
-    template<class Op, class S, class T>
+    template<class Op, class S, class T, class X = common_value_type<S, T>>
     class binop {
         inline static Op op = Op{};
         S s;
@@ -20,7 +20,7 @@ namespace fms::sequence {
         {
             return s && t;
         }
-        auto operator*() const
+        X operator*() const
         {
             return op(*s, *t);
         }

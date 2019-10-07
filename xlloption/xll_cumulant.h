@@ -9,7 +9,7 @@ namespace xll {
     struct cumulant : public sequence<S> {
         virtual ~cumulant()
         { }
-        S operator()(const S& s)
+        S operator()(const S& s) const
         {
             return op_value(s);
         }
@@ -25,7 +25,7 @@ namespace xll {
         { }
         ~cumulant_impl()
         { }
-        S op_value(const S& s) const
+        S op_value(const S& s) const override
         {
             return k(s);
         }

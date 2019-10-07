@@ -21,6 +21,25 @@ int test_epsilon()
     double ex_ = exp(x);
     assert (ex - ex_ == 2*std::numeric_limits<double>::epsilon());
 
+    {
+        auto p = power(0.5);
+        auto e = epsilon(p);
+        auto n = length(e);
+        assert(n == 53);
+    }
+    {
+        auto p = power(0.5);
+        auto e = epsilon(p, 1., 60);
+        auto n = length(e);
+        assert(n == 60);
+    }
+    {
+        auto p = power(0.5);
+        auto e = epsilon(p, 1., 0, 50);
+        auto n = length(e);
+        assert(n == 50);
+    }
+
     return 0;
 }
 

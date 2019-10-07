@@ -38,8 +38,8 @@ namespace fms {
             ++n;
             if (n >= B.size()) {
                 // B_{n+1} = (sum_{k=0}^n C(n,k) B_{n-k} kappa_{k+1}
-                auto Bnk = reverse(B.begin(), B.begin() += n);
-                B.push_back(sum(choose(n - 1) * Bnk * skip(1, kappa)));
+                auto Bnk = reverse(B.begin(), B.begin() + n);
+                B.push_back(sum(choose(X(n - 1)) * Bnk * skip(1, kappa)));
             }
 
             return *this;
@@ -80,7 +80,7 @@ namespace fms {
             ++n;
             if (n >= b.size()) {
                 // b_{n+1} = (sum_{k=0}^n b_{n-k} kappa_{k+1}/k!))/(n+1)
-                auto bnk = reverse(b.begin(), b.begin() += n);
+                auto bnk = reverse(b.begin(), b.begin() + n);
                 b.push_back(sum(bnk * skip(1, kappa) / factorial<X>{}) / n);
             }
  

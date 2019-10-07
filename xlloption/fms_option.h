@@ -1,4 +1,5 @@
 // fms_option.h - General option pricing.
+// See https://github.com/keithalewis/papers/blob/master/options.pdf
 // F = f exp(sX - kappa(s))
 // F <= k iff X <= (kappa(s) + log k/f)/s
 #pragma once
@@ -48,11 +49,11 @@ namespace fms::option {
         return (kappa(s) + log(k / f)) / s;
     }
 
-    // Probability X <= x where X has cumulants kappa.
-    // Phi(x) - phi(x) sum_{n>3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
+    // Probability density function of X where X has cumulants kappa.
+    //   phi(x) sum_{n} bell_n(0,0,kappa_3,...,kappa_n) Hermite_n(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
     template<class X, class K>
-    inline auto cdf(X x, K kappa)
+    inline auto pdf(X x, K kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::constant;
@@ -65,14 +66,39 @@ namespace fms::option {
         auto x_ = (x - mu) / sigma;
 
         bell b(concatenate(list({ 0, 0 }), kappa3));
+        Hermite H(x_);
+        X phi = normal::pdf(x_);
+
+        return phi*sum(epsilon(b * H, phi, 4, 100))/sigma;
+    }
+    
+    // Probability X <= x where X has cumulants kappa.
+    //   Phi(x) - phi(x) sum_{n>3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
+    // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
+    template<class X, class K>
+    inline auto cdf(X x, K kappa)
+    {
+        using fms::sequence::concatenate;
+        using fms::sequence::constant;
+        using fms::sequence::epsilon;
+        using fms::sequence::list;
+        using fms::sequence::skip;
+        using fms::sequence::sum;
+
+        auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
+        auto x_ = (x - mu) / sigma;
+
+        bell b(concatenate(list({ 0, 0 }), kappa3));
         auto b3 = skip(3, b); // bell_n(0, 0, kappa_3, ..., kappa_n)
 
         Hermite H(x_);
         auto H2 = skip(2, H); // Hermite_{n-1}(x)
+        
+        X phi = normal::pdf(x_);
 
-        return normal::cdf(x_) - sum(epsilon(constant(normal::pdf(x_)) * b3 * H2));
+        return normal::cdf(x_) - phi*sum(epsilon(b3 * H2, phi, 0, 100));
     }
-    
+
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
