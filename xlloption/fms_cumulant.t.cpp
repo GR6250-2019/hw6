@@ -28,12 +28,26 @@ int test_cumulant_scale()
 
 int test_cumulant_scale_double = test_cumulant_scale<double>();
 
+int test_cumulant_sum()
+{
+    normal n;
+    Poisson P(1.);
+    double c[] = { 2, 3 };
+
+    auto sp = sum_product(c, 2, n, P);
+    for (double s : {0., 0.1, 1.}) {
+        assert(sp(s) == c[0] * n(s) + c[1] * P(s));
+    }
+
+    return 0;
+}
+int test_cumulant_sum_ = test_cumulant_sum();
+
 int test_cumulant_sum_product()
 {
     {
         constant<> one(1);
         double c[] = { 1, 2, 3 };
-        auto t = std::tuple{ one, one, one };
         auto sp = sum_product(&c[0], 3, one, one, one);
         assert(sp);
         assert(*sp == 1 + 2 + 3);

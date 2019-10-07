@@ -1,4 +1,4 @@
-// fms_cumulant.h - Cumlant and cumulants
+// fms_cumulant.h - Cumulant and cumulants
 #pragma once
 #include <cmath>
 #include <stdexcept>
@@ -9,14 +9,22 @@
 namespace fms::cumulant {
 
     // Cumulants of a scalar multiple of a random variable.
+    // kappa^{cX}_n = c^n kappa^X_n
     template<class S, class X = sequence::value_type<S>>
     class scale {
         S s;
-        X c, cn; // c^n
+        X c;
+        X cn; // c^n
     public:
         scale(X c, S s)
             : s(s), c(c), cn(c)
         { }
+        /*
+        X operator()(X x) const 
+        {
+            return c * s(x);
+        }
+        */
         operator bool() const
         {
             return s;
@@ -27,6 +35,7 @@ namespace fms::cumulant {
         }
         scale& operator++()
         {
+            ++s;
             cn *= c;
 
             return *this;
@@ -34,7 +43,7 @@ namespace fms::cumulant {
     };
 
     // Convert to mean 0, variance 1: X -> X' = (X - mu)/sigma
-    // kappa'_1 = kappa_1 - mu, kappa_n' = kappa_n/sigma^n for n > 1.
+    // kappa'_1 = kappa_1 - mu = 0, kappa'_2 = kappa_2/sigma^2 = 1, kappa_n' = kappa_n/sigma^n for n > 2.
     // Return original mean, standard, deviation, and normalized kappa_n, n >= 3.
     template<class Kappa, class X = sequence::value_type<Kappa>>
     inline auto normalize(Kappa kappa)
@@ -61,11 +70,23 @@ namespace fms::cumulant {
         }
     }
 
+    template<size_t I, class X, class... Ss>
+    constexpr X tuple_sum(const std::valarray<X>& c, const std::tuple<Ss...>& ss, X s)
+    {
+        if constexpr (I == sizeof...(Ss) - 1) {
+            return c[I] * (std::get<I>(ss)(s));
+        }
+        else {
+            return c[I] * (std::get<I>(ss)(s)) + tuple_sum<I + 1>(c, ss, s);
+        }
+    }
+
     // Linear combination of cumulants
     template<class ...Kappas>
     class sum_product {
         using X = sequence::common_value_type<Kappas...>;
-        std::valarray<X> c, cn; // coefficients, c^n
+        std::valarray<X> c;
+        std::valarray<X> cn; // coefficients, c^n
         std::tuple<Kappas...> kappas;
     public:
         sum_product(const X* c, size_t n, const std::tuple<Kappas ...>& kappas)
@@ -78,6 +99,10 @@ namespace fms::cumulant {
         sum_product(const X* c, size_t n, Kappas ...kappas)
             : sum_product(c, n, std::tuple<Kappas...>(kappas...))
         { }
+        X operator()(X s) const
+        {
+            return tuple_sum<0>(c, kappas, s);
+        }
         operator bool() const
         {
             return true;
@@ -100,7 +125,8 @@ namespace fms::cumulant {
     class normal {
         size_t n;
     public:
-        S operator()(S s)
+        // Normal cumulant
+        S operator()(S s) const
         {
             return s * s / 2;
         }
@@ -128,7 +154,8 @@ namespace fms::cumulant {
     class Poisson {
         S lambda;
     public:
-        S operator()(S s)
+        // Poisson cumulant.
+        S operator()(S s) const
         {
             return lambda * (exp(s) - 1);
         }
