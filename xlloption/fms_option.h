@@ -72,7 +72,9 @@ namespace fms::option {
 
         return normal::cdf(x_) - sum(epsilon(constant(normal::pdf(x_)) * b3 * H2));
     }
-    /*
+    
+    // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
+    // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
     inline auto put(F f, S s, K k, const Kappa& kappa)
     {
@@ -81,5 +83,5 @@ namespace fms::option {
        
         return k * cdf(z, kappa) - f * cdf(z, kappa_);
     }
-    */
+    
 } // fms::option
