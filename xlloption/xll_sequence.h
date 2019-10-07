@@ -21,7 +21,7 @@ namespace xll {
         {
             return op_incr();
         }
-        // Return a pointer to a copy of the base class.
+        // Return a pointer to a copy of the derived class.
         virtual sequence* clone() const = 0;
     private:
         virtual bool op_bool() const = 0;
@@ -63,7 +63,7 @@ namespace xll {
     public:
         sequence_copy(sequence<X>& s)
             : ps(s.clone())
-        {  }
+        { }
         operator bool() const
         {
             return *ps;
@@ -79,4 +79,4 @@ namespace xll {
             return *this;
         }
     };
- }
+}
