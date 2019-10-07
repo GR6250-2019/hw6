@@ -116,34 +116,47 @@ namespace fms::cumulant {
 
             return *this;
         }
+        sum_product& _(X s) const
+        {
+            auto kappas_ = kappas;
+            std::apply([s](auto& ...kappa_) { (kappa_._(s),...); }, kappas_);
+
+            return sum_product(c, c.size(), kappas_);
+        }
     };
 
     // 0, 1, 0, ...
     template<class S = double>
     class normal {
+        S mu;
+        S sigma;
         size_t n;
     public:
+        normal(S mu = 0, S sigma = 1)
+            : mu(mu), sigma(sigma), n(0)
+        { }
         // Normal cumulant
         S operator()(S s) const
         {
-            return s * s / 2;
+            return mu*s + sigma * sigma * s * s / 2;
         }
-        normal()
-            : n(0)
-        { }
         operator bool() const
         {
             return true;
         }
         S operator*() const
         {
-            return S(n == 1);
+            return n == 0 ? mu : n == 1 ? sigma*sigma : 0;
         }
         normal& operator++()
         {
             ++n;
 
             return *this;
+        }
+        normal _(S s) const
+        {
+            return normal(mu + s, sigma);
         }
     };
 
@@ -172,6 +185,10 @@ namespace fms::cumulant {
         Poisson& operator++()
         {
             return *this;
+        }
+        Poisson _(S s) const
+        {
+            return Poisson(exp(s) * lambda);
         }
     };
 

@@ -4,6 +4,9 @@
 
 namespace fms::sequence {
 
+    template<class X>
+    using is_arithmetic = typename std::enable_if<std::is_arithmetic<X>::value>::type;
+
     template<class S>
     using value_type = std::invoke_result_t<decltype(&S::operator*), S>;
 

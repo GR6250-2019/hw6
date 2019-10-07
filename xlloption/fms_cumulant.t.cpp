@@ -30,8 +30,8 @@ int test_cumulant_scale_double = test_cumulant_scale<double>();
 
 int test_cumulant_sum()
 {
-    normal n;
-    Poisson P(1.);
+    normal<> n;
+    Poisson<> P(1.);
     double c[] = { 2, 3 };
 
     auto sp = sum_product(c, 2, n, P);
@@ -89,6 +89,15 @@ int test_cumulant_normal()
     assert(*++kappa == 0);
     assert(*++kappa == 0);
 
+    double s = 0.1;
+    auto kappa_ = kappa._(s);
+    for (double u : {-1., 0., 1.}) {
+        double ku_ = kappa_(u);
+        double ku = kappa(u + s) - kappa(s);
+        double dku = ku_ - ku;
+        assert(fabs(dku) <= std::numeric_limits<double>::epsilon());
+    }
+
     return 0;
 }
 
@@ -105,6 +114,15 @@ int test_cumulant_Poisson()
     assert(*++kappa == lambda);
     assert(*++kappa == lambda);
     assert(*++kappa == lambda);
+
+    double s = 0.1;
+    auto kappa_ = kappa._(s);
+    for (double u : {-1., 0., 1.}) {
+        double ku_ = kappa_(u);
+        double ku = kappa(u + s) - kappa(s);
+        double dku = ku_ - ku;
+        assert(fabs(dku) <= std::numeric_limits<double>::epsilon());
+    }
 
     return 0;
 }

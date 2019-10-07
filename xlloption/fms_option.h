@@ -3,6 +3,7 @@
 // F <= k iff X <= (kappa(s) + log k/f)/s
 #pragma once
 #include <algorithm>
+#include <cmath>
 #include <functional>
 #include <stdexcept>
 #include <tuple>
@@ -20,6 +21,7 @@ namespace fms::option {
     {
         using Z = decltype((kappa(s) + log(k / f)) / s);
         auto scale = std::max(f, std::max(s, k));
+        auto infinity = std::numeric_limits<Z>::infinity();
 
         if (f < 0) {
             throw std::invalid_argument("fms::option::moneyness: the forward must be non-negative");
@@ -28,27 +30,29 @@ namespace fms::option {
             throw std::invalid_argument("fms::option::moneyness: the strike must be non-negative");
         }
         if (s < 0) {
-            throw std::invalid_argument("fms::option::moneyness: the variance must be non-negative");
+            throw std::invalid_argument("fms::option::moneyness: the volatility must be non-negative");
         }
         // Edge cases
-        if (f + F(1) == F(scale)) { // f = 0 to machine epsilon
-            return std::numeric_limits<Z>::infinity();
+        if (f + F(scale) == F(scale)) { // f = 0 to machine epsilon
+            return infinity;
         }
-        if (k + K(1) == K(scale)) {
-            return -std::numeric_limits<Z>::infinity();
+        if (k + K(scale) == K(scale)) {
+            return -infinity;
         }
-        if (s + S(1) == S(scale)) {
+        if (s + S(scale) == S(scale)) {
             // k/f < 1 -> -infinity
             // k/f > 1 -> ininity
-            return copysign(Z(1), k - f) * std::numeric_limits<Z>::infinity();
+            return copysign(Z(1), k - f) * infinity;
         }
        
         return (kappa(s) + log(k / f)) / s;
     }
 
-    // Phi(x) - phi(x) sum_{n>3} b_n(0,0,kappa_3,...,kappa_n) H_{n-1}(x)
-    template<class X, class Kappas>
-    inline auto cdf(X x, Kappas kappa)
+    // Probability X <= x where X has cumulants kappa.
+    // Phi(x) - phi(x) sum_{n>3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
+    // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
+    template<class X, class Kappa>
+    inline auto cdf(X x, Kappa kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::constant;
@@ -60,14 +64,22 @@ namespace fms::option {
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
 
+        bell b(concatenate(list({ 0, 0 }), kappa3));
+        auto b3 = skip(3, b); // bell_n(0, 0, kappa_3, ..., kappa_n)
+
         Hermite H(x_);
-        auto H2 = skip(2, H);
-        bell b(concatenate(list({ 0, 0 }), kappa3)); // reduced Bell polynomial
-        auto b3 = skip(3, b);
+        auto H2 = skip(2, H); // Hermite_{n-1}(x)
 
-        auto s = sum(epsilon(constant(normal::pdf(x_)) * b3 * H2));
-
-        return normal::cdf(x_) - s;
+        return normal::cdf(x_) - sum(epsilon(constant(normal::pdf(x_)) * b3 * H2));
     }
-
+    /*
+    template<class F, class S, class K, class Kappa>
+    inline auto put(F f, S s, K k, const Kappa& kappa)
+    {
+        auto z = moneyness(f, s, k, kappa);
+        auto kappa_ = kappa._(s);
+       
+        return k * cdf(z, kappa) - f * cdf(z, kappa_);
+    }
+    */
 } // fms::option

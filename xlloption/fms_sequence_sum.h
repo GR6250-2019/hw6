@@ -1,5 +1,6 @@
 // fms_sequence_sum.h - sum a sequence
 #pragma once
+#include <stdexcept>
 #include <type_traits>
 
 namespace fms::sequence {
