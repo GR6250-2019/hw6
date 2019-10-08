@@ -139,3 +139,29 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
 
     return h;
 }
+
+#ifdef _DEBUG
+static Auto<OpenAfter> xao_test_sum_product([]() {
+    HANDLEX hn = xll_cumulant_normal(0, 1);
+    HANDLEX hp = xll_cumulant_Poisson(0.1);
+    xll::FP12 c(1, 2), h(1, 2);
+    c[0] = 1; c[1] = 2;
+    h[0] = hn; h[1] = hp;
+    HANDLEX hsp = xll_cumulant_sum_product(c.get(), h.get());
+    handle<sequence<>> hsp_(hsp);
+
+    auto hn_ = sequence_copy(*handle<sequence<>>(hn));
+    auto hp_ = sequence_copy(*handle<sequence<>>(hp));
+    auto hspc_ = sequence_copy(*hsp_);
+
+    ensure(hspc_);
+    ensure(*hspc_ == c[0] * (*hn_) + c[1] * (*hp_));
+    ++hspc_; ++hn_; ++hp_;
+    ensure(*hspc_ == c[0] * c[0] *(*hn_) + c[1] * c[1] * (*hp_));
+    ++hspc_; ++hn_; ++hp_;
+    ensure(*hspc_ == c[0] * c[0] * c[0] * (*hn_) + c[1] * c[1] * c[1] * (*hp_));
+
+    return TRUE;
+
+    });
+#endif // _DEBUG

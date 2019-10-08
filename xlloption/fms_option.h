@@ -102,7 +102,7 @@ namespace fms::option {
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
-    inline auto put(F f, S s, K k, const Kappa& kappa)
+    inline auto put(F f, S s, K k, Kappa kappa)
     {
         auto z = moneyness(f, s, k, kappa);
         auto kappa_ = kappa._(s);

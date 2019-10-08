@@ -21,10 +21,10 @@ namespace fms::cumulant {
         S c;
         S cn; // c^n
     public:
-        scale(const S& c, const K& k)
+        scale(S c, K k)
             : k(k), c(c), cn(c)
         { }
-        S operator()(const S& s) const 
+        S operator()(S s) const 
         {
             return c * k(s);
         }
@@ -84,6 +84,17 @@ namespace fms::cumulant {
         }
     }
 
+    template<size_t I, class... Ks>
+    constexpr bool tuple_all(const std::tuple<Ks...>& ks)
+    {
+        if constexpr (I == sizeof...(Ks) - 1) {
+            return std::get<I>(ks);
+        }
+        else {
+            return std::get<I>(ks) && tuple_all<I + 1>(ks);
+        }
+    }
+
     // Linear combination of cumulants
     template<class ...Ks>
     class sum_product {
@@ -92,7 +103,7 @@ namespace fms::cumulant {
         std::valarray<S> cn; // coefficients, c^n
         std::tuple<Ks...> ks;
     public:
-        sum_product(const S* c, size_t n, const std::tuple<Ks ...>& ks)
+        sum_product(const S* c, size_t n, std::tuple<Ks ...> ks)
             : c(c, n), cn(c, n), ks(ks)
         {
             if (n != std::tuple_size<std::tuple<Ks...>>::value) {
@@ -108,7 +119,7 @@ namespace fms::cumulant {
         }
         operator bool() const
         {
-            return true;
+            return tuple_all<0>(ks);
         }
         S operator*() const
         {

@@ -13,7 +13,7 @@ namespace fms::sequence {
         list(const std::initializer_list<X>& s)
             : s(s.begin(), s.end()), n(0)
         { }
-        list(const std::vector<X> s)
+        list(const std::vector<X>& s)
             : s(s), n(0)
         { }
         list(size_t n, const X* s)

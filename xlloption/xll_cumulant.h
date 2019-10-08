@@ -20,7 +20,7 @@ namespace xll {
     class cumulant_impl : public cumulant<S> {
         K k;
     public:
-        cumulant_impl(const K& k)
+        cumulant_impl(K k)
             : k(k)
         { }
         ~cumulant_impl()
@@ -59,14 +59,18 @@ namespace xll {
         { }
         ~cumulant_copy()
         { }
-        S operator()(const S& s) const
+        cumulant<S>* get() const
         {
             cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk.get());
             if (pc == nullptr) {
                 throw std::runtime_error("xll::cumulant_copy: dynamic cast failed");
             }
             
-            return (*pc)(s);
+            return pc;
+        }
+        S operator()(const S& s) const
+        {
+            return (*get())(s);
         }
         operator bool() const
         {

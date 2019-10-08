@@ -104,6 +104,9 @@
     <ClInclude Include="xll_cumulant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fms_Poisson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">

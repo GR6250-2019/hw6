@@ -1,6 +1,7 @@
 // fms_option.t.cpp - Test general European option pricing
 #include <cassert>
 #include "fms_option.h"
+#include "fms_Poisson.h"
 
 using namespace fms::option;
 using namespace fms::sequence;
@@ -51,6 +52,17 @@ int test_option_cdf()
             assert(P == fms::normal::cdf((x - mu)/sigma));
         }
     }
+    /*
+    {
+        double lambda = 0.5;
+        auto kappas = Poisson(lambda);
+
+        for (double x : {-1., 0., 1., 1.1}) {
+            auto P = cdf(x, kappas);
+            assert(P == fms::Poisson::cdf((x - lambda) / lambda, lambda));
+        }
+    }
+    */
 
     return 0;
 }
