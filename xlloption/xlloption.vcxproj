@@ -145,7 +145,7 @@
   <ItemGroup>
     <ClInclude Include="fms_Bell.h" />
     <ClInclude Include="fms_cumulant.h" />
-    <ClInclude Include="fms_Poisson.h" />
+    <ClInclude Include="fms_probability_Poisson.h" />
     <ClInclude Include="fms_sequence_apply.h" />
     <ClInclude Include="fms_sequence_binop.h" />
     <ClInclude Include="fms_sequence_cache.h" />
@@ -189,6 +189,7 @@
     <ClCompile Include="fms_option.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_probability_Poisson.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />

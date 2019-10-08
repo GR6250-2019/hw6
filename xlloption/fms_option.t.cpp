@@ -1,7 +1,7 @@
 // fms_option.t.cpp - Test general European option pricing
 #include <cassert>
 #include "fms_option.h"
-#include "fms_Poisson.h"
+#include "fms_probability_Poisson.h"
 
 using namespace fms::option;
 using namespace fms::sequence;
@@ -29,8 +29,11 @@ int test_option_cdf()
         auto kappas = normal<>();
 
         for (double x : {-1., 0., 1., 1.1}) {
-            auto P = cdf(x, kappas);
-            assert(P == fms::normal::cdf(x));
+            double p;
+            p = cdf(x, kappas);
+            assert(p == fms::normal::cdf(x));
+            p = pdf(x, kappas);
+            assert(p == fms::normal::pdf(x));
         }
     }
     {
@@ -38,8 +41,13 @@ int test_option_cdf()
         auto kappas = normal( mu, 1. );
 
         for (double x : {-1., 0., 1., 1.1}) {
-            auto P = cdf(x, kappas);
-            assert(P == fms::normal::cdf(x - mu));
+            double p, p_;
+            p = cdf(x, kappas);
+            p_ = fms::normal::cdf(x - mu);
+            assert(p - p_ == 0);
+            p = pdf(x, kappas);
+            p_ = fms::normal::pdf(x - mu);
+            assert(p - p_ == 0);
         }
     }
     {
@@ -48,21 +56,25 @@ int test_option_cdf()
         auto kappas = normal(mu, sigma);
 
         for (double x : {-1., 0., 1., 1.1}) {
-            auto P = cdf(x, kappas);
-            assert(P == fms::normal::cdf((x - mu)/sigma));
+            double p;
+            p = cdf(x, kappas);
+            assert(p == fms::normal::cdf((x - mu)/sigma));
+            p = pdf(x, kappas);
+            assert(p == fms::normal::pdf((x - mu)/sigma)/sigma);
         }
     }
-    /*
     {
-        double lambda = 0.5;
+        double lambda = 0.1;
+        fms::probability::Poisson poisson(lambda);
         auto kappas = Poisson(lambda);
 
         for (double x : {-1., 0., 1., 1.1}) {
-            auto P = cdf(x, kappas);
-            assert(P == fms::Poisson::cdf((x - lambda) / lambda, lambda));
+            double P = pdf(x, kappas);
+            double P_ = poisson.pdf(x);
+            double dP;
+            dP = P - P_;
         }
     }
-    */
 
     return 0;
 }

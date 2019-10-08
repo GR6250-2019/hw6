@@ -80,6 +80,35 @@ double WINAPI xll_cumulant(HANDLEX k, double s)
     return result;
 }
 
+static AddIn xai_cumulant_normalize(
+    Function(XLL_FP, L"?xll_cumulant_normalize", L"XLL.CUMULANT.NORMALIZE")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the mean, variance, and handle to remaining cumulant.")
+);
+_FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
+{
+#pragma XLLEXPORT
+    static xll::FP12 result(3, 1);
+
+    try {
+        handle<sequence<>> k_(k);
+        cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
+        ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
+        auto [mu, sigma, kappa3] = normalize(cumulant_copy(*k_));
+        result[0] = mu;
+        result[1] = sigma;
+        result[2] = handle<sequence<>>(new sequence_impl(kappa3)).get();
+
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result.get();
+}
+
 template<size_t... I>
 auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
 {

@@ -15,6 +15,9 @@
     <Filter Include="cumulant">
       <UniqueIdentifier>{6028193a-5f89-4a2c-8602-055aeea06653}</UniqueIdentifier>
     </Filter>
+    <Filter Include="probability">
+      <UniqueIdentifier>{9282a02b-f78a-4840-aa42-c7b702635bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -104,8 +107,8 @@
     <ClInclude Include="xll_cumulant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fms_Poisson.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="fms_probability_Poisson.h">
+      <Filter>probability</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +183,9 @@
     </ClCompile>
     <ClCompile Include="xll_Hermite.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_probability_Poisson.t.cpp">
+      <Filter>probability</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

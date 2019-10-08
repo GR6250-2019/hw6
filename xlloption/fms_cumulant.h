@@ -209,15 +209,15 @@ namespace fms::cumulant {
     class Poisson {
         S lambda;
     public:
-        // Poisson cumulant.
-        S operator()(S s) const
-        {
-            return lambda * (exp(s) - 1);
-        }
         Poisson(S lambda = 0)
             : lambda(lambda)
         { }
 
+        // Poisson cumulant.
+        S operator()(const S& s) const
+        {
+            return lambda * (exp(s) - 1);
+        }
         operator bool() const
         {
             return true;
@@ -230,7 +230,7 @@ namespace fms::cumulant {
         {
             return *this;
         }
-        Poisson _(S s) const
+        Poisson _(const S& s) const
         {
             return Poisson(exp(s) * lambda);
         }
