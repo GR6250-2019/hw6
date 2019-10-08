@@ -21,6 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_option.h">

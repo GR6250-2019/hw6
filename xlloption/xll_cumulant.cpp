@@ -79,7 +79,6 @@ double WINAPI xll_cumulant(HANDLEX k, double s)
 
     return result;
 }
-
 static AddIn xai_cumulant_normalize(
     Function(XLL_FP, L"?xll_cumulant_normalize", L"XLL.CUMULANT.NORMALIZE")
     .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant.")

@@ -180,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
+    <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Bell.t.cpp" />
