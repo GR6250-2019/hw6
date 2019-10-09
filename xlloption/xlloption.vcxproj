@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="fms_Bell.h" />
     <ClInclude Include="fms_cumulant.h" />
+    <ClInclude Include="fms_cumulant_constant.h" />
     <ClInclude Include="fms_cumulant_normal.h" />
     <ClInclude Include="fms_cumulant_poisson.h" />
     <ClInclude Include="fms_probability_normal.h" />
@@ -190,6 +191,7 @@
     <ClCompile Include="fms_cumulant.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_cumulant_constant.t.cpp" />
     <ClCompile Include="fms_cumulant_normal.t.cpp" />
     <ClCompile Include="fms_cumulant_poisson.t.cpp" />
     <ClCompile Include="fms_option.t.cpp">

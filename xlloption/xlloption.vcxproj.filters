@@ -120,6 +120,9 @@
     <ClInclude Include="fms_probability_normal.h">
       <Filter>probability</Filter>
     </ClInclude>
+    <ClInclude Include="fms_cumulant_constant.h">
+      <Filter>cumulant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="fms_probability_normal.t.cpp">
       <Filter>probability</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_cumulant_constant.t.cpp">
+      <Filter>cumulant</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
