@@ -27,11 +27,6 @@ namespace fms::cumulant {
         scale(S c, K k)
             : k(k), c(c), cn(c)
         { }
-        // kappa^{cX}(s) = kappa(cs)
-        S operator()(S s) const 
-        {
-            return k(c*s);
-        }
         operator bool() const
         {
             return k;
@@ -46,6 +41,11 @@ namespace fms::cumulant {
             cn *= c;
 
             return *this;
+        }
+        // kappa^{cX}(s) = kappa(cs)
+        S operator()(S s) const
+        {
+            return k(c * s);
         }
     };
 
