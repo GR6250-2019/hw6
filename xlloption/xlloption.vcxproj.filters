@@ -203,5 +203,8 @@
     <ClCompile Include="fms_cumulant_normal.t.cpp">
       <Filter>cumulant</Filter>
     </ClCompile>
+    <ClCompile Include="fms_probability_normal.t.cpp">
+      <Filter>probability</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

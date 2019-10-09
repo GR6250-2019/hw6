@@ -195,6 +195,7 @@
     <ClCompile Include="fms_option.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_probability_normal.t.cpp" />
     <ClCompile Include="fms_probability_poisson.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
