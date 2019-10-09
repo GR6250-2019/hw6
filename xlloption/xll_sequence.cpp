@@ -18,7 +18,7 @@ BOOL WINAPI xll_sequence_bool(HANDLEX h)
 
     try {
         handle<sequence<>> h_(h);
-        result = !!(*h_);
+        result = (*h_);
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
@@ -70,6 +70,114 @@ HANDLEX WINAPI xll_sequence_incr(HANDLEX h)
 }
 
 //
+// Arithmetic
+//
+
+static AddIn xai_sequence_add(
+    Function(XLL_HANDLE, L"?xll_sequence_add", L"XLL.SEQUENCE.ADD")
+    .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
+    .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the sum of two sequences. ")
+);
+HANDLEX WINAPI xll_sequence_add(HANDLEX s, HANDLEX t)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        handle<sequence<>> s_(s);
+        handle<sequence<>> t_(t);
+        handle<sequence<>> u(sequence_impl(sequence_copy(*s_) + sequence_copy(*t_)).clone());
+        result = u.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+static AddIn xai_sequence_sub(
+    Function(XLL_HANDLE, L"?xll_sequence_sub", L"XLL.SEQUENCE.SUB")
+    .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
+    .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the difference of two sequences. ")
+);
+HANDLEX WINAPI xll_sequence_sub(HANDLEX s, HANDLEX t)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        handle<sequence<>> s_(s);
+        handle<sequence<>> t_(t);
+        handle<sequence<>> u(sequence_impl(sequence_copy(*s_) - sequence_copy(*t_)).clone());
+        result = u.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+static AddIn xai_sequence_mul(
+    Function(XLL_HANDLE, L"?xll_sequence_mul", L"XLL.SEQUENCE.MUL")
+    .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
+    .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the product of two sequences. ")
+);
+HANDLEX WINAPI xll_sequence_mul(HANDLEX s, HANDLEX t)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        handle<sequence<>> s_(s);
+        handle<sequence<>> t_(t);
+        handle<sequence<>> u(sequence_impl(sequence_copy(*s_) * sequence_copy(*t_)).clone());
+        result = u.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+static AddIn xai_sequence_div(
+    Function(XLL_HANDLE, L"?xll_sequence_div", L"XLL.SEQUENCE.DIV")
+    .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
+    .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the quotient of two sequences. ")
+    );
+    HANDLEX WINAPI xll_sequence_div(HANDLEX s, HANDLEX t)
+    {
+#pragma XLLEXPORT
+        handlex result;
+
+        try {
+            handle<sequence<>> s_(s);
+            handle<sequence<>> t_(t);
+            handle<sequence<>> u(sequence_impl(sequence_copy(*s_) / sequence_copy(*t_)).clone());
+            result = u.get();
+        }
+        catch (const std::exception & ex) {
+            XLL_ERROR(ex.what());
+        }
+
+        return result;
+    }
+
+//
 // Uncalced functions
 //
 
@@ -81,7 +189,7 @@ static AddIn xai_sequence_epsilon(
     .Arg(XLL_LONG, L"max", L"is the maximum number of terms to take. Default is infinity.")
     .Uncalced()
     .Category(L"XLL")
-    .FunctionHelp(L"Return a sequnce that is truncated when one + x == one.")
+    .FunctionHelp(L"Return a sequence that is truncated when x + one == one.")
 );
 HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min, LONG max)
 {
@@ -197,7 +305,11 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         }
         sequence_copy<> h_(*handle<sequence<>>(h));
         result.resize(n, 1);
-        copy(take(n, h_), result.begin());
+        LONG m = copy(take(n, h_), result.begin());
+        ensure(m <= n);
+        if (m < n) {
+            result.resize(m, 1);
+        }
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());

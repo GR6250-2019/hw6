@@ -33,8 +33,14 @@ namespace fms::sequence {
         }
 
     };
+    template<class Op, class S, class T>
+    inline auto make_binop(S s, T t)
+    {
+        return fms::sequence::binop<Op, S, T>(s, t);
+    }
 
 }
+
 
 template<class S, class T, class X = fms::sequence::common_value_type<S, T>>
 inline auto operator+(S s, T t)

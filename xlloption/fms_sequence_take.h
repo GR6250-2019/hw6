@@ -1,21 +1,28 @@
 // fms_sequence_take.h - iterators with operator bool() const
 #pragma once
 #include <compare>
+#include "fms_sequence_reverse.h"
 
 namespace fms::sequence {
 
     template<class S>
     class take {
-        size_t n;
+        long n;
         S s;
     public:
-        take(size_t n, S s)
+        take(long n, S s)
             : n(n), s(s)
-        { }
+        {
+            if (n < 0) {
+                n = -n;
+                // constexpr if has reverse
+                //s = take(n, reverse(s, s - n));
+            }
+        }
         const auto operator<=>(const take&) const = default;
         operator bool() const
         {
-            return n != 0;
+            return s && n != 0;
         }
         auto operator*() const
         {
@@ -23,7 +30,7 @@ namespace fms::sequence {
         }
         take& operator++()
         {
-            if (n != 0) {
+            if (s && n != 0) {
                 --n;
                 ++s;
             }
