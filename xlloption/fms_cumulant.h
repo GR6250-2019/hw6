@@ -12,9 +12,50 @@
 
 namespace fms::cumulant {
 
+    //using namespace fms::sequence;
+
     // K is cumulant sequence
     template<class K>
     using value_type = std::invoke_result_t<decltype(&K::operator*), K>;
+
+    // Cumulants under the measure P_ with dP_/dP = exp(s X - kappa(s))
+    template<class K, class S = value_type<K>>
+    class __ {
+        K k;
+        S s;
+    public:
+        __(K k, S s)
+            : k(k), s(s)
+        { }
+        operator bool() const
+        {
+            return k;
+        }
+        // kappa^{X}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
+        S operator*() const
+        {
+            using fms::sequence::sum;
+            using fms::sequence::epsilon;
+            using fms::sequence::power;
+            using fms::sequence::factorial;
+
+            return sum(epsilon(k * power(s) / factorial<S>{}));
+        }
+        __& operator++()
+        {
+            ++k;
+
+            return *this;
+        }
+        S operator()(S u)
+        {
+            return k(u + s) - k(s);
+        }
+        __ _(S u)
+        {
+            return __(k, u + s);
+        }
+    };
 
     // Cumulants of a scalar multiple of a random variable.
     // kappa^{cX}_n = c^n kappa^X_n
@@ -46,6 +87,11 @@ namespace fms::cumulant {
         S operator()(S s) const
         {
             return k(c * s);
+        }
+        // kappa^{cX}_n = c^n (kappa_n sum_{k >= 0} kappa_{n + k} s^k/k!)
+        auto _(S s) const
+        {
+            return __(*this, s);
         }
     };
 

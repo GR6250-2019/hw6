@@ -21,7 +21,7 @@ static AddIn xai_cumulant_constant(
 HANDLEX WINAPI xll_cumulant_constant(double c)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new cumulant_impl(constant(c))).get();
+    return handle<sequence<>>(new cumulant_impl(fms::cumulant::constant(c))).get();
 }
 
 static AddIn xai_cumulant_normal(

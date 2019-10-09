@@ -1,4 +1,6 @@
 // fms_sequence_factorial.h - factorial and Pochhammer symbols
+// raising Pochhammer 1, x, x(x + 1)/2, x(x + 1)(x + 2)/2!, ...
+// falling Pochhammer 1, x, x(x - 1)/2, x(x - 1)(x - 2)/2!, ...
 #pragma once
 #include <compare>
 
@@ -11,7 +13,7 @@ namespace fms::sequence {
     public:
         // n = -1 for falling Pochhammer
         factorial(X x = 0, long n = 1)
-            : x(x), x_(x), n(n)
+            : x(x), x_(0), n(n)
         { }
         const auto operator<=>(const factorial&) const = default;
         operator bool() const
@@ -24,8 +26,11 @@ namespace fms::sequence {
         }
         factorial& operator++()
         {
-            if (x == 0) {
-                x = x_ = 1;
+            if (x_ == 0) {
+                if (x == 0) {
+                    x = 1;
+                }
+                x_ = x;
             }
             else {
                 x_ *= (x + n);

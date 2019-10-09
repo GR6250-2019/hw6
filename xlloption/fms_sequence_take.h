@@ -22,7 +22,7 @@ namespace fms::sequence {
         const auto operator<=>(const take&) const = default;
         operator bool() const
         {
-            return s && n != 0;
+            return n != 0 && s;
         }
         auto operator*() const
         {
@@ -30,7 +30,7 @@ namespace fms::sequence {
         }
         take& operator++()
         {
-            if (s && n != 0) {
+            if (operator bool()) {
                 --n;
                 ++s;
             }

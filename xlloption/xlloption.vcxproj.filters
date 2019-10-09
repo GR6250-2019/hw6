@@ -191,9 +191,6 @@
     <ClCompile Include="fms_sequence_constant.t.cpp">
       <Filter>sequence</Filter>
     </ClCompile>
-    <ClCompile Include="fms_sequence_copy.t.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="xll_Hermite.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -211,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="fms_cumulant_constant.t.cpp">
       <Filter>cumulant</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_copy.t.cpp">
+      <Filter>sequence</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

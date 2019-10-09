@@ -17,7 +17,8 @@ int test_factorial()
     {
         double x = 1.23;
         Pochhammer<> n(x);
-        assert(n && *n == x);
+        assert(n && *n == 1);
+        assert(++n && *n == x);
         assert(++n && *n == x * (x + 1));
         assert(++n && *n == x * (x + 1) * (x + 2));
         assert(++n && *n == x * (x + 1) * (x + 2) * (x + 3));
@@ -25,7 +26,8 @@ int test_factorial()
     {
         double x = 1.23;
         Pochhammer<> n(x, -1);
-        assert(n && *n == x);
+        assert(n && *n == 1);
+        assert(++n && *n == x);
         assert(++n && *n == x * (x - 1));
         assert(++n && *n == x * (x - 1) * (x - 2));
         assert(++n && *n == x * (x - 1) * (x - 2) * (x - 3));
