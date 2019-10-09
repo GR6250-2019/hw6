@@ -57,11 +57,11 @@ double WINAPI xll_option_cdf(double x, HANDLEX kappa)
 
 static Auto<OpenAfter> xao_test_option([]() {
     HANDLEX WINAPI xll_cumulant_normal(double, double);
-    HANDLEX WINAPI xll_cumulant_Poisson(double);
+    HANDLEX WINAPI xll_cumulant_poisson(double);
     HANDLEX WINAPI xll_cumulant_sum_product(_FP12*, _FP12*);
 
     HANDLEX hn = xll_cumulant_normal(0, 1);
-    HANDLEX hp = xll_cumulant_Poisson(0.1);
+    HANDLEX hp = xll_cumulant_poisson(0.1);
     xll::FP12 c(1, 2), h(1, 2);
     c[0] = 1; c[1] = 2;
     h[0] = hn; h[1] = hp;

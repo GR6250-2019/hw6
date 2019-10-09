@@ -1,7 +1,9 @@
 // fms_option.t.cpp - Test general European option pricing
 #include <cassert>
 #include "fms_option.h"
-#include "fms_probability_Poisson.h"
+#include "fms_cumulant_normal.h"
+#include "fms_probability_poisson.h"
+#include "fms_probability_normal.h"
 
 using namespace fms::option;
 using namespace fms::sequence;
@@ -26,7 +28,7 @@ int test_moneyness_ = test_moneyness();
 int test_option_cdf()
 {
     {
-        auto kappas = normal<>();
+        auto kappas = Normal<>();
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
@@ -38,7 +40,7 @@ int test_option_cdf()
     }
     {
         double mu = 0.5;
-        auto kappas = normal( mu, 1. );
+        auto kappas = Normal( mu, 1. );
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p, p_;
@@ -53,7 +55,7 @@ int test_option_cdf()
     {
         double mu = 0.5;
         double sigma = 2;
-        auto kappas = normal(mu, sigma);
+        auto kappas = Normal(mu, sigma);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;

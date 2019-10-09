@@ -111,6 +111,15 @@
     <ClInclude Include="fms_probability_Poisson.h">
       <Filter>probability</Filter>
     </ClInclude>
+    <ClInclude Include="fms_cumulant_Poisson.h">
+      <Filter>cumulant</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_cumulant_normal.h">
+      <Filter>cumulant</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_probability_normal.h">
+      <Filter>probability</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -187,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="fms_probability_Poisson.t.cpp">
       <Filter>probability</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_cumulant_poisson.t.cpp">
+      <Filter>cumulant</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_cumulant_normal.t.cpp">
+      <Filter>cumulant</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

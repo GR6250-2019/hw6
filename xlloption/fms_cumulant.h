@@ -6,6 +6,8 @@
 #include <type_traits>
 #include <valarray>
 #include "fms_sequence.h"
+#include "fms_cumulant_normal.h"
+#include "fms_cumulant_poisson.h"
 
 namespace fms::cumulant {
 
@@ -24,9 +26,10 @@ namespace fms::cumulant {
         scale(S c, K k)
             : k(k), c(c), cn(c)
         { }
+        // kappa^{cX}(s) = kappa(cs)
         S operator()(S s) const 
         {
-            return c * k(s);
+            return k(c*s);
         }
         operator bool() const
         {
@@ -168,72 +171,4 @@ namespace fms::cumulant {
             return *this;
         }
     };
-
-    // Cumulants of a normal random variable: mu, sigma^2, 0, ...
-    template<class S = double>
-    class normal {
-        S mu;
-        S sigma;
-        size_t n;
-    public:
-        normal(S mu = 0, S sigma = 1)
-            : mu(mu), sigma(sigma), n(0)
-        { }
-        // Normal cumulant
-        S operator()(const S& s) const
-        {
-            return mu*s + sigma * sigma * s * s / 2;
-        }
-        operator bool() const
-        {
-            return true;
-        }
-        S operator*() const
-        {
-            return n == 0 ? mu : n == 1 ? sigma*sigma : 0;
-        }
-        normal& operator++()
-        {
-            ++n;
-
-            return *this;
-        }
-        normal _(S s) const
-        {
-            return normal(mu + s, sigma);
-        }
-    };
-
-    // Cumulants of a Poisson random variable: lambda, lambda, ....
-    template<class S = double>
-    class Poisson {
-        S lambda;
-    public:
-        Poisson(S lambda = 0)
-            : lambda(lambda)
-        { }
-
-        // Poisson cumulant.
-        S operator()(const S& s) const
-        {
-            return lambda * (exp(s) - 1);
-        }
-        operator bool() const
-        {
-            return true;
-        }
-        S operator*() const
-        {
-            return lambda;
-        }
-        Poisson& operator++()
-        {
-            return *this;
-        }
-        Poisson _(const S& s) const
-        {
-            return Poisson(exp(s) * lambda);
-        }
-    };
-
 }

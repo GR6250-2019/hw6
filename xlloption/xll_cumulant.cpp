@@ -39,17 +39,17 @@ HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma)
         sigma = 1;
     }
 
-    return handle<sequence<>>(new cumulant_impl(normal(mu, sigma))).get();
+    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma))).get();
 }
 
-static AddIn xai_cumulant_Poisson(
-    Function(XLL_HANDLE, L"?xll_cumulant_Poisson", L"XLL.CUMULANT.POISSON")
+static AddIn xai_cumulant_poisson(
+    Function(XLL_HANDLE, L"?xll_cumulant_poisson", L"XLL.CUMULANT.POISSON")
     .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a Poisson cumulant.")
 );
-HANDLEX WINAPI xll_cumulant_Poisson(double lambda)
+HANDLEX WINAPI xll_cumulant_poisson(double lambda)
 {
 #pragma XLLEXPORT
     return handle<sequence<>>(new cumulant_impl(Poisson(lambda))).get();
@@ -171,7 +171,7 @@ HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
 #ifdef _DEBUG
 static Auto<OpenAfter> xao_test_sum_product([]() {
     HANDLEX hn = xll_cumulant_normal(0, 1);
-    HANDLEX hp = xll_cumulant_Poisson(0.1);
+    HANDLEX hp = xll_cumulant_poisson(0.1);
     xll::FP12 c(1, 2), h(1, 2);
     c[0] = 1; c[1] = 2;
     h[0] = hn; h[1] = hp;

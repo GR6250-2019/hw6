@@ -1,12 +1,12 @@
-// fms_probability_Poisson.t.cpp - Test Poisson distribution
+// fms_probability_poisson.t.cpp - Test Poisson distribution
 #include <cassert>
 #include <initializer_list>
-#include "fms_probability_Poisson.h"
+#include "fms_probability_poisson.h"
 
 using namespace fms::probability;
 
 template<class X = double>
-int test_fms_probability_Poisson()
+int test_fms_probability_poisson()
 {
     for (X lambda : {X(0), X(0.1), X(1)}) {
         Poisson<X> p(lambda);
@@ -64,5 +64,5 @@ int test_fms_probability_Poisson()
 
     return 0;
 }
-int test_fms_probability_Poisson_double = test_fms_probability_Poisson<double>();
-int test_fms_probability_Poisson_float = test_fms_probability_Poisson<float>();
+int test_fms_probability_poisson_double = test_fms_probability_poisson<double>();
+int test_fms_probability_poisson_float = test_fms_probability_poisson<float>();

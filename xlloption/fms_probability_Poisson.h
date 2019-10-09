@@ -1,4 +1,4 @@
-// fms_probability_Poisson.h - Poisson distributiong
+// fms_probability_poisson.h - Poisson distributiong
 //  P(X = k) = exp(-lambda) lambda^k/k!
 #pragma once
 #include <cmath>
