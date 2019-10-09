@@ -49,18 +49,6 @@ namespace fms::option {
         return (kappa(s) + log(k / f)) / s;
     }
 
-    /*
-    // Specialize for normal and Poisson
-    template<class X= double>
-    inline auto pdf(X x, cumulant::normal<X> kappa)
-    {
-        X mu = *kappa;
-        ++kappa;
-        X s2 = *kappa;
-        
-    }
-    */
-
     // Probability density function of X where X has cumulants kappa.
     //   phi(x) sum_{n} bell_n(0,0,kappa_3,...,kappa_n) Hermite_n(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
