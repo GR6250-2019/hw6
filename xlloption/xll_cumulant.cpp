@@ -1,4 +1,6 @@
 // xll_cumulant.cpp - Excel add-in for cumulants.
+#include <algorithm>
+#include <iterator>
 #include <numeric>
 #include <utility>
 #include "../xll12/xll/xll.h"
@@ -29,31 +31,40 @@ static AddIn xai_cumulant_normal(
     Function(XLL_HANDLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
     .Arg(XLL_DOUBLE, L"mu", L"is the mean. Default is 0.")
     .Arg(XLL_DOUBLE, L"sigma", L"is the standard deviation of the normal. Default is 1.")
+    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to a normal cumulant.")
+    .FunctionHelp(L"Return a handle to a scaled normal cumulant.")
 );
-HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma)
+HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma, double c)
 {
 #pragma XLLEXPORT
     if (sigma == 0) {
         sigma = 1;
     }
+    if (c == 0) {
+        c = 1;
+    }
 
-    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma))).get();
+    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma, c))).get();
 }
 
 static AddIn xai_cumulant_poisson(
     Function(XLL_HANDLE, L"?xll_cumulant_poisson", L"XLL.CUMULANT.POISSON")
     .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
+    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to a Poisson cumulant.")
+    .FunctionHelp(L"Return a handle to a scaled Poisson cumulant.")
 );
-HANDLEX WINAPI xll_cumulant_poisson(double lambda)
+HANDLEX WINAPI xll_cumulant_poisson(double lambda, double c)
 {
 #pragma XLLEXPORT
-    return handle<sequence<>>(new cumulant_impl(Poisson(lambda))).get();
+    if (c == 0) {
+        c = 1;
+    }
+
+    return handle<sequence<>>(new cumulant_impl(Poisson(lambda, c))).get();
 }
 
 static AddIn xai_cumulant(
@@ -112,13 +123,37 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 BOOL WINAPI xll_sequence_bool(HANDLEX);
 double WINAPI xll_sequence_star(HANDLEX);
 HANDLEX WINAPI xll_sequence_incr(HANDLEX);
+HANDLEX WINAPI xll_sequence_copy(HANDLEX);
 
 class cumulant_sum {
     size_t n;
     std::vector<HANDLEX> h;
+    void copy()
+    {
+        std::for_each(h.begin(), h.end(), [](HANDLEX hi) { hi = xll_sequence_copy(hi);  });
+    }
 public:
-    cumulant_sum(size_t n, const HANDLEX* h)
-        : n(n), h(h, h + n)
+    cumulant_sum(size_t n, const HANDLEX* h_)
+        : n(n), h(h_, h_ + n)
+    {
+        copy();
+    }
+    cumulant_sum(const cumulant_sum& cs)
+        : n(cs.n), h(cs.h)
+    {
+        copy();
+    }
+    cumulant_sum& operator=(const cumulant_sum& cs)
+    {
+        if (this != &cs) {
+            n = cs.n;
+            h = cs.h;
+            copy();
+        }
+
+        return *this;
+    }
+    ~cumulant_sum()
     { }
     operator bool() const
     {
@@ -133,90 +168,33 @@ public:
         std::for_each(h.begin(), h.end(), [](HANDLEX hi) { xll_sequence_incr(hi);  });
         return *this;
     }
+    double operator()(double s) const
+    {
+        return std::accumulate(h.begin(), h.end(), 0., [s](double x, HANDLEX hi) { 
+            return x + xll_cumulant(hi, s); });
+    }
 };
 
-template<size_t... I>
-auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
-{
-    auto t = std::tuple(cumulant_copy(*handle<sequence<>>(h[I]))...);
-
-    return handle<sequence<>>(new cumulant_impl(sum_product(c, sizeof...(I), t))).get();
-}
-
-static AddIn xai_cumulant_sum_product(
-    Function(XLL_HANDLE, L"?xll_cumulant_sum_product", L"XLL.CUMULANT.SUM.PRODUCT")
-    .Arg(XLL_FP, L"coefficients", L"is an array of weights to use for the cumulants.")
-    .Arg(XLL_FP, L"handles", L"is an array of handles to cumulant sequences.")
+static AddIn xai_cumulant_sum(
+    Function(XLL_HANDLE, L"?xll_cumulant_sum", L"XLL.CUMULANT.SUM")
+    .Arg(XLL_FP, L"handles", L"is an array of handles to a cumulants.")
     .Uncalced()
-    .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to a sequence that is a linear combination of cumulants.")
+    .Category(L"XLL")
+    .FunctionHelp(L"Returns a handle to the sum of the cumulants.")
 );
-HANDLEX WINAPI xll_cumulant_sum_product(_FP12* pc, _FP12* ph)
+HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
 {
 #pragma XLLEXPORT
-    handlex h;
-//    _crtBreakAlloc = 26200;
-    try {
-        ensure(size(*pc) == size(*ph));
+    handlex result;
 
-        auto n = size(*pc);
-        if (n == 1) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<1>{});
-        }
-        if (n == 2) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<2>{});
-        }
-        if (n == 3) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<3>{});
-        }
-        if (n == 4) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<4>{});
-        }
-        if (n == 5) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<5>{});
-        }
-        if (n == 6) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<6>{});
-        }
-        if (n == 7) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<7>{});
-        }
-        if (n == 8) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<8>{});
-        }
-        if (n == 9) {
-            return make_sum_product(pc->array, ph->array, std::make_index_sequence<9>{});
-        }
+    try {
+        handle<sequence<>> h(new sequence_impl(cumulant_sum(size(*cs), cs->array)));
+        result = h.get();
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
     }
 
-    return h;
+    return result;
 }
 
-#ifdef _DEBUG
-static Auto<OpenAfter> xao_test_sum_product([]() {
-    HANDLEX hn = xll_cumulant_normal(0, 1);
-    HANDLEX hp = xll_cumulant_poisson(0.1);
-    xll::FP12 c(1, 2), h(1, 2);
-    c[0] = 1; c[1] = 2;
-    h[0] = hn; h[1] = hp;
-    HANDLEX hsp = xll_cumulant_sum_product(c.get(), h.get());
-    handle<sequence<>> hsp_(hsp);
-
-    auto hn_ = sequence_copy(*handle<sequence<>>(hn));
-    auto hp_ = sequence_copy(*handle<sequence<>>(hp));
-    auto hspc_ = sequence_copy(*hsp_);
-
-    ensure(hspc_);
-    ensure(*hspc_ == c[0] * (*hn_) + c[1] * (*hp_));
-    ++hspc_; ++hn_; ++hp_;
-    ensure(*hspc_ == c[0] * c[0] *(*hn_) + c[1] * c[1] * (*hp_));
-    ++hspc_; ++hn_; ++hp_;
-    ensure(*hspc_ == c[0] * c[0] * c[0] * (*hn_) + c[1] * c[1] * c[1] * (*hp_));
-
-    return TRUE;
-
-    });
-#endif // _DEBUG

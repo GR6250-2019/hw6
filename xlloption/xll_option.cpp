@@ -56,37 +56,6 @@ double WINAPI xll_option_cdf(double x, HANDLEX kappa)
 }
 
 static Auto<OpenAfter> xao_test_option([]() {
-    HANDLEX WINAPI xll_cumulant_normal(double, double);
-    HANDLEX WINAPI xll_cumulant_poisson(double);
-    HANDLEX WINAPI xll_cumulant_sum_product(_FP12*, _FP12*);
-
-    HANDLEX hn = xll_cumulant_normal(0, 1);
-    HANDLEX hp = xll_cumulant_poisson(0.1);
-    xll::FP12 c(1, 2), h(1, 2);
-    c[0] = 1; c[1] = 2;
-    h[0] = hn; h[1] = hp;
-    HANDLEX hsp = xll_cumulant_sum_product(c.get(), h.get());
-    handle<xll::sequence<>> hsp_(hsp);
-
-    auto hn_ = sequence_copy(*handle<xll::sequence<>>(hn));
-    auto hp_ = sequence_copy(*handle<xll::sequence<>>(hp));
-    auto hspc_ = sequence_copy(*hsp_);
-/*
-    double v;
-    ensure(hspc_);
-    v = *hspc_;
-    ensure(*hspc_ == c[0] * (*hn_) + c[1] * (*hp_));
-    ++hspc_; ++hn_; ++hp_;
-    v = *hspc_;
-    ensure(*hspc_ == c[0] * c[0] * (*hn_) + c[1] * c[1] * (*hp_));
-    ++hspc_; ++hn_; ++hp_;
-    v = *hspc_;
-    ensure(*hspc_ == c[0] * c[0] * c[0] * (*hn_) + c[1] * c[1] * c[1] * (*hp_));
-    double x = 0;
-    double p = xll_option_pdf(x, hsp_.get());
-    ensure(p == p);
-*/
 
     return TRUE;
-
     });

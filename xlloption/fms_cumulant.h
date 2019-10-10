@@ -1,4 +1,5 @@
-// fms_cumulant.h - A cumulant is a sequence of cumulants and operator() for the cumulant
+// fms_cumulant.h - A cumulant is a sequence of cumulants, operator() for the cumulant
+// and _() for the sequence of cumulants
 #pragma once
 #include <cmath>
 #include <stdexcept>
@@ -12,15 +13,13 @@
 
 namespace fms::cumulant {
 
-    //using namespace fms::sequence;
-
     // K is cumulant sequence
     template<class K>
     using value_type = std::invoke_result_t<decltype(&K::operator*), K>;
 
     // Cumulants under the measure P_ with dP_/dP = exp(s X - kappa(s))
     template<class K, class S = value_type<K>>
-    class __ {
+    class __ { //??? Dumb name, but _ can't be used.
         K k;
         S s;
     public:
@@ -29,7 +28,7 @@ namespace fms::cumulant {
         { }
         operator bool() const
         {
-            return k;
+            return true; // Assumes all cumulants exist.
         }
         // kappa^{X}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
         S operator*() const
@@ -111,84 +110,5 @@ namespace fms::cumulant {
 
         return std::tuple(mean, sigma, kappa3);
     }
-
-    template<size_t I, class S, class... Ks>
-    constexpr auto tuple_sum_product(const std::valarray<S>& cn, const std::tuple<Ks...>& ks)
-    {
-        if constexpr (I == sizeof...(Ks) - 1) {
-            return cn[I]*(*std::get<I>(ks));
-        }
-        else {
-            return cn[I]*(*std::get<I>(ks)) + tuple_sum_product<I + 1>(cn, ks);
-        }
-    }
-
-    template<size_t I, class S, class... Ks>
-    constexpr S tuple_sum(const std::valarray<S>& c, const std::tuple<Ks...>& ks, const S& s)
-    {
-        if constexpr (I == sizeof...(Ks) - 1) {
-            return c[I] * (std::get<I>(ks)(s));
-        }
-        else {
-            return c[I] * (std::get<I>(ks)(s)) + tuple_sum<I + 1>(c, ks, s);
-        }
-    }
-
-    template<size_t I, class... Ks>
-    constexpr bool tuple_all(const std::tuple<Ks...>& ks)
-    {
-        if constexpr (I == sizeof...(Ks) - 1) {
-            return std::get<I>(ks);
-        }
-        else {
-            return std::get<I>(ks) && tuple_all<I + 1>(ks);
-        }
-    }
-
-    // Linear combination of cumulants
-    template<class ...Ks>
-    class sum_product {
-        using S = sequence::common_value_type<Ks...>;
-        std::valarray<S> c;
-        std::valarray<S> cn; // coefficients, c^n
-        std::tuple<Ks...> ks;
-    public:
-        sum_product(const S* c, size_t n, std::tuple<Ks ...> ks)
-            : c(c, n), cn(c, n), ks(ks)
-        {
-            if (n != std::tuple_size<std::tuple<Ks...>>::value) {
-                throw std::invalid_argument("fms::cumulant::sum_product: coefficients and sequences must have the same size");
-            }
-        }
-        sum_product(const S* c, size_t n, Ks ...ks)
-            : sum_product(c, n, std::tuple<Ks...>(ks...))
-        { }
-        S operator()(const S& s) const
-        {
-            return tuple_sum<0>(c, ks, s);
-        }
-        operator bool() const
-        {
-            return tuple_all<0>(ks);
-        }
-        S operator*() const
-        {
-            return tuple_sum_product<0>(cn, ks);
-        }
-        sum_product& operator++()
-        {
-            cn *= c;
-            std::apply([](auto& ...k) { (++k,...); }, ks);
-
-            return *this;
-        }
-        sum_product& _(const S& s) const
-        {
-            auto ks_ = ks;
-            std::apply([s](auto& ...k_) { (k_._(s),...); }, ks_);
-
-            return sum_product(c, c.size(), ks_);
-        }
-    };
 
 }

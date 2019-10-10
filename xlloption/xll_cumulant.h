@@ -59,18 +59,13 @@ namespace xll {
         { }
         ~cumulant_copy()
         { }
-        cumulant<S>* get() const
+        S operator()(const S& s) const
         {
             cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk.get());
             if (pc == nullptr) {
                 throw std::runtime_error("xll::cumulant_copy: dynamic cast failed");
             }
-            
-            return pc;
-        }
-        S operator()(const S& s) const
-        {
-            return (*get())(s);
+            return (*pc)(s);
         }
         operator bool() const
         {

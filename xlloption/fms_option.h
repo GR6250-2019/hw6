@@ -16,12 +16,12 @@
 
 namespace fms::option {
 
-    // F <= k iff X <= z where F = f exp(sX - kappa(s)) and z is the moneyness z = (kappa(s) + log(k/f))/s
+    // F <= k iff X <= z where F = f exp(sX - kappa(s)) and z = (kappa(s) + log(k/f))/s
     template<class F, class S, class K, class Kappa = std::function<S(S)>>
     inline auto moneyness(F f, S s, K k, const Kappa& kappa)
     {
-        using Z = decltype((kappa(s) + log(k / f)) / s);
         auto scale = std::max(f, std::max(s, k));
+        using Z = decltype((kappa(s) + log(k / f)) / s);
         constexpr auto infinity = std::numeric_limits<Z>::infinity();
 
         if (f < 0) {
@@ -56,10 +56,8 @@ namespace fms::option {
     inline auto pdf(X x, K kappa)
     {
         using fms::sequence::concatenate;
-        using fms::sequence::constant;
         using fms::sequence::epsilon;
         using fms::sequence::list;
-        using fms::sequence::skip;
         using fms::sequence::sum;
  
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
@@ -73,7 +71,7 @@ namespace fms::option {
     }
     
     // Probability X <= x where X has cumulants kappa.
-    //   Phi(x) - phi(x) sum_{n>3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
+    //   Phi(x) - phi(x) sum_{n>=3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
     template<class X, class K>
     inline auto cdf(X x, K kappa)
@@ -109,5 +107,16 @@ namespace fms::option {
        
         return k * cdf(z, kappa) - f * cdf(z, kappa_);
     }
-    
+
+    // E(F - k)^+ = f P_(F >= k) - k P(F >= k)
+    // where dP_/dP = exp(s X - kappa(s))
+    template<class F, class S, class K, class Kappa>
+    inline auto call(F f, S s, K k, Kappa kappa)
+    {
+        auto z = moneyness(f, s, k, kappa);
+        auto kappa_ = kappa._(s);
+
+        return f * (1 - cdf(z, kappa_)) - k * (1 - cdf(z, kappa));
+    }
+
 } // fms::option

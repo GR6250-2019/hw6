@@ -328,9 +328,9 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         if (n < 0) {
             n = -n; // take reverse!!!
         }
-        sequence_copy<> h_(*handle<sequence<>>(h));
+        
         result.resize(n, 1);
-        LONG m = copy(take(n, h_), result.begin());
+        LONG m = copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
         ensure(m <= n);
         if (m < n) {
             result.resize(m, 1);
