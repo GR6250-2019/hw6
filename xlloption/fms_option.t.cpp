@@ -27,43 +27,54 @@ int test_moneyness_ = test_moneyness();
 
 int test_option_cdf()
 {
-    {
+	constexpr double eps = std::numeric_limits<double>::epsilon();
+	double s = 0.2;
+	{
         auto kappas = Normal<>();
+		auto kappas_ = kappas._(s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
-            p = cdf(x, kappas);
+			p = pdf(x, kappas);
+			assert(p == fms::normal::pdf(x));
+			p = cdf(x, kappas);
             assert(p == fms::normal::cdf(x));
-            p = pdf(x, kappas);
-            assert(p == fms::normal::pdf(x));
+			double p_ = cdf(x + s, kappas_);
+			assert(p_ == p);
         }
     }
     {
         double mu = 0.5;
         auto kappas = Normal( mu, 1. );
+		auto kappas_ = kappas._(s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p, p_;
-            p = cdf(x, kappas);
+			p = pdf(x, kappas);
+			p_ = fms::normal::pdf(x - mu);
+			p = cdf(x, kappas);
             p_ = fms::normal::cdf(x - mu);
             assert(p - p_ == 0);
-            p = pdf(x, kappas);
-            p_ = fms::normal::pdf(x - mu);
             assert(p - p_ == 0);
-        }
+			p_ = cdf(x + s, kappas_);
+			assert(fabs(p_ - p) <= eps);
+		}
     }
     {
         double mu = 0.5;
         double sigma = 2;
         auto kappas = Normal(mu, sigma);
+		auto kappas_ = kappas._(s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
-            p = cdf(x, kappas);
+			p = pdf(x, kappas);
+			assert(p == fms::normal::pdf((x - mu) / sigma) / sigma);
+			p = cdf(x, kappas);
             assert(p == fms::normal::cdf((x - mu)/sigma));
-            p = pdf(x, kappas);
-            assert(p == fms::normal::pdf((x - mu)/sigma)/sigma);
-        }
+        	double p_ = cdf(x + s, kappas_);
+			assert(fabs(p_ - p) <= eps);
+		}
     }
     {
         double lambda = 0.1;
@@ -72,7 +83,7 @@ int test_option_cdf()
 
         for (double x : {-1., 0., 1., 1.1}) {
             double P = pdf(x, kappas);
-            double P_ = poisson.pdf(x);
+            double P_ = poisson.pdf(x); //??? Does not converge.
             double dP;
             dP = P - P_;
         }
