@@ -69,6 +69,31 @@ HANDLEX WINAPI xll_sequence_incr(HANDLEX h)
     return h;
 }
 
+static AddIn xai_sequence_copy(
+    Function(XLL_HANDLE, L"?xll_sequence_copy", L"XLL.SEQUENCE.COPY")
+    .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Copy a handle and return a new handle to it. ")
+);
+HANDLEX WINAPI xll_sequence_copy(HANDLEX h)
+{
+#pragma XLLEXPORT
+    handlex k_;
+
+    try {
+        handle<sequence<>> h_(h);
+        handle<sequence<>> k((*h_).clone());
+ 
+        k_ = k.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return k_;
+}
+
 //
 // Arithmetic
 //

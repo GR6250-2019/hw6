@@ -1,4 +1,5 @@
 // xll_cumulant.cpp - Excel add-in for cumulants.
+#include <numeric>
 #include <utility>
 #include "../xll12/xll/xll.h"
 #include "xll_sequence.h"
@@ -107,6 +108,32 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 
     return result.get();
 }
+
+BOOL WINAPI xll_sequence_bool(HANDLEX);
+double WINAPI xll_sequence_star(HANDLEX);
+HANDLEX WINAPI xll_sequence_incr(HANDLEX);
+
+class cumulant_sum {
+    size_t n;
+    std::vector<HANDLEX> h;
+public:
+    cumulant_sum(size_t n, const HANDLEX* h)
+        : n(n), h(h, h + n)
+    { }
+    operator bool() const
+    {
+        return std::all_of(h.begin(), h.end(), [](HANDLEX hi) { return xll_sequence_bool(hi); });
+    }
+    double operator*() const
+    {
+        return std::accumulate(h.begin(), h.end(), 0., [](double s, HANDLEX hi) { return s + xll_sequence_star(hi); });
+    }
+    cumulant_sum& operator++()
+    {
+        std::for_each(h.begin(), h.end(), [](HANDLEX hi) { xll_sequence_incr(hi);  });
+        return *this;
+    }
+};
 
 template<size_t... I>
 auto make_sum_product(const double *c, const HANDLEX* h, std::index_sequence<I...>)
