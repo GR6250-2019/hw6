@@ -4,7 +4,7 @@ Homework 6
 Open Visual Studo.  
 Clone or check out code.  
 Repository location: https://github.com/GR6250-2019/hw6.git then click Clone.  
-Open `hw4.sln` in Solution Explorer.  
+Open `hw6.sln` in Solution Explorer.  
 Build the solution.  
 Go to Team Explorer then click the Home button.
 Click on `Branches`  
