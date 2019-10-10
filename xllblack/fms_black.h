@@ -17,7 +17,8 @@ namespace fms::black {
 
 		return (s * s / 2 + log(k / f)) / s;
 	}
-    
+
+    // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
 	template<class F, class S, class K, class T>
 	inline auto put(F f, S sigma, K k, T t)
 	{
@@ -31,6 +32,7 @@ namespace fms::black {
 		return k * normal::cdf(z) - f * normal::cdf(z_);
 	}
 
+    // E(F - k)^+ = f P_(F >= k) - k P(F >= k)
 	template<class F, class S, class K, class T>
 	inline auto call(F f, S sigma, K k, T t)
 	{
