@@ -12,6 +12,9 @@ static AddIn xai_Bell(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a sequence of Bell polynomials.")
+    .Documentation(
+        L"The Bell polynomials provide the relationship between the moments and cumulants of a random variable. "
+    )
 );
 HANDLEX xll_Bell(HANDLEX x)
 {

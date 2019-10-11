@@ -1,4 +1,5 @@
 // fms_Hermite.h - Hermite polynomials
+// H_0(x) = 1, H_1(x) = x, H_{n + 1}(x) = x H_n(x) - n H_{n-1}(x)
 #pragma once
 
 namespace fms {
@@ -18,7 +19,7 @@ namespace fms {
         }
         X operator*() const
         {
-            return n == 0 ? _H : n == 1 ? Hn : H_; // H_n(x)
+            return n == 0 ? X(1) : n == 1 ? x : H_; // H_n(x)
         }
         // H_{n+1}(x) = x H_n(x) - n H_{n-1}(x);
         Hermite& operator++()

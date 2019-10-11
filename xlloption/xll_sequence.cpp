@@ -331,7 +331,7 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         }
         
         result.resize(n, 1);
-        size_t m = copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
+        LONG s = (LONG)copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
         ensure(m <= n);
         if (m < n) {
             result.resize(RW(m), 1);

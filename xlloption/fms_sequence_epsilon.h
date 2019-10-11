@@ -10,12 +10,12 @@ namespace fms::sequence {
     template<class S, class X = value_type<S>>
     class epsilon {
         S s;
-        X size;
+        X scale;
         size_t min, max;
     public:
-        // size should be the average size of the values
-        epsilon(S s, X size = 1, size_t min = 0, size_t max = std::numeric_limits<size_t>::max())
-            : s(s), size(size), min(min), max(max)
+        // scale should be the average size of the values
+        epsilon(S s, X scale = 1, size_t min = 0, size_t max = std::numeric_limits<size_t>::max())
+            : s(s), scale(scale), min(min), max(max)
         { }
         const auto operator<=>(const epsilon&) const = default;
         operator bool() const
@@ -28,7 +28,7 @@ namespace fms::sequence {
                     return false;
                 }
 
-                return *s + size != size;
+                return *s + scale != scale;
             }
 
             return false;

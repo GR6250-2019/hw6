@@ -188,7 +188,7 @@ HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
     handlex result;
 
     try {
-        handle<sequence<>> h(new sequence_impl(cumulant_sum(size(*cs), cs->array)));
+        handle<sequence<>> h(new cumulant_impl(cumulant_sum(size(*cs), cs->array)));
         result = h.get();
     }
     catch (const std::exception & ex) {

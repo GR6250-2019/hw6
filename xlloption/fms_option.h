@@ -1,6 +1,7 @@
 // fms_option.h - General option pricing.
 // See https://github.com/keithalewis/papers/blob/master/options.pdf
-// F = f exp(sX - kappa(s))
+// F = f exp(sX - kappa(s)) where X has mean 0 variance 1.
+// Note E[F] = f and Var(log(F)) = s^2.
 // F <= k iff X <= (kappa(s) + log k/f)/s
 #pragma once
 #include <algorithm>
@@ -21,7 +22,7 @@ namespace fms::option {
     inline auto moneyness(F f, S s, K k, const Kappa& kappa)
     {
         auto scale = std::max(f, std::max(s, k));
-        using Z = decltype((kappa(s) + log(k / f)) / s);
+        using Z = decltype(f + s + k);
         constexpr auto infinity = std::numeric_limits<Z>::infinity();
 
         if (f < 0) {
@@ -50,8 +51,10 @@ namespace fms::option {
     }
 
     // Probability density function of X where X has cumulants kappa.
+    //
     //   phi(x) sum_{n} bell_n(0,0,kappa_3,...,kappa_n) Hermite_n(x) if X has mean 0, variance 1.
-    // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
+    //
+    // Normalize to X' = (X - mu)/sigma and X == x iff X' == (x - mu)/sigma.
     template<class X, class K>
     inline auto pdf(X x, K kappa)
     {
@@ -67,7 +70,7 @@ namespace fms::option {
         Hermite H(x_);
         X phi = normal::pdf(x_);
 
-        return phi*sum(epsilon(b * H, phi, 4, 100))/sigma;
+        return phi*sum(epsilon(b * H, phi, 6, 100))/sigma;
     }
     
     // Probability X <= x where X has cumulants kappa.
@@ -94,7 +97,7 @@ namespace fms::option {
         
         X phi = normal::pdf(x_);
 
-        return normal::cdf(x_) - phi*sum(epsilon(b3 * H2, phi, 0, 100));
+        return normal::cdf(x_) - phi*sum(epsilon(b3 * H2, phi, 3, 100));
     }
 
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)

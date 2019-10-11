@@ -30,7 +30,7 @@ namespace fms::cumulant {
         {
             return true; // Assumes all cumulants exist.
         }
-        // kappa^{X}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
+        // kappa^{X_}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
         S operator*() const
         {
             using fms::sequence::sum;
@@ -108,7 +108,7 @@ namespace fms::cumulant {
         S sigma = sqrt(variance);
         auto kappa3 = scale(1 / sigma, kappa) / sequence::constant(variance);
 
-        return std::tuple(mean, sigma, kappa3);
+        return std::tuple(mean, sigma, std::move(kappa3));
     }
 
 }
