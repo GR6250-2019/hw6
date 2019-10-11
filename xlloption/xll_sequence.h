@@ -1,7 +1,6 @@
 // xll_sequence.h - Sequences for Excel
 #pragma once
-#include <set>
-#include "fms_sequence.h"
+//#include "fms_sequence.h"
 
 namespace xll {
     // NVI type erasure for sequence
@@ -59,11 +58,30 @@ namespace xll {
     // Copies of a sequence.
     template<class X = double>
     class sequence_copy {
-        std::shared_ptr<sequence<X>> ps;
+        sequence<X>* ps;
     public:
+        
         sequence_copy(const sequence<X>& s)
             : ps(s.clone())
         { }
+        
+        sequence_copy(const sequence_copy& s)
+            : ps(s.ps->clone())
+        { }
+        sequence_copy& operator=(const sequence_copy& s)
+        {
+            if (this != &s) {
+                delete ps;
+                ps = s.ps->clone();
+            }
+
+            return *this;
+        }
+        ~sequence_copy()
+        {
+            delete ps;
+        }
+        
         operator bool() const
         {
             return *ps;

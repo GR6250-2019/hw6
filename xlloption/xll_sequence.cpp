@@ -1,6 +1,7 @@
 // xll_sequence.cpp - Excel add-in for sequences
-#include "../xll12/xll/xll.h"
+#include "fms_sequence.h"
 #include "xll_sequence.h"
+#include "../xll12/xll/xll.h"
 
 using namespace fms::sequence;
 using namespace xll;
@@ -205,7 +206,7 @@ static AddIn xai_sequence_div(
 //
 // Uncalced functions
 //
-
+    /*
 static AddIn xai_sequence_epsilon(
     Function(XLL_HANDLE, L"?xll_sequence_epsilon", L"XLL.SEQUENCE.EPSILON")
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
@@ -235,6 +236,7 @@ HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min, LONG max)
 
     return s_;
 }
+*/
 static AddIn xai_sequence_iota(
     Function(XLL_HANDLE, L"?xll_sequence_iota", L"XLL.SEQUENCE.IOTA")
     .Arg(XLL_DOUBLE, L"start", L"is the starting value for iota. Default is 0.")
@@ -331,8 +333,7 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         }
         
         result.resize(n, 1);
-        LONG s = (LONG)copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
-        ensure(m <= n);
+        LONG m = (LONG)copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
         if (m < n) {
             result.resize(RW(m), 1);
         }

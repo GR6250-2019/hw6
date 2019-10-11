@@ -3,6 +3,7 @@
 #include <iterator>
 #include <numeric>
 #include <utility>
+#include "fms_cumulant.h"
 #include "../xll12/xll/xll.h"
 #include "xll_sequence.h"
 #include "xll_cumulant.h"
@@ -130,7 +131,7 @@ class cumulant_sum {
     std::vector<HANDLEX> h;
     void copy()
     {
-        std::for_each(h.begin(), h.end(), [](HANDLEX hi) { hi = xll_sequence_copy(hi);  });
+        std::for_each(h.begin(), h.end(), [](HANDLEX& hi) { hi = xll_sequence_copy(hi);  });
     }
 public:
     cumulant_sum(size_t n, const HANDLEX* h_)

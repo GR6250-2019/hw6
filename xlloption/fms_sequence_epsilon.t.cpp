@@ -37,12 +37,6 @@ int test_epsilon()
         assert(n == 60);
     }
     {
-        auto p = power(0.5);
-        auto e = epsilon(p, 1., 0, 50);
-        auto n = length(e);
-        assert(n == 50);
-    }
-    {
         auto c = constant(eps / 2);
         assert(0 == length(epsilon(c)));
         assert(0 == sum(epsilon(c)));

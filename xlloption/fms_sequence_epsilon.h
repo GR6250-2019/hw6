@@ -14,8 +14,8 @@ namespace fms::sequence {
         size_t min, max;
     public:
         // scale should be the average size of the values
-        epsilon(S s, X scale = 1, size_t min = 0, size_t max = std::numeric_limits<size_t>::max())
-            : s(s), scale(scale), min(min), max(max)
+        epsilon(S s, X scale = 1, size_t min = 0)
+            : s(s), scale(scale), min(min)
         { }
         const auto operator<=>(const epsilon&) const = default;
         operator bool() const
@@ -23,9 +23,6 @@ namespace fms::sequence {
             if (s) {
                 if (min != 0) {
                     return true;
-                }
-                if (max == 0) {
-                    return false;
                 }
 
                 return *s + scale != scale;
@@ -41,9 +38,6 @@ namespace fms::sequence {
         {
             if (min != 0) {
                 --min;
-            }
-            if (max != 0) {
-                --max;
             }
 
             ++s;

@@ -1,6 +1,5 @@
 // xll_cumlant.h - Cumulants for Excel
 #pragma once
-#include "fms_cumulant.h"
 #include "xll_sequence.h"
 
 namespace xll {
@@ -16,6 +15,7 @@ namespace xll {
     private:
         virtual S op_value(const S&) const = 0;
     };
+
     template<class K, class S = fms::cumulant::value_type<K>>
     class cumulant_impl : public cumulant<S> {
         K k;
@@ -52,13 +52,28 @@ namespace xll {
     // Copies of a cumulant.
     template<class S = double>
     class cumulant_copy {
-        std::shared_ptr<sequence<S>> pk;
+        sequence<S>* pk;
     public:
         cumulant_copy(const sequence<S>& s)
             : pk(s.clone())
         { }
-        ~cumulant_copy()
+
+        cumulant_copy(const cumulant_copy& s)
+            : pk(s.pk->clone())
         { }
+        cumulant_copy& operator=(const cumulant_copy& s)
+        {
+            if (this != &s) {
+                delete pk;
+                pk = s.pk->clone();
+            }
+
+            return *this;
+        }
+        ~cumulant_copy()
+        {
+            delete pk;
+        }
         S operator()(const S& s) const
         {
             cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk.get());

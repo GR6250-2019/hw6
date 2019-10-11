@@ -62,7 +62,8 @@ namespace fms::option {
         using fms::sequence::epsilon;
         using fms::sequence::list;
         using fms::sequence::sum;
- 
+        using fms::sequence::take;
+
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
 
@@ -70,7 +71,7 @@ namespace fms::option {
         Hermite H(x_);
         X phi = normal::pdf(x_);
 
-        return phi*sum(epsilon(b * H, phi, 6, 100))/sigma;
+        return phi*sum(take(100, epsilon(b * H, phi, 6)))/sigma;
     }
     
     // Probability X <= x where X has cumulants kappa.
@@ -85,6 +86,7 @@ namespace fms::option {
         using fms::sequence::list;
         using fms::sequence::skip;
         using fms::sequence::sum;
+        using fms::sequence::take;
 
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
@@ -97,7 +99,7 @@ namespace fms::option {
         
         X phi = normal::pdf(x_);
 
-        return normal::cdf(x_) - phi*sum(epsilon(b3 * H2, phi, 3, 100));
+        return normal::cdf(x_) - phi*sum(take(100, epsilon(b3 * H2, phi, 3)));
     }
 
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
