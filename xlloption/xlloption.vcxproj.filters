@@ -123,6 +123,15 @@
     <ClInclude Include="fms_cumulant_constant.h">
       <Filter>cumulant</Filter>
     </ClInclude>
+    <ClInclude Include="fms_sequence_item.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_null.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_flatten.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -210,6 +219,15 @@
       <Filter>cumulant</Filter>
     </ClCompile>
     <ClCompile Include="fms_sequence_copy.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_item.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_null.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_flatten.t.cpp">
       <Filter>sequence</Filter>
     </ClCompile>
   </ItemGroup>

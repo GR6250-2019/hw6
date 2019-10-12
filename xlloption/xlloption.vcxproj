@@ -162,9 +162,11 @@
     <ClInclude Include="fms_sequence_factorial.h" />
     <ClInclude Include="fms_option.h" />
     <ClInclude Include="fms_Hermite.h" />
+    <ClInclude Include="fms_sequence_flatten.h" />
     <ClInclude Include="fms_sequence_iota.h" />
     <ClInclude Include="fms_sequence_length.h" />
     <ClInclude Include="fms_sequence_list.h" />
+    <ClInclude Include="fms_sequence_null.h" />
     <ClInclude Include="fms_sequence_pointer.h" />
     <ClInclude Include="fms_sequence_power.h" />
     <ClInclude Include="fms_sequence_reverse.h" />
@@ -173,6 +175,7 @@
     <ClInclude Include="fms_sequence_sum.h" />
     <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="fms_sequence_traits.h" />
+    <ClInclude Include="fms_sequence_item.h" />
     <ClInclude Include="xlloption.h" />
     <ClInclude Include="xll_cumulant.h" />
     <ClInclude Include="xll_sequence.h" />
@@ -216,8 +219,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_sequence_flatten.t.cpp" />
     <ClCompile Include="fms_sequence_iota.t.cpp" />
+    <ClCompile Include="fms_sequence_item.t.cpp" />
     <ClCompile Include="fms_sequence_list.t.cpp" />
+    <ClCompile Include="fms_sequence_null.t.cpp" />
     <ClCompile Include="fms_sequence_reverse.t.cpp" />
     <ClCompile Include="fms_sequence_take.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
