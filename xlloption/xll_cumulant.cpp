@@ -5,6 +5,7 @@
 #include <utility>
 #include "fms_cumulant.h"
 #include "../xll12/xll/xll.h"
+#include "../xll12/xll/shfb/entities.h"
 #include "xll_sequence.h"
 #include "xll_cumulant.h"
 
@@ -21,6 +22,9 @@ static AddIn xai_cumulant_constant(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the cumulant of a constant random variable.")
+    .Documentation(
+        L"The cumulants of a constant are c, 0, 0, ..."
+    )
 );
 HANDLEX WINAPI xll_cumulant_constant(double c)
 {
@@ -36,6 +40,9 @@ static AddIn xai_cumulant_normal(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled normal cumulant.")
+    .Documentation(
+        L"The cumulant is " MATH_(kappa_ L"(s) = " mu_ L"s + " sigma_ sup2_ L" s" sup2_ L"/2.")
+    )
 );
 HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma, double c)
 {
@@ -57,6 +64,9 @@ static AddIn xai_cumulant_poisson(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled Poisson cumulant.")
+    .Documentation(
+        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(exp(x) - 1).")
+    )
 );
 HANDLEX WINAPI xll_cumulant_poisson(double lambda, double c)
 {

@@ -1,5 +1,7 @@
 // fms_sequence_concatenate.h - Concatenate two sequences.
 #pragma once
+#include "fms_sequence_item.h"
+#include "fms_sequence_traits.h"
 
 namespace fms::sequence {
 
@@ -26,4 +28,9 @@ namespace fms::sequence {
             return *this;
         }
     };
+    template<class S, class X = value_type<S>>
+    inline auto cons(X x, S s)
+    {
+        return concatenate(item(x), s);
+    }
 }

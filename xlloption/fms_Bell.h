@@ -1,5 +1,6 @@
 // fms_Bell.h - Bell polynomials
 #pragma once
+#include <initializer_list>
 #include "fms_sequence.h"
 
 namespace fms {
@@ -11,8 +12,8 @@ namespace fms {
         std::vector<X> B; // cached values
         size_t n;
     public:
-        Bell(K kappa)
-            : kappa(kappa), B({ X(1) }), n(0)
+        Bell(K kappa, const std::initializer_list<X>& b = {1})
+            : kappa(kappa), B(b), n(0)
         { }
         void reset()
         {
@@ -54,8 +55,8 @@ namespace fms {
         std::vector<X> b; // cached values
         size_t n;
     public:
-        bell(K kappa)
-            : kappa(kappa), b({ X(1) }), n(0)
+        bell(K kappa, const std::initializer_list<X>& b = { 1 })
+            : kappa(kappa), b(b), n(0)
         { }
         void reset()
         {

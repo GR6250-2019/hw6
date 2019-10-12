@@ -43,6 +43,10 @@ namespace fms::sequence {
         {
             return s[n];
         }
+        X& operator*()
+        {
+            return s[n];
+        }
         list& operator++()
         {
             if (n < s.size()) {

@@ -164,6 +164,7 @@
     <ClInclude Include="fms_Hermite.h" />
     <ClInclude Include="fms_sequence_flatten.h" />
     <ClInclude Include="fms_sequence_iota.h" />
+    <ClInclude Include="fms_sequence_iterator.h" />
     <ClInclude Include="fms_sequence_length.h" />
     <ClInclude Include="fms_sequence_list.h" />
     <ClInclude Include="fms_sequence_null.h" />
@@ -222,6 +223,7 @@
     <ClCompile Include="fms_sequence_flatten.t.cpp" />
     <ClCompile Include="fms_sequence_iota.t.cpp" />
     <ClCompile Include="fms_sequence_item.t.cpp" />
+    <ClCompile Include="fms_sequence_iterator.t.cpp" />
     <ClCompile Include="fms_sequence_list.t.cpp" />
     <ClCompile Include="fms_sequence_null.t.cpp" />
     <ClCompile Include="fms_sequence_reverse.t.cpp" />

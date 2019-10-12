@@ -6,11 +6,11 @@ namespace fms {
 
     template<class X = double>
     class Hermite {
-        X x;
+        const X x;
         X _H, Hn, H_;
         size_t n;
     public:
-        Hermite(X x)
+        Hermite(const X x)
             : x(x), _H(1), Hn(x), H_(x*x - 1), n(0)
         { }
         operator bool() const

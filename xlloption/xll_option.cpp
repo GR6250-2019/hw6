@@ -6,6 +6,16 @@
 using namespace xll;
 using namespace fms;
 
+static AddIn xai_option(
+    Document(L"xlloption")
+    .Documentation(L"General option pricing.")
+);
+
+static AddIn xai_option_xll(
+    Document(L"XLL")
+    .Documentation(L"XLL documentation.")
+);
+
 static AddIn xai_option_pdf(
     Function(XLL_DOUBLE, L"?xll_option_pdf", L"XLL.OPTION.PDF")
     .Arg(XLL_DOUBLE, L"x", L"is the value at which to evaluate the density function.")

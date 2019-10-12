@@ -1,4 +1,5 @@
 // fms_sequence_flatten.h - Reduce a sequence of sequences to a sequence.
+// {{a, a, ...},{b, b, ...},...} -> {a, a, ..., b, b, ...}
 #pragma once
 
 namespace fms::sequence {
@@ -20,11 +21,9 @@ namespace fms::sequence {
         }
         flatten& operator++()
         {
-            if (ss) {
-                if (*ss) {
-                    ++*ss;
-                }
-                else {
+            if (ss && *ss) {
+                ++(*ss);
+                if (!*ss) {
                     ++ss;
                 }
             }

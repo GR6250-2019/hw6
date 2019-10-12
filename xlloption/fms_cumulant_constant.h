@@ -30,7 +30,7 @@ namespace fms::cumulant {
             return c * s;
         }
         // Constant under the measure dP_/dP = exp(s X - kappa(s)) = 1
-        constant _(S s) const
+        constant _(S) const
         {
             return constant(c);
         }
