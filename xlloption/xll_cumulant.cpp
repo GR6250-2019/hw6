@@ -23,7 +23,8 @@ static AddIn xai_cumulant_constant(
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the cumulant of a constant random variable.")
     .Documentation(
-        L"The cumulants of a constant are c, 0, 0, ..."
+        L"The cumulants of a constant are c, 0, 0, ... "
+        L"The cumulant is " MATH_(kappa_ L"(s) = cs. ")
     )
 );
 HANDLEX WINAPI xll_cumulant_constant(double c)
@@ -41,6 +42,7 @@ static AddIn xai_cumulant_normal(
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled normal cumulant.")
     .Documentation(
+        L"The cumulants of a normal random variable are " mu_ L", " sigma_ SUP_(L"2") L", 0, 0 ... "
         L"The cumulant is " MATH_(kappa_ L"(s) = " mu_ L"s + " sigma_ sup2_ L" s" sup2_ L"/2.")
     )
 );
@@ -65,7 +67,8 @@ static AddIn xai_cumulant_poisson(
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled Poisson cumulant.")
     .Documentation(
-        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(exp(x) - 1).")
+        L"The cumulants of a Poisson random variable are constant and equal to " lambda_ L". "
+        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(e" SUP_(L"x") L" - 1).")
     )
 );
 HANDLEX WINAPI xll_cumulant_poisson(double lambda, double c)
@@ -84,6 +87,9 @@ static AddIn xai_cumulant(
     .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
     .Category(CATEGORY)
     .FunctionHelp(L"Return the value of the cumulant at s.")
+    .Documentation(
+        L"Evaluate the cumulant at a value. "
+    )
 );
 double WINAPI xll_cumulant(HANDLEX k, double s)
 {
@@ -108,6 +114,10 @@ static AddIn xai_cumulant_normalize(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return the mean, variance, and handle to remaining cumulant.")
+    .Documentation(
+        L"Convert to a cumulants with mean 0 and variance 1. "
+        L"Return the original mean and standard deviation, and a handle to the remaining normalized cumulants. "
+    )
 );
 _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 {
@@ -191,7 +201,10 @@ static AddIn xai_cumulant_sum(
     .Arg(XLL_FP, L"handles", L"is an array of handles to a cumulants.")
     .Uncalced()
     .Category(L"XLL")
-    .FunctionHelp(L"Returns a handle to the sum of the cumulants.")
+    .FunctionHelp(L"Return a handle to the sum of the cumulants.")
+    .Documentation(
+        L"Return a handle to the sum of the cumulants. "
+    )
 );
 HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
 {
