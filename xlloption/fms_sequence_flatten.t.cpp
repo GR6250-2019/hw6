@@ -4,6 +4,7 @@
 #include "fms_sequence_apply.h"
 #include "fms_sequence_cache.h"
 #include "fms_sequence_concatenate.h"
+#include "fms_sequence_copy.h"
 #include "fms_sequence_equal.h"
 #include "fms_sequence_item.h"
 #include "fms_sequence_iterator.h"
@@ -107,6 +108,14 @@ int test_fms_sequence_flatten()
         auto l_ = list({ 1, 0, 2, 0, 3 });
         auto f = [](auto i) { return list({ 0, i }); };
         assert(equal(l_, skip(1, flatten(cache(apply(f,l))))));
+    }
+    {
+        auto l = null("ab");
+        auto f = [](auto c) { return list({ ',', c }); };
+        auto fl = skip(1, flatten(cache(apply(f, l))));
+        std::string s;
+        copy(fl, std::back_inserter(s));
+        assert(s == "a,b");
     }
 
 

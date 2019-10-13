@@ -188,6 +188,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="HTMLPage.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
     <None Include="README.md" />
     <None Include="TODO.md" />
   </ItemGroup>
