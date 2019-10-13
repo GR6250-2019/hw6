@@ -206,28 +206,51 @@ static AddIn xai_sequence_div(
 //
 // Uncalced functions
 //
-    /*
+
+static AddIn xai_sequence_concatenate(
+    Function(XLL_HANDLE, L"?xll_sequence_concatenate", L"XLL.SEQUENCE.CONCATENATE")
+    .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
+    .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a sequence concatentaing s followed by t.")
+);
+HANDLEX WINAPI xll_sequence_concatenate(HANDLEX s, HANDLEX t)
+{
+#pragma XLLEXPORT
+    handlex u_;
+
+    try {
+        handle<sequence<>> s_(s);
+        handle<sequence<>> t_(t);
+        handle<sequence<>> u(new sequence_impl(concatenate(sequence_copy(*s_), sequence_copy(*t_))));
+        u_ = u.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return u_;
+}
+
+
 static AddIn xai_sequence_epsilon(
     Function(XLL_HANDLE, L"?xll_sequence_epsilon", L"XLL.SEQUENCE.EPSILON")
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_DOUBLE, L"one", L"is the scale to use for machine epsilon. Default is 0.")
     .Arg(XLL_LONG, L"min", L"is the minimum number of terms to take. Default is 0.")
-    .Arg(XLL_LONG, L"max", L"is the maximum number of terms to take. Default is infinity.")
     .Uncalced()
     .Category(L"XLL")
     .FunctionHelp(L"Return a sequence that is truncated when x + one == one.")
 );
-HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min, LONG max)
+HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min)
 {
 #pragma XLLEXPORT
     handlex s_;
 
     try {
-        if (max == 0) {
-            max = std::numeric_limits<LONG>::max();
-        }
         handle<sequence<>> h_(h);
-        handle<sequence<>> s(new sequence_impl(epsilon(sequence_copy(*h_), one, min, max)));
+        handle<sequence<>> s(new sequence_impl(epsilon(sequence_copy(*h_), one, min)));
         s_ = s.get();
     }
     catch (const std::exception & ex) {
@@ -236,7 +259,7 @@ HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min, LONG max)
 
     return s_;
 }
-*/
+
 static AddIn xai_sequence_iota(
     Function(XLL_HANDLE, L"?xll_sequence_iota", L"XLL.SEQUENCE.IOTA")
     .Arg(XLL_DOUBLE, L"start", L"is the starting value for iota. Default is 0.")
@@ -249,6 +272,29 @@ HANDLEX WINAPI xll_sequence_iota(double start)
 #pragma XLLEXPORT
 
     return handle<sequence<>>(new sequence_impl(iota(start))).get();
+}
+
+static AddIn xai_sequence_list(
+    Function(XLL_HANDLE, L"?xll_sequence_list", L"XLL.SEQUENCE.LIST")
+    .Arg(XLL_FP, L"array", L"is a array of numbers to use for a sequence.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a sequence of array.")
+);
+HANDLEX WINAPI xll_sequence_list(const _FP12* pa)
+{
+#pragma XLLEXPORT
+    handlex s_;
+
+    try {
+        handle<sequence<>> s(new sequence_impl(list(size(*pa), pa->array)));
+        s_ = s.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return s_;
 }
 
 static AddIn xai_sequence_pow(

@@ -11,7 +11,7 @@ namespace fms::sequence {
     class epsilon {
         S s;
         X scale;
-        size_t min, max;
+        size_t min;
     public:
         // scale should be the average size of the values
         epsilon(S s, X scale = 1, size_t min = 0)

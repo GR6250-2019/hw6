@@ -30,7 +30,6 @@ namespace fms::sequence {
         }
     };
     // Assumes c exists over lifetime
-
     template<class C>
     auto make_iterator(C& c)
     {
