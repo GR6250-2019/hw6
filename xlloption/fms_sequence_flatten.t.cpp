@@ -10,6 +10,7 @@
 #include "fms_sequence_list.h"
 #include "fms_sequence_constant.h"
 #include "fms_sequence_null.h"
+#include "fms_sequence_skip.h"
 
 using namespace fms::sequence;
 
@@ -86,6 +87,26 @@ int test_fms_sequence_flatten()
         i = *++h;
         */
         //assert(equal(f, null(", a, bc, def")));
+    }
+    {
+        auto l = list({ 1, 2, 3 });
+        auto f = [](auto i) { return list({ 0, i }); };
+        auto afl = apply(f, l);
+        auto fc = flatten(cache(afl));
+        assert(equal(fc, list({ 0, 1, 0, 2, 0, 3 })));
+    }
+    {
+        auto l = list({ 1, 2, 3 });
+        auto f = [](auto i) { return list({ 0, i }); };
+        auto afl = apply(f, l);
+        auto fc = flatten(cache(afl));
+        assert(equal(skip(1,fc), list({1, 0, 2, 0, 3 })));
+    }
+    {
+        auto l = list({ 1, 2, 3 });
+        auto l_ = list({ 1, 0, 2, 0, 3 });
+        auto f = [](auto i) { return list({ 0, i }); };
+        assert(equal(l_, skip(1, flatten(cache(apply(f,l))))));
     }
 
 

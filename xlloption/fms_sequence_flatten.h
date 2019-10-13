@@ -1,5 +1,5 @@
 // fms_sequence_flatten.h - Reduce a sequence of sequences to a sequence.
-// {{a, a, ...},{b, b, ...},...} -> {a, a, ..., b, b, ...}
+// {{a0, a1, ...},{b0, b1, ...},...} -> {a0, a1, ..., b0, b1, ...}
 #pragma once
 
 namespace fms::sequence {

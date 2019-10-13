@@ -9,9 +9,12 @@ using namespace fms::sequence;
 
 int test_sequence_equal()
 {
-    int s[] = { 1, 2, 3 };
-    pointer sp(3, s);
-    assert(equal(sp, take(3, iota(1))));
+    {
+        int s[] = { 1, 2, 3 };
+        pointer sp(3, s);
+        assert(equal(sp, take(3, iota(1))));
+        assert(equal(take(0, sp), take(0, sp)));
+    }
 
     return 0;
 }

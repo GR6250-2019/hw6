@@ -18,11 +18,8 @@ static AddIn xai_Bell(
         L"They are defined by B" SUB_(L"0") L" = 1 and "
         PARA_(
             L"B" SUB_(L"n+1") L"(x" SUB_(L"1") L", ..., x" SUB_(L"n+1") L")"
-            L" = " sum_ SUP_(L"n") SUB_(L"k = 0") L" C(n,k) B" SUB_(L"n-k")
+            L" = " sum_ SUP_(L"n") SUB_(L"k = 0") L" n!/k!(n - k)! B" SUB_(L"n-k")
             L"(x" SUB_(L"1") L", ..., x" SUB_(L"k") L") " kappa_ SUB_(L"k+1")
-        )
-        PARA_(
-            L"where C(n,k) = n!/k!(n - k)! is the number of combinations choosing k items from n."
         )
     )
 );

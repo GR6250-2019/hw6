@@ -177,6 +177,7 @@
     <ClInclude Include="fms_sequence_take.h" />
     <ClInclude Include="fms_sequence_traits.h" />
     <ClInclude Include="fms_sequence_item.h" />
+    <ClInclude Include="fms_sequence_unique.h" />
     <ClInclude Include="xlloption.h" />
     <ClInclude Include="xll_cumulant.h" />
     <ClInclude Include="xll_sequence.h" />
@@ -232,6 +233,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="fms_sequence_sum.t.cpp" />
+    <ClCompile Include="fms_sequence_unique.t.cpp" />
     <ClCompile Include="xll_Bell.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

@@ -135,6 +135,9 @@
     <ClInclude Include="fms_sequence_iterator.h">
       <Filter>sequence</Filter>
     </ClInclude>
+    <ClInclude Include="fms_sequence_unique.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -234,6 +237,9 @@
       <Filter>sequence</Filter>
     </ClCompile>
     <ClCompile Include="fms_sequence_iterator.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_unique.t.cpp">
       <Filter>sequence</Filter>
     </ClCompile>
   </ItemGroup>
