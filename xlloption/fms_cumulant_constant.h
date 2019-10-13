@@ -20,7 +20,8 @@ namespace fms::cumulant {
         {
             return n == 0 ? c : S(0);
         }
-        constant& operator++() {
+        constant& operator++() 
+        {
             ++n;
 
             return *this;
@@ -29,12 +30,11 @@ namespace fms::cumulant {
         {
             return c * s;
         }
-        // Constant under the measure dP_/dP = exp(s X - kappa(s)) = 1
-        constant _(S) const
-        {
-            return constant(c);
-        }
-
     };
+    template<class S = double>
+    inline auto shift(constant<S> c, const S&)
+    {
+        return c;
+    }
 
 }

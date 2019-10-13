@@ -291,6 +291,26 @@ HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min)
     return s_;
 }
 
+static AddIn xai_sequence_factorial(
+    Function(XLL_HANDLE, L"?xll_sequence_factorial", L"XLL.SEQUENCE.FACTORIAL")
+    .Arg(XLL_DOUBLE, L"x", L"is the number whos factorials form the sequence. Default is 0. ")
+    .Arg(XLL_LONG, L"n", L"is the integer increment to use for Pochhammer sequences. Default is 1.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to the sequence of factorials 1 = 0!, 1 = 1!, 2 = 2! ...")
+    .Documentation(
+        L"If n is not 0 then the Pochhammer sequence is returned. "
+    )
+);
+HANDLEX WINAPI xll_sequence_factorial(double x, LONG n)
+{
+#pragma XLLEXPORT
+    if (n == 0)
+        n = 1;
+
+    return handle<sequence<>>(new sequence_impl(factorial(x, n))).get();
+}
+
 static AddIn xai_sequence_iota(
     Function(XLL_HANDLE, L"?xll_sequence_iota", L"XLL.SEQUENCE.IOTA")
     .Arg(XLL_DOUBLE, L"start", L"is the starting value for iota. Default is 0.")
@@ -332,17 +352,17 @@ HANDLEX WINAPI xll_sequence_list(const _FP12* pa)
     return s_;
 }
 
-static AddIn xai_sequence_pow(
-    Function(XLL_HANDLE, L"?xll_sequence_pow", L"XLL.SEQUENCE.POW")
+static AddIn xai_sequence_power(
+    Function(XLL_HANDLE, L"?xll_sequence_power", L"XLL.SEQUENCE.POWER")
     .Arg(XLL_DOUBLE, L"x", L"is the number whos powers form the sequence.")
     .Uncalced()
     .Category(L"XLL")
     .FunctionHelp(L"Return a handle to the sequence 1, x, x^2, ...")
     .Documentation(
-        L"Return a handle to the sequence of powers of " MATH_(L"x") L". "
+        L"Return a handle to the sequence of powers of the number " MATH_(L"x") L". "
     )
 );
-HANDLEX WINAPI xll_sequence_pow(double x)
+HANDLEX WINAPI xll_sequence_power(double x)
 {
 #pragma XLLEXPORT
 

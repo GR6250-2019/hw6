@@ -37,7 +37,6 @@ static AddIn xai_cumulant_normal(
     Function(XLL_HANDLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
     .Arg(XLL_DOUBLE, L"mu", L"is the mean. Default is 0.")
     .Arg(XLL_DOUBLE, L"sigma", L"is the standard deviation of the normal. Default is 1.")
-    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled normal cumulant.")
@@ -46,39 +45,32 @@ static AddIn xai_cumulant_normal(
         L"The cumulant is " MATH_(kappa_ L"(s) = " mu_ L"s + " sigma_ sup2_ L" s" sup2_ L"/2.")
     )
 );
-HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma, double c)
+HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma)
 {
 #pragma XLLEXPORT
     if (sigma == 0) {
         sigma = 1;
     }
-    if (c == 0) {
-        c = 1;
-    }
 
-    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma, c))).get();
+    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma))).get();
 }
 
 static AddIn xai_cumulant_poisson(
     Function(XLL_HANDLE, L"?xll_cumulant_poisson", L"XLL.CUMULANT.POISSON")
     .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
-    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled Poisson cumulant.")
     .Documentation(
         L"The cumulants of a Poisson random variable are constant and equal to " lambda_ L". "
-        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(e" SUP_(L"x") L" - 1).")
+        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(e" SUP_(L"s") L" - 1).")
     )
 );
-HANDLEX WINAPI xll_cumulant_poisson(double lambda, double c)
+HANDLEX WINAPI xll_cumulant_poisson(double lambda)
 {
 #pragma XLLEXPORT
-    if (c == 0) {
-        c = 1;
-    }
 
-    return handle<sequence<>>(new cumulant_impl(Poisson(lambda, c))).get();
+    return handle<sequence<>>(new cumulant_impl(Poisson(lambda))).get();
 }
 
 static AddIn xai_cumulant(
@@ -100,6 +92,7 @@ double WINAPI xll_cumulant(HANDLEX k, double s)
         handle<sequence<>> k_(k);
         cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
         ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
+        
         result = (*pk)(s);
     }
     catch (const std::exception & ex) {
@@ -126,8 +119,6 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 
     try {
         handle<sequence<>> k_(k);
-        cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
-        ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
         auto [mu, sigma, kappa3] = normalize(cumulant_copy(*k_));
         result[0] = mu;
         result[1] = sigma;
@@ -139,6 +130,34 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
     }
 
     return result.get();
+}
+static AddIn xai_cumulant_scale(
+    Function(XLL_HANDLE, L"?xll_cumulant_scale", L"XLL.CUMULANT.SCALE")
+    .Arg(XLL_HANDLE, L"handle", L"is handle to a cumulant.")
+    .Arg(XLL_DOUBLE, L"scale", L"is the scalar multiplier of the corresponding random variable.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to a scaled cumulant.")
+    .Documentation(
+        L"Return a handle to a scaled cumulant. "
+    )
+);
+
+HANDLEX WINAPI xll_cumulant_scale(HANDLEX k, double c)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        handle<sequence<>> k_(k);
+
+        result = handle<sequence<>>(new cumulant_impl(scale(cumulant_copy(*k_), c))).get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
 }
 
 BOOL WINAPI xll_sequence_bool(HANDLEX);
@@ -196,9 +215,10 @@ public:
     }
 };
 
+
 static AddIn xai_cumulant_sum(
     Function(XLL_HANDLE, L"?xll_cumulant_sum", L"XLL.CUMULANT.SUM")
-    .Arg(XLL_FP, L"handles", L"is an array of handles to a cumulants.")
+    .Arg(XLL_FP, L"handles", L"is an array of handles to cumulants.")
     .Uncalced()
     .Category(L"XLL")
     .FunctionHelp(L"Return a handle to the sum of the cumulants.")

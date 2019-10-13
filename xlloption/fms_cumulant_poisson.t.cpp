@@ -1,6 +1,7 @@
 // fms_cumulant_poisson.t.cpp - Test Poisson cumulant.
 #include <cassert>
 #include <limits>
+#include "fms_cumulant.h"
 #include "fms_cumulant_poisson.h"
 
 using namespace fms::cumulant;
@@ -18,7 +19,8 @@ int test_cumulant_poisson()
     assert(*++kappa == lambda);
 
     double s = 0.1;
-    auto kappa_ = kappa._(s);
+    auto kappa_ = shift(kappa, s);
+    assert(*kappa_ == lambda * exp(s));
     for (double u : {-1., 0., 1.}) {
         double ku_ = kappa_(u);
         double ku = kappa(u + s) - kappa(s);

@@ -12,6 +12,7 @@ namespace xll {
         {
             return op_value(s);
         }
+        
     private:
         virtual S op_value(const S&) const = 0;
     };
@@ -76,7 +77,7 @@ namespace xll {
         }
         S operator()(const S& s) const
         {
-            cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk.get());
+            cumulant<S>* pc = dynamic_cast<cumulant<>*>(pk);
             if (pc == nullptr) {
                 throw std::runtime_error("xll::cumulant_copy: dynamic cast failed");
             }

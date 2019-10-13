@@ -30,8 +30,10 @@ int test_option_cdf()
 	constexpr double eps = std::numeric_limits<double>::epsilon();
 	double s = 0.2;
 	{
-        auto kappas = Normal<>();
-		auto kappas_ = kappas._(s);
+
+        // P_(X <= x) = P(X + s <= x)
+        auto kappas = Normal(.0,1.);
+		auto kappas_ = shift(kappas, s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
@@ -46,7 +48,7 @@ int test_option_cdf()
     {
         double mu = 0.5;
         auto kappas = Normal( mu, 1. );
-		auto kappas_ = kappas._(s);
+		auto kappas_ = shift(kappas, s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p, p_;
@@ -64,7 +66,7 @@ int test_option_cdf()
         double mu = 0.5;
         double sigma = 2;
         auto kappas = Normal(mu, sigma);
-		auto kappas_ = kappas._(s);
+		auto kappas_ = shift(kappas, s);
 
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
@@ -91,5 +93,18 @@ int test_option_cdf()
 
     return 0;
 }
-
 int test_option_cdf_ = test_option_cdf();
+
+int test_option_put()
+{
+    double f = 100;
+    double s = 0.2 * sqrt(0.25);
+    double k = 100;
+    Normal n(0., 1.);
+
+    double p = put(f, s, k, n);
+    p = p;
+
+    return 0;
+}
+//int test_option_put_ = test_option_put();

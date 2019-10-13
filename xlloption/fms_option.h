@@ -108,7 +108,7 @@ namespace fms::option {
     inline auto put(F f, S s, K k, Kappa kappa)
     {
         auto z = moneyness(f, s, k, kappa);
-        auto kappa_ = kappa._(s);
+        auto kappa_ = fms::cumulant::shift(kappa, s);
        
         return k * cdf(z, kappa) - f * cdf(z, kappa_);
     }
@@ -119,7 +119,7 @@ namespace fms::option {
     inline auto call(F f, S s, K k, Kappa kappa)
     {
         auto z = moneyness(f, s, k, kappa);
-        auto kappa_ = kappa._(s);
+        auto kappa_ = fms::cumulant::shift(kappa, s);
 
         return f * (1 - cdf(z, kappa_)) - k * (1 - cdf(z, kappa));
     }
