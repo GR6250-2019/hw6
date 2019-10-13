@@ -63,7 +63,7 @@ double WINAPI xll_option_cdf(double x, HANDLEX kappa)
 
     return result;
 }
-#if 0
+
 static AddIn xai_option_put(
     Function(XLL_DOUBLE, L"?xll_option_put", L"XLL.OPTION.PUT")
     .Arg(XLL_DOUBLE, L"f", L"is the forward.", L"100")
@@ -76,14 +76,12 @@ static AddIn xai_option_put(
 double WINAPI xll_option_put(double f, double s, double k, HANDLEX kappa)
 {
 #pragma XLLEXPORT
-    double result = std::numeric_limits<double>::quiet_NaN();
-
-    try {
+    double result = std::numeric_limits<double>::quiet_NaN();    try {
         handle<xll::sequence<>> kappa_(kappa);
-        xll::cumulant<>* pk = dynamic_cast<xll::cumulant<>*>(kappa_.ptr());
-        ensure(pk != nullptr || !"xll_option_put: dynamic cast to cumulant failed");
+        //xll::cumulant<>* pk = dynamic_cast<xll::cumulant<>*>(kappa_.ptr());
+        //ensure(pk != nullptr || !"xll_option_put: dynamic cast to cumulant failed");
 
-        result = option::put(f, s, k, cumulant_copy(*pk));
+        result = option::put(f, s, k, cumulant_copy(*kappa_));
     }
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
@@ -91,7 +89,7 @@ double WINAPI xll_option_put(double f, double s, double k, HANDLEX kappa)
 
     return result;
 }
-#endif
+
 
 static Auto<OpenAfter> xao_test_option([]() {
 

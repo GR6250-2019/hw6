@@ -101,7 +101,7 @@ namespace fms::cumulant {
         ++kappa;
         S sigma = sqrt(variance);
 
-        return std::tuple(mean, sigma, scale(kappa, sigma, variance));
+        return std::tuple(mean, sigma, scale(kappa, 1/sigma, 1/variance));
     }
 
 }
