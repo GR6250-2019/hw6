@@ -30,7 +30,7 @@ namespace fms::sequence {
         }
         take& operator++()
         {
-            if (operator bool()) {
+            if (n != 0) {
                 --n;
                 ++s;
             }

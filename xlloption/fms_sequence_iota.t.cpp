@@ -10,8 +10,13 @@ int test_iota()
     iota<X> i;
     assert(i);
     assert(*i == 0);
-    assert(*++i == 1 && i);
-    assert(*++i == 2 && i);
+	++i;
+	assert(i);
+	assert(*i == 1);
+	++i;
+	assert(i);
+	assert(*i == 2);
 
     return 0;
 }
+int test_iota_double = test_iota<double>();
