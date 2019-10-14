@@ -28,7 +28,9 @@ int test_moneyness_ = test_moneyness();
 int test_option_cdf()
 {
 	constexpr double eps = std::numeric_limits<double>::epsilon();
-	double s = 0.2;
+    fms::probability::Normal<> N;
+    
+    double s = 0.2;
 	{
 
         // P_(X <= x) = P(X + s <= x)
@@ -38,9 +40,9 @@ int test_option_cdf()
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
 			p = pdf(x, kappas);
-			assert(p == fms::normal::pdf(x));
+			assert(p == N.pdf(x));
 			p = cdf(x, kappas);
-            assert(p == fms::normal::cdf(x));
+            assert(p == N.cdf(x));
 			double p_ = cdf(x + s, kappas_);
 			assert(p_ == p);
         }
@@ -53,9 +55,9 @@ int test_option_cdf()
         for (double x : {-1., 0., 1., 1.1}) {
             double p, p_;
 			p = pdf(x, kappas);
-			p_ = fms::normal::pdf(x - mu);
+			p_ = N.pdf(x - mu);
 			p = cdf(x, kappas);
-            p_ = fms::normal::cdf(x - mu);
+            p_ = N.cdf(x - mu);
             assert(p - p_ == 0);
             assert(p - p_ == 0);
 			p_ = cdf(x + s, kappas_);
@@ -71,9 +73,9 @@ int test_option_cdf()
         for (double x : {-1., 0., 1., 1.1}) {
             double p;
 			p = pdf(x, kappas);
-			assert(p == fms::normal::pdf((x - mu) / sigma) / sigma);
+			assert(p == N.pdf((x - mu) / sigma) / sigma);
 			p = cdf(x, kappas);
-            assert(p == fms::normal::cdf((x - mu)/sigma));
+            assert(p == N.cdf((x - mu)/sigma));
         	double p_ = cdf(x + s, kappas_);
 			assert(fabs(p_ - p) <= eps);
 		}
@@ -95,16 +97,26 @@ int test_option_cdf()
 }
 int test_option_cdf_ = test_option_cdf();
 
+template<class X>
 int test_option_put()
 {
-    double f = 100;
-    double s = 0.2 * sqrt(0.25);
-    double k = 100;
-    Normal n(0., 1.);
+    fms::probability::Normal<X> N;
 
-    double p = put(f, s, k, n);
-    p = p;
+    X f = 101;
+    X sigma = X(0.2);
+    X t = X(0.25);
+    X s = sigma * sqrt(t);
+    X k = 99;
+
+    X p = put(f, s, k, Normal<X>{});
+    X z = (s * s / 2 + log(k / f)) / s;
+    X n = N.cdf(z);
+    X z_ = z - s;
+    X n_ = N.cdf(z_);
+    X q = k * n - f * n_;
+    assert(p == q);
 
     return 0;
 }
-//int test_option_put_ = test_option_put();
+int test_option_put_double = test_option_put<double>();
+int test_option_put_float = test_option_put<float>();

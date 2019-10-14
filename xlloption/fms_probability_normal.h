@@ -15,7 +15,7 @@ namespace fms::probability {
     class Normal {
         X mu, sigma;
     public:
-        Normal(X mu, X sigma)
+        Normal(X mu = 0, X sigma = 1)
             : mu(mu), sigma(sigma)
         { }
         // Normal probability density function.
@@ -23,14 +23,14 @@ namespace fms::probability {
         {
             auto z = (x - mu) / sigma;
 
-            return exp(-z * z / 2) / (sigma * M_SQRT2PI);
+            return exp(-z * z / 2) / (sigma * X(M_SQRT2PI));
         }
         // Normal cumulative distribution function.
         X cdf(X x)
         {
             auto z = (x - mu) / sigma;
 
-            return (1 + erf(z / M_SQRT2)) / 2;
+            return (1 + erf(z / X(M_SQRT2))) / 2;
         }
         X cumulant(X s) const
         {

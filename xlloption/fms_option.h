@@ -9,7 +9,7 @@
 #include <functional>
 #include <stdexcept>
 #include <tuple>
-#include "fms_normal.h"
+#include "fms_probability_normal.h"
 #include "fms_Bell.h"
 #include "fms_Hermite.h"
 #include "fms_sequence.h"
@@ -69,7 +69,7 @@ namespace fms::option {
 
         bell b(concatenate(list({ 0, 0 }), kappa3));
         Hermite H(x_);
-        X phi = normal::pdf(x_);
+        X phi = fms::probability::Normal<X>().pdf(x_);
 
         return phi*sum(take(100, epsilon(b * H, phi, 6)))/sigma;
     }
@@ -97,9 +97,10 @@ namespace fms::option {
         Hermite H(x_);
         auto H2 = skip(2, H); // Hermite_{n-1}(x)
         
-        X phi = normal::pdf(x_);
+        fms::probability::Normal<X> N;
+        X phi = N.pdf(x_);
 
-        return normal::cdf(x_) - phi*sum(take(100, epsilon(b3 * H2, phi, 3)));
+        return N.cdf(x_) - phi*sum(take(100, epsilon(b3 * H2, phi, 3)));
     }
 
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
