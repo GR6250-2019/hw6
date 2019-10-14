@@ -76,7 +76,9 @@ static AddIn xai_option_put(
 double WINAPI xll_option_put(double f, double s, double k, HANDLEX kappa)
 {
 #pragma XLLEXPORT
-    double result = std::numeric_limits<double>::quiet_NaN();    try {
+    double result = std::numeric_limits<double>::quiet_NaN();    
+    
+    try {
         handle<xll::sequence<>> kappa_(kappa);
         //xll::cumulant<>* pk = dynamic_cast<xll::cumulant<>*>(kappa_.ptr());
         //ensure(pk != nullptr || !"xll_option_put: dynamic cast to cumulant failed");

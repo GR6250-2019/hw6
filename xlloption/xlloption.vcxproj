@@ -195,6 +195,7 @@
     <None Include="TODO.md" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\xllblack\xll_black.cpp" />
     <ClCompile Include="fms_Bell.t.cpp" />
     <ClCompile Include="fms_cumulant.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>

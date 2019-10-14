@@ -23,7 +23,7 @@ namespace fms::cumulant {
         K k;
         S s;
     public:
-        _(K k, const S& s)
+        _(const K& k, const S& s)
             : k(k), s(s)
         { }
         operator bool() const
@@ -37,8 +37,10 @@ namespace fms::cumulant {
             using fms::sequence::epsilon;
             using fms::sequence::power;
             using fms::sequence::factorial;
+            K k2(k);
+            auto s2 = *++k2; // variance
 
-            return sum(epsilon(k * power(s) / factorial<S>{}));
+            return sum(epsilon(k * power(s) / factorial<S>{}, s2, 2));
         }
         _& operator++()
         {
@@ -52,7 +54,7 @@ namespace fms::cumulant {
         }
     };
     template<class K, class S = value_type<K>>
-    inline auto shift(K k, const S& s)
+    inline auto shift(const K& k, const S& s)
     {
         return _(k, s);
     }
@@ -64,7 +66,7 @@ namespace fms::cumulant {
         K k;
         S c, cn; // c^n
     public:
-        scale(K k, S c, S cn = 0)
+        scale(const K& k, const S& c, const S& cn = 0)
             : k(k), c(c), cn(cn == 0 ? c : cn)
         { }
         operator bool() const

@@ -56,7 +56,7 @@ namespace fms::option {
     //
     // Normalize to X' = (X - mu)/sigma and X == x iff X' == (x - mu)/sigma.
     template<class X, class K>
-    inline auto pdf(X x, K kappa)
+    inline auto pdf(const X& x, const K& kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::epsilon;
@@ -78,7 +78,7 @@ namespace fms::option {
     //   Phi(x) - phi(x) sum_{n>=3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
     template<class X, class K>
-    inline auto cdf(X x, K kappa)
+    inline auto cdf(const X& x, const K& kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::constant;
@@ -106,23 +106,27 @@ namespace fms::option {
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
-    inline auto put(F f, S s, K k, Kappa kappa)
+    inline auto put(const F& f, const S& s, const K& k, const Kappa& kappa)
     {
         auto z = moneyness(f, s, k, kappa);
         auto kappa_ = fms::cumulant::shift(kappa, s);
+        auto N = cdf(z, kappa);
+        auto N_ = cdf(z, kappa_);
        
-        return k * cdf(z, kappa) - f * cdf(z, kappa_);
+        return k * N - f * N_;
     }
 
     // E(F - k)^+ = f P_(F >= k) - k P(F >= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
-    inline auto call(F f, S s, K k, Kappa kappa)
+    inline auto call(const F& f, const S& s, const K& k, const Kappa& kappa)
     {
         auto z = moneyness(f, s, k, kappa);
         auto kappa_ = fms::cumulant::shift(kappa, s);
+        auto N = cdf(z, kappa);
+        auto N_ = cdf(z, kappa_);
 
-        return f * (1 - cdf(z, kappa_)) - k * (1 - cdf(z, kappa));
+        return f * (1 - N_) - k * (1 - N);
     }
 
 } // fms::option

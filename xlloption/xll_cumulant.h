@@ -49,6 +49,11 @@ namespace xll {
             return new cumulant_impl(k);
         }
     };
+    template<class K, class S = fms::cumulant::value_type<K>>
+    inline auto shift(cumulant_impl<K,S>& k, const S& s)
+    {
+        return shift(k, s);
+    }
 
     // Copies of a cumulant.
     template<class S = double>
