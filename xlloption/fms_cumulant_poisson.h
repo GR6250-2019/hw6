@@ -4,15 +4,13 @@
 
 namespace fms::cumulant {
 
-    // Cumulants of a Poisson random variable times a scalar c: c*lambda, c^2*lambda, ....
+    // Cumulants of a Poisson random variable: lambda, lambda, ....
     template<class S = double>
     class Poisson {
         S lambda;
-        S c; // scale
-        S cn; // c^n
     public:
-        Poisson(S lambda = 0, S c = S(1))
-            : lambda(lambda), c(c), cn(c)
+        Poisson(S lambda = 0)
+            : lambda(lambda)
         { }
 
         operator bool() const
@@ -21,23 +19,26 @@ namespace fms::cumulant {
         }
         S operator*() const
         {
-            return cn*lambda;
+            return lambda;
         }
         Poisson& operator++()
         {
-            cn *= c;
-
             return *this;
         }
         // Poisson cumulant.
+        //   E exp(sX) = sum_{k>=0} exp(sk) lambda^k/k!/exp(lambda) =
+        //             = sum_{k>=0} (e^s lambda)^k/k!/exp(lambda))
+        //             = exp(e^s lambda))/exp(lambda)
+        //             = exp(e^s lambda - lambda)
         S operator()(const S& s) const
         {
-            return lambda * (exp(c*s) - 1);
-        }
-        // Poisson under the measure dP_/dP = exp(s X - kappa(s))
-        Poisson _(const S& s) const
-        {
-            return Poisson(exp(s) * lambda, c);
+            return lambda * (exp(s) - 1);
         }
     };
+    // kappa^*_n = sum_{k>=0} lambda * s^k/k! = lambda exp(s)
+    template<class S = double>
+    inline auto shift(Poisson<S> ks, const S& s)
+    {
+        return Poisson(*ks * exp(s));
+    }
 }

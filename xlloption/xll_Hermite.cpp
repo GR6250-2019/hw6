@@ -14,6 +14,14 @@ static AddIn xai_Hermite(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return the first n values of the Hermite polynomials.")
+    .Documentation(
+        L"The Hermite polynomials are defined by " MATH_(L"H" SUB_(L"0") L"(x) = 1, ")
+        MATH_(L"H" SUB_(L"1") L"(x) = x") L", and "
+        PARA_(
+        MATH_(L"H" SUB_(L"n+1") L" = x H" SUB_(L"n") L" " minus_ L" n H" SUB_(L"n-1") L"(x)")
+        L" for " MATH_(L"n " ge_ L"2") L"."
+        )
+    )
 );
 HANDLEX WINAPI xll_Hermite(double x)
 {

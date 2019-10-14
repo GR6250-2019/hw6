@@ -1,6 +1,7 @@
 // fms_option.h - General option pricing.
 // See https://github.com/keithalewis/papers/blob/master/options.pdf
-// F = f exp(sX - kappa(s))
+// F = f exp(sX - kappa(s)) where X has mean 0 variance 1.
+// Note E[F] = f and Var(log(F)) = s^2.
 // F <= k iff X <= (kappa(s) + log k/f)/s
 #pragma once
 #include <algorithm>
@@ -8,7 +9,7 @@
 #include <functional>
 #include <stdexcept>
 #include <tuple>
-#include "fms_normal.h"
+#include "fms_probability_normal.h"
 #include "fms_Bell.h"
 #include "fms_Hermite.h"
 #include "fms_sequence.h"
@@ -21,7 +22,7 @@ namespace fms::option {
     inline auto moneyness(F f, S s, K k, const Kappa& kappa)
     {
         auto scale = std::max(f, std::max(s, k));
-        using Z = decltype((kappa(s) + log(k / f)) / s);
+        using Z = decltype(f + s + k);
         constexpr auto infinity = std::numeric_limits<Z>::infinity();
 
         if (f < 0) {
@@ -50,31 +51,34 @@ namespace fms::option {
     }
 
     // Probability density function of X where X has cumulants kappa.
+    //
     //   phi(x) sum_{n} bell_n(0,0,kappa_3,...,kappa_n) Hermite_n(x) if X has mean 0, variance 1.
-    // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
+    //
+    // Normalize to X' = (X - mu)/sigma and X == x iff X' == (x - mu)/sigma.
     template<class X, class K>
-    inline auto pdf(X x, K kappa)
+    inline auto pdf(const X& x, const K& kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::epsilon;
         using fms::sequence::list;
         using fms::sequence::sum;
- 
+        using fms::sequence::take;
+
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
 
         bell b(concatenate(list({ 0, 0 }), kappa3));
         Hermite H(x_);
-        X phi = normal::pdf(x_);
+        X phi = fms::probability::Normal<X>().pdf(x_);
 
-        return phi*sum(epsilon(b * H, phi, 4, 100))/sigma;
+        return phi*sum(take(100, epsilon(b * H, phi, 6)))/sigma;
     }
     
     // Probability X <= x where X has cumulants kappa.
     //   Phi(x) - phi(x) sum_{n>=3} bell_n(0,0,kappa_3,...,kappa_n) Hermite_{n-1}(x) if X has mean 0, variance 1.
     // Normalize to X' = (X - mu)/sigma and X <= x iff X' <= (x - mu)/sigma.
     template<class X, class K>
-    inline auto cdf(X x, K kappa)
+    inline auto cdf(const X& x, const K& kappa)
     {
         using fms::sequence::concatenate;
         using fms::sequence::constant;
@@ -82,6 +86,7 @@ namespace fms::option {
         using fms::sequence::list;
         using fms::sequence::skip;
         using fms::sequence::sum;
+        using fms::sequence::take;
 
         auto [mu, sigma, kappa3] = cumulant::normalize(kappa);
         auto x_ = (x - mu) / sigma;
@@ -92,31 +97,36 @@ namespace fms::option {
         Hermite H(x_);
         auto H2 = skip(2, H); // Hermite_{n-1}(x)
         
-        X phi = normal::pdf(x_);
+        fms::probability::Normal<X> N;
+        X phi = N.pdf(x_);
 
-        return normal::cdf(x_) - phi*sum(epsilon(b3 * H2, phi, 0, 100));
+        return N.cdf(x_) - phi*sum(take(100, epsilon(b3 * H2, phi, 3)));
     }
 
     // E(k - F)^+ = k P(F <= k) - f P_(F <= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
-    inline auto put(F f, S s, K k, Kappa kappa)
+    inline auto put(const F& f, const S& s, const K& k, const Kappa& kappa)
     {
         auto z = moneyness(f, s, k, kappa);
-        auto kappa_ = kappa._(s);
+        auto kappa_ = fms::cumulant::shift(kappa, s);
+        auto N = cdf(z, kappa);
+        auto N_ = cdf(z, kappa_);
        
-        return k * cdf(z, kappa) - f * cdf(z, kappa_);
+        return k * N - f * N_;
     }
 
     // E(F - k)^+ = f P_(F >= k) - k P(F >= k)
     // where dP_/dP = exp(s X - kappa(s))
     template<class F, class S, class K, class Kappa>
-    inline auto call(F f, S s, K k, Kappa kappa)
+    inline auto call(const F& f, const S& s, const K& k, const Kappa& kappa)
     {
         auto z = moneyness(f, s, k, kappa);
-        auto kappa_ = kappa._(s);
+        auto kappa_ = fms::cumulant::shift(kappa, s);
+        auto N = cdf(z, kappa);
+        auto N_ = cdf(z, kappa_);
 
-        return f * (1 - cdf(z, kappa_)) - k * (1 - cdf(z, kappa));
+        return f * (1 - N_) - k * (1 - N);
     }
 
 } // fms::option

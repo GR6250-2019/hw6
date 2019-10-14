@@ -19,53 +19,55 @@ namespace fms::cumulant {
 
     // Cumulants under the measure P_ with dP_/dP = exp(s X - kappa(s))
     template<class K, class S = value_type<K>>
-    class __ { //??? Dumb name, but _ can't be used.
+    class _ {
         K k;
         S s;
     public:
-        __(K k, S s)
+        _(const K& k, const S& s)
             : k(k), s(s)
         { }
         operator bool() const
         {
             return true; // Assumes all cumulants exist.
         }
-        // kappa^{X}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
+        // kappa^{X_}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
         S operator*() const
         {
             using fms::sequence::sum;
             using fms::sequence::epsilon;
             using fms::sequence::power;
             using fms::sequence::factorial;
+            K k2(k);
+            auto s2 = *++k2; // variance
 
-            return sum(epsilon(k * power(s) / factorial<S>{}));
+            return sum(epsilon(k * power(s) / factorial<S>{}, s2, 2));
         }
-        __& operator++()
+        _& operator++()
         {
             ++k;
 
             return *this;
         }
-        S operator()(S u)
+        S operator()(const S& u) const
         {
             return k(u + s) - k(s);
         }
-        __ _(S u)
-        {
-            return __(k, u + s);
-        }
     };
+    template<class K, class S = value_type<K>>
+    inline auto shift(const K& k, const S& s)
+    {
+        return _(k, s);
+    }
 
     // Cumulants of a scalar multiple of a random variable.
     // kappa^{cX}_n = c^n kappa^X_n
     template<class K, class S = value_type<K>>
     class scale {
         K k;
-        S c;
-        S cn; // c^n
+        S c, cn; // c^n
     public:
-        scale(S c, K k)
-            : k(k), c(c), cn(c)
+        scale(const K& k, const S& c, const S& cn = 0)
+            : k(k), c(c), cn(cn == 0 ? c : cn)
         { }
         operator bool() const
         {
@@ -83,20 +85,15 @@ namespace fms::cumulant {
             return *this;
         }
         // kappa^{cX}(s) = kappa(cs)
-        S operator()(S s) const
+        S operator()(const S& s) const
         {
             return k(c * s);
-        }
-        // kappa^{cX}_n = c^n (kappa_n sum_{k >= 0} kappa_{n + k} s^k/k!)
-        auto _(S s) const
-        {
-            return __(*this, s);
         }
     };
 
     // Convert to mean 0, variance 1: X' = (X - mu)/sigma
     // kappa'_1 = kappa_1 - mu = 0, kappa'_2 = kappa_2/sigma^2 = 1, kappa_n' = kappa_n/sigma^n for n > 2.
-    // Return original mean, standard, deviation, and normalized kappa_n, n >= 3.
+    // Return original mean, standard deviation, and normalized kappa_n, n >= 3.
     template<class K, class S = value_type<K>>
     inline auto normalize(K kappa)
     {
@@ -104,11 +101,9 @@ namespace fms::cumulant {
         ++kappa;
         S variance = *kappa;
         ++kappa;
-
         S sigma = sqrt(variance);
-        auto kappa3 = scale(1 / sigma, kappa) / sequence::constant(variance);
 
-        return std::tuple(mean, sigma, kappa3);
+        return std::tuple(mean, sigma, scale(kappa, 1/sigma, 1/variance));
     }
 
 }

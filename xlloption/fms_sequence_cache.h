@@ -6,10 +6,10 @@
 
 namespace fms::sequence {
 
-    template<class S, class X = value_type<S>>
+    template<class S, class X = value_type<S>, class C = std::vector<X>>
     struct cache {
         S s;
-        mutable std::vector<X> s_;
+        mutable C s_;
         size_t n; // current index into cache
     public:
         cache(S s)
@@ -43,18 +43,17 @@ namespace fms::sequence {
         {
             return s || n < s_.size();
         }
-        auto operator*() const
+        auto& operator*() const
         {
             if (n < s_.size()) {
                 return s_[n];
             }
 
-            auto _s = *s;
-            s_.push_back(_s);
-
-            return _s;
+            s_.push_back(*s);
+            
+            return s_.back();
         }
-        auto operator[](size_t i) const
+        auto& operator[](size_t i) const
         {
             return s_[i];
         }

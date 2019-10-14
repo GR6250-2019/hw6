@@ -22,6 +22,7 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include="TODO.md" />
+    <None Include="HTMLPage.htm" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_option.h">
@@ -123,6 +124,21 @@
     <ClInclude Include="fms_cumulant_constant.h">
       <Filter>cumulant</Filter>
     </ClInclude>
+    <ClInclude Include="fms_sequence_item.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_null.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_flatten.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_iterator.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_unique.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -211,6 +227,24 @@
     </ClCompile>
     <ClCompile Include="fms_sequence_copy.t.cpp">
       <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_item.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_null.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_flatten.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_iterator.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_unique.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="..\xllblack\xll_black.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

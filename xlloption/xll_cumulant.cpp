@@ -3,7 +3,9 @@
 #include <iterator>
 #include <numeric>
 #include <utility>
+#include "fms_cumulant.h"
 #include "../xll12/xll/xll.h"
+#include "../xll12/xll/shfb/entities.h"
 #include "xll_sequence.h"
 #include "xll_cumulant.h"
 
@@ -20,6 +22,10 @@ static AddIn xai_cumulant_constant(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the cumulant of a constant random variable.")
+    .Documentation(
+        L"The cumulants of a constant are c, 0, 0, ... "
+        L"The cumulant is " MATH_(kappa_ L"(s) = cs. ")
+    )
 );
 HANDLEX WINAPI xll_cumulant_constant(double c)
 {
@@ -31,40 +37,40 @@ static AddIn xai_cumulant_normal(
     Function(XLL_HANDLE, L"?xll_cumulant_normal", L"XLL.CUMULANT.NORMAL")
     .Arg(XLL_DOUBLE, L"mu", L"is the mean. Default is 0.")
     .Arg(XLL_DOUBLE, L"sigma", L"is the standard deviation of the normal. Default is 1.")
-    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled normal cumulant.")
+    .Documentation(
+        L"The cumulants of a normal random variable are " mu_ L", " sigma_ SUP_(L"2") L", 0, 0 ... "
+        L"The cumulant is " MATH_(kappa_ L"(s) = " mu_ L"s + " sigma_ sup2_ L" s" sup2_ L"/2.")
+    )
 );
-HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma, double c)
+HANDLEX WINAPI xll_cumulant_normal(double mu, double sigma)
 {
 #pragma XLLEXPORT
     if (sigma == 0) {
         sigma = 1;
     }
-    if (c == 0) {
-        c = 1;
-    }
 
-    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma, c))).get();
+    return handle<sequence<>>(new cumulant_impl(Normal(mu, sigma))).get();
 }
 
 static AddIn xai_cumulant_poisson(
     Function(XLL_HANDLE, L"?xll_cumulant_poisson", L"XLL.CUMULANT.POISSON")
     .Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
-    .Arg(XLL_DOUBLE, L"scale", L"is a scalar multiple to apply to the cumulant. Default is 1.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled Poisson cumulant.")
+    .Documentation(
+        L"The cumulants of a Poisson random variable are constant and equal to " lambda_ L". "
+        L"The cumulant is " MATH_(kappa_ L"(s) = " lambda_ L"(e" SUP_(L"s") L" - 1).")
+    )
 );
-HANDLEX WINAPI xll_cumulant_poisson(double lambda, double c)
+HANDLEX WINAPI xll_cumulant_poisson(double lambda)
 {
 #pragma XLLEXPORT
-    if (c == 0) {
-        c = 1;
-    }
 
-    return handle<sequence<>>(new cumulant_impl(Poisson(lambda, c))).get();
+    return handle<sequence<>>(new cumulant_impl(Poisson(lambda))).get();
 }
 
 static AddIn xai_cumulant(
@@ -73,6 +79,9 @@ static AddIn xai_cumulant(
     .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
     .Category(CATEGORY)
     .FunctionHelp(L"Return the value of the cumulant at s.")
+    .Documentation(
+        L"Evaluate the cumulant at a value. "
+    )
 );
 double WINAPI xll_cumulant(HANDLEX k, double s)
 {
@@ -83,6 +92,7 @@ double WINAPI xll_cumulant(HANDLEX k, double s)
         handle<sequence<>> k_(k);
         cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
         ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
+        
         result = (*pk)(s);
     }
     catch (const std::exception & ex) {
@@ -97,6 +107,10 @@ static AddIn xai_cumulant_normalize(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return the mean, variance, and handle to remaining cumulant.")
+    .Documentation(
+        L"Convert to a cumulants with mean 0 and variance 1. "
+        L"Return the original mean and standard deviation, and a handle to the remaining normalized cumulants. "
+    )
 );
 _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 {
@@ -105,8 +119,6 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 
     try {
         handle<sequence<>> k_(k);
-        cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
-        ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
         auto [mu, sigma, kappa3] = normalize(cumulant_copy(*k_));
         result[0] = mu;
         result[1] = sigma;
@@ -119,6 +131,34 @@ _FP12* WINAPI xll_cumulant_normalize(HANDLEX k)
 
     return result.get();
 }
+static AddIn xai_cumulant_scale(
+    Function(XLL_HANDLE, L"?xll_cumulant_scale", L"XLL.CUMULANT.SCALE")
+    .Arg(XLL_HANDLE, L"handle", L"is handle to a cumulant.")
+    .Arg(XLL_DOUBLE, L"scale", L"is the scalar multiplier of the corresponding random variable.")
+    .Uncalced()
+    .Category(L"XLL")
+    .FunctionHelp(L"Return a handle to a scaled cumulant.")
+    .Documentation(
+        L"Return a handle to a scaled cumulant. "
+    )
+);
+
+HANDLEX WINAPI xll_cumulant_scale(HANDLEX k, double c)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+        handle<sequence<>> k_(k);
+
+        result = handle<sequence<>>(new cumulant_impl(scale(cumulant_copy(*k_), c))).get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
 
 BOOL WINAPI xll_sequence_bool(HANDLEX);
 double WINAPI xll_sequence_star(HANDLEX);
@@ -130,7 +170,7 @@ class cumulant_sum {
     std::vector<HANDLEX> h;
     void copy()
     {
-        std::for_each(h.begin(), h.end(), [](HANDLEX hi) { hi = xll_sequence_copy(hi);  });
+        std::for_each(h.begin(), h.end(), [](HANDLEX& hi) { hi = xll_sequence_copy(hi);  });
     }
 public:
     cumulant_sum(size_t n, const HANDLEX* h_)
@@ -175,12 +215,16 @@ public:
     }
 };
 
+
 static AddIn xai_cumulant_sum(
     Function(XLL_HANDLE, L"?xll_cumulant_sum", L"XLL.CUMULANT.SUM")
-    .Arg(XLL_FP, L"handles", L"is an array of handles to a cumulants.")
+    .Arg(XLL_FP, L"handles", L"is an array of handles to cumulants.")
     .Uncalced()
     .Category(L"XLL")
-    .FunctionHelp(L"Returns a handle to the sum of the cumulants.")
+    .FunctionHelp(L"Return a handle to the sum of the cumulants.")
+    .Documentation(
+        L"Return a handle to the sum of the cumulants. "
+    )
 );
 HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
 {
@@ -188,7 +232,7 @@ HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
     handlex result;
 
     try {
-        handle<sequence<>> h(new sequence_impl(cumulant_sum(size(*cs), cs->array)));
+        handle<sequence<>> h(new cumulant_impl(cumulant_sum(size(*cs), cs->array)));
         result = h.get();
     }
     catch (const std::exception & ex) {
