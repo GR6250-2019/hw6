@@ -31,7 +31,7 @@ int test_concatenate()
     {
         auto l = list({ 1, 2, 3 });
         auto _l = l; // make a copy to increment
-        assert(equal(l, cons(*_l, ++_l)));
+        assert(equal(l, cons(*l, ++_l)));
     }
 
     return 0;
