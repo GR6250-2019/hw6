@@ -79,7 +79,7 @@ HANDLEX WINAPI xll_probability_normal(double mu, double sigma)
 }
 
 static AddIn xai_probability_poisson(
-	Function(XLL_HANDLE, L"?xll_probability_poisson", L"XLL.probability.POISSON")
+	Function(XLL_HANDLE, L"?xll_probability_poisson", L"XLL.PROBABILITY.POISSON")
 	.Arg(XLL_DOUBLE, L"lambda", L"is the Poisson mean parameter.")
 	.Uncalced()
 	.Category(CATEGORY)
@@ -117,6 +117,33 @@ double WINAPI xll_probability_cumulant(HANDLEX k, double s)
 		result = k_->cumulant(s);
 	}
 	catch (const std::exception & ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return result;
+}
+
+static AddIn xai_probability_pdf(
+	Function(XLL_DOUBLE, L"?xll_probability_pdf", L"XLL.PROBABILITY.PDF")
+	.Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+	.Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the pdf.")
+	.Category(CATEGORY)
+	.FunctionHelp(L"Return the value of the pdf at s.")
+	.Documentation(
+		L"Evaluate the pdf at a value. "
+	)
+);
+double WINAPI xll_probability_pdf(HANDLEX k, double s)
+{
+#pragma XLLEXPORT
+	double result = std::numeric_limits<double>::quiet_NaN();
+
+	try {
+		handle<probability<>> k_(k);
+
+		result = k_->pdf(s);
+	}
+	catch (const std::exception& ex) {
 		XLL_ERROR(ex.what());
 	}
 

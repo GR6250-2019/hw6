@@ -13,7 +13,7 @@
 
 namespace fms::cumulant {
 
-    // K is cumulant sequence
+    // K is the cumulant sequence
     template<class K>
     using value_type = std::invoke_result_t<decltype(&K::operator*), K>;
 

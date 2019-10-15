@@ -22,7 +22,6 @@
   <ItemGroup>
     <None Include="README.md" />
     <None Include="TODO.md" />
-    <None Include="HTMLPage.htm" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fms_option.h">
