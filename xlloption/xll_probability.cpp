@@ -96,31 +96,32 @@ HANDLEX WINAPI xll_probability_poisson(double lambda)
 	return handle<probability<>>(new probability_impl(Poisson(lambda))).get();
 }
 
-static AddIn xai_probability_cumulant(
-	Function(XLL_DOUBLE, L"?xll_probability_cumulant", L"XLL.PROBABILITY.CUMULANT")
-	.Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
-	.Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
-	.Category(CATEGORY)
-	.FunctionHelp(L"Return the value of the cumulant at s.")
-	.Documentation(
-		L"Evaluate the cumulant at a value. "
-	)
+
+static AddIn xai_probability_cdf(
+    Function(XLL_DOUBLE, L"?xll_probability_cdf", L"XLL.PROBABILITY.CDF")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cdf.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the cdf at s.")
+    .Documentation(
+        L"Evaluate the pdf at a value. "
+    )
 );
-double WINAPI xll_probability_cumulant(HANDLEX k, double s)
+double WINAPI xll_probability_cdf(HANDLEX k, double s)
 {
 #pragma XLLEXPORT
-	double result = std::numeric_limits<double>::quiet_NaN();
+    double result = std::numeric_limits<double>::quiet_NaN();
 
-	try {
-		handle<probability<>> k_(k);
+    try {
+        handle<probability<>> k_(k);
 
-		result = k_->cumulant(s);
-	}
-	catch (const std::exception & ex) {
-		XLL_ERROR(ex.what());
-	}
+        result = k_->cdf(s);
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
 
-	return result;
+    return result;
 }
 
 static AddIn xai_probability_pdf(
@@ -148,4 +149,115 @@ double WINAPI xll_probability_pdf(HANDLEX k, double s)
 	}
 
 	return result;
+}
+
+static AddIn xai_probability_moment(
+    Function(XLL_DOUBLE, L"?xll_probability_moment", L"XLL.PROBABILITY.MOMENT")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the moment generating function.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the moment generating function at s.")
+    .Documentation(
+        L"Evaluate the moment generating function at a value. "
+    )
+);
+double WINAPI xll_probability_moment(HANDLEX k, double s)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<probability<>> k_(k);
+
+        result = k_->moment(s);
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+static AddIn xai_probability_moments(
+    Function(XLL_HANDLE, L"?xll_probability_moments", L"XLL.PROBABILITY.MOMENTS")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the sequence of moments.")
+    .Documentation(
+        L"Return the sequence of moments. "
+    )
+);
+HANDLEX WINAPI xll_probability_moments(HANDLEX k)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<probability<>> k_(k);
+
+        handle<sequence<>> c_(k_->moments());
+
+        result = c_.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+static AddIn xai_probability_cumulant(
+    Function(XLL_DOUBLE, L"?xll_probability_cumulant", L"XLL.PROBABILITY.CUMULANT")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the cumulant at s.")
+    .Documentation(
+        L"Evaluate the cumulant at a value. "
+    )
+);
+double WINAPI xll_probability_cumulant(HANDLEX k, double s)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<probability<>> k_(k);
+
+        result = k_->cumulant(s);
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
+static AddIn xai_probability_cumulants(
+    Function(XLL_HANDLE, L"?xll_probability_cumulants", L"XLL.PROBABILITY.CUMULANTS")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the sequence of cumulants.")
+    .Documentation(
+        L"Return the sequence of cumulants. "
+    )
+);
+HANDLEX WINAPI xll_probability_cumulants(HANDLEX k)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<probability<>> k_(k);
+
+        handle<sequence<>> c_(k_->cumulants());
+
+        result = c_.get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
 }

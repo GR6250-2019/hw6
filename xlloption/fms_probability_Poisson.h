@@ -41,7 +41,7 @@ namespace fms::probability {
             return exp(-lambda) * p;
         }
 		// Moment generating function: E exp(tX)
-		X moment(const X& t)
+		X moment(const X& t) const
 		{
 			return exp(cumulant(t));
 		}
@@ -51,14 +51,15 @@ namespace fms::probability {
 			Touchard<X> T;
 		public:
 			moments(const Poisson<X>& P)
-				: P(P), T(lambda)
+				: P(P), T(P.lambda)
 			{ }
 			operator bool() const
 			{
 				return true;
 			}
-			// E X^n = sum_{k=0}^n {n;k} lambda^k
-			// where {n;k} are the Sterling numbers of the second kind.
+			// E X^n = T_n(x) = sum_{k=0}^n {n;k} lambda^k
+            // where T_n is the n-th Touchard polynomial
+			// and where {n;k} are the Sterling numbers of the second kind.
 			X operator*() const
 			{
 				return *T;
@@ -69,6 +70,11 @@ namespace fms::probability {
 
 				return *this;
 			}
+            X operator()(const X& t) const
+            {
+                return P.moment(t);
+            }
+
 		};
         X cumulant(const X& s) const
         {
@@ -93,6 +99,10 @@ namespace fms::probability {
 			{
 				return *this;
 			}
+            X operator()(const X& s) const
+            {
+                return P.cumulant(s);
+            }
 		};
         
     };

@@ -16,6 +16,35 @@
 using namespace xll;
 using namespace fms::cumulant;
 
+static AddIn xai_cumulant(
+    Function(XLL_DOUBLE, L"?xll_cumulant", L"XLL.CUMULANT")
+    .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant object.")
+    .Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return the value of the cumulant at s.")
+    .Documentation(
+        L"Evaluate the cumulant at a value. "
+    )
+);
+double WINAPI xll_cumulant(HANDLEX k, double s)
+{
+#pragma XLLEXPORT
+    double result = std::numeric_limits<double>::quiet_NaN();
+
+    try {
+        handle<sequence<>> k_(k);
+        cumulant<>* pk = dynamic_cast<cumulant<>*>(k_.ptr());
+        ensure(pk != nullptr || !"failed to dynamic cast from sequence* to cumulant*");
+
+        result = (*pk)(s);
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
 static AddIn xai_cumulant_normalize(
     Function(XLL_FP, L"?xll_cumulant_normalize", L"XLL.CUMULANT.NORMALIZE")
     .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant.")

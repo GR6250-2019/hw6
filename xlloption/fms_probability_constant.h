@@ -16,7 +16,7 @@ namespace fms::probability {
 		// Constant probability density function.
 		X pdf(const X x) const
 		{
-			return x == c ? std::numeric_limits<X>::infinity() : 0;
+			return x == c ? 1 : 0;
 		}
 		// Constant cumulative distribution function.
 		X cdf(const X& x) const
@@ -24,7 +24,7 @@ namespace fms::probability {
 			return X(1) * (x >= c);
 		}
 		// Moment generating function: E exp(tX)
-		X moment(const X& t)
+		X moment(const X& t) const
 		{
 			return exp(c*t);
 		}
@@ -50,6 +50,10 @@ namespace fms::probability {
 
 				return *this;
 			}
+            X operator()(const X& t) const
+            {
+                return c.moment(t);
+            }
 		};
 		X cumulant(X s) const
 		{
@@ -76,6 +80,10 @@ namespace fms::probability {
 
 				return *this;
 			}
+            X operator()(const X& s) const
+            {
+                return c.cumulant(s);
+            }
 		};
 		
 	};

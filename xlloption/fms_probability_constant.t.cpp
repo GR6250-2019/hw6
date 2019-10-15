@@ -20,7 +20,7 @@ int test_fms_probability_constant()
 		assert(!(c > c2));
 		*/
 		assert(0 == c.pdf(X(1)));
-		assert(std::numeric_limits<X>::infinity() == c.pdf(X(0)));
+		assert(1 == c.pdf(X(0)));
 		assert(0  == c.pdf(X(-1)));
 		
 		assert(0 == c.cdf(X(-1)));
@@ -63,7 +63,7 @@ int test_fms_probability_constant()
 		assert(!(c > c2));
 		
 		assert(0 == c.pdf(c0 - 1));
-		assert(std::numeric_limits<X>::infinity() == c.pdf(c0));
+		assert(1 == c.pdf(c0));
 		assert(0 == c.pdf(c0 + 1));
 
 		assert(0 == c.cdf(c0 - 1));

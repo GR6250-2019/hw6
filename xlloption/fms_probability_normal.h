@@ -62,7 +62,11 @@ namespace fms::probability {
 
 				return *this;
 			}
-		};
+            X operator()(const X& t) const
+            {
+                return N.moment(t);
+            }
+        };
         X cumulant(const X& s) const
         {
             return mu * s + sigma * sigma * s * s/2;
@@ -89,6 +93,10 @@ namespace fms::probability {
 
 				return *this;
 			}
+            X operator()(const X& s) const
+            {
+                return N.cumulant(s);
+            }
 		};
      };
 }

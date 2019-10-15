@@ -35,17 +35,19 @@ namespace fms::probability {
 
 			return  xa_ * xb_ / Bab;
 		}
-		X cdf(const X& x) const
+#pragma warning(push)
+#pragma warning(disable: 4702)
+        X cdf(const X& x) const
 		{
 			if (x <= 0 || x >= 1) {
 				throw std::domain_error("fms::probability::Beta::pdf: x must be between 0 and 1");
 			}
 
 			throw std::domain_error("fms::probability::Beta::cdf: not implemented");
-
 			return 0;
 		}
-		// moment generating function: E exp(t X)
+#pragma warning(pop)
+        // moment generating function: E exp(t X)
 		X moment(const X& t, long n = 100) const
 		{
 			using fms::sequence::sum;
@@ -83,7 +85,11 @@ namespace fms::probability {
 
 				return *this;
 			}
-		};
+            X operator()(const X& t) const
+            {
+                return B.moment(t);
+            }
+        };
 		X cumulant(const X& s) const
 		{
 			using std::log;
@@ -91,10 +97,12 @@ namespace fms::probability {
 			return log(moment(s));
 		}
 		class cumulants {
+            Beta<X> B;
 		public:
-			cumulants()
+			cumulants(const Beta& B)
+                : B(B)
 			{
-				throw std::runtime_error("fms::probability::Beta::cumulants: not implemented");
+				//throw std::runtime_error("fms::probability::Beta::cumulants: not implemented");
 			}
 			operator bool() const
 			{
@@ -109,6 +117,10 @@ namespace fms::probability {
 			{
 				return *this;
 			}
+            X operator()(const X& s) const
+            {
+                return B.cumulant(s);
+            }
 		};
 	};
 }
