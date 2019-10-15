@@ -11,6 +11,7 @@
 #include "fms_sequence_equal.h"
 #include "fms_sequence_factorial.h"
 #include "fms_sequence_iota.h"
+#include "fms_sequence_iterator.h"
 #include "fms_sequence_length.h"
 #include "fms_sequence_list.h"
 #include "fms_sequence_pointer.h"

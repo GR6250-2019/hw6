@@ -10,6 +10,35 @@
 
 using namespace xll;
 using namespace fms::probability;
+
+static AddIn xai_probability_beta(
+	Function(XLL_HANDLE, L"?xll_probability_beta", L"XLL.PROBABILITY.BETA")
+	.Arg(XLL_DOUBLE, L"alpha", L"is first parameter.")
+	.Arg(XLL_DOUBLE, L"beta", L"is the second parameter.")
+	.Uncalced()
+	.Category(CATEGORY)
+	.FunctionHelp(L"Return a handle to a beta distribution.")
+	.Documentation(
+		L"The cumulants of a beta random variable are ..."
+		L"The cumulant is ..."
+	)
+);
+HANDLEX WINAPI xll_probability_beta(double alpha, double beta)
+{
+#pragma XLLEXPORT
+	handlex result;
+
+	try {
+		handle<probability<>> h(new probability_impl(Beta(alpha, beta)));
+		result = h.get();
+	}
+	catch (const std::exception& ex) {
+		XLL_ERROR(ex.what());
+	}
+
+	return result;
+}
+
 static AddIn xai_probability_constant(
 	Function(XLL_HANDLE, L"?xll_probability_constant", L"XLL.PROBABILITY.CONSTANT")
 	.Arg(XLL_DOUBLE, L"c", L"is the value of the constant random variable.")
@@ -67,8 +96,8 @@ HANDLEX WINAPI xll_probability_poisson(double lambda)
 	return handle<probability<>>(new probability_impl(Poisson(lambda))).get();
 }
 
-static AddIn xai_cumulant(
-	Function(XLL_DOUBLE, L"?xll_cumulant", L"XLL.CUMULANT")
+static AddIn xai_probability_cumulant(
+	Function(XLL_DOUBLE, L"?xll_probability_cumulant", L"XLL.PROBABILITY.CUMULANT")
 	.Arg(XLL_HANDLE, L"k", L"is a handle to a probability object.")
 	.Arg(XLL_DOUBLE, L"s", L"is the value at which to calculate the cumulant.")
 	.Category(CATEGORY)
@@ -77,7 +106,7 @@ static AddIn xai_cumulant(
 		L"Evaluate the cumulant at a value. "
 	)
 );
-double WINAPI xll_cumulant(HANDLEX k, double s)
+double WINAPI xll_probability_cumulant(HANDLEX k, double s)
 {
 #pragma XLLEXPORT
 	double result = std::numeric_limits<double>::quiet_NaN();

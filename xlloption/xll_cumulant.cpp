@@ -79,7 +79,7 @@ BOOL WINAPI xll_sequence_bool(HANDLEX);
 double WINAPI xll_sequence_star(HANDLEX);
 HANDLEX WINAPI xll_sequence_incr(HANDLEX);
 HANDLEX WINAPI xll_sequence_copy(HANDLEX);
-HANDLEX WINAPI xll_cumulant(HANDLEX, double);
+HANDLEX WINAPI xll_probability_cumulant(HANDLEX, double);
 
 class cumulant_sum {
     size_t n;
@@ -127,7 +127,7 @@ public:
     double operator()(double s) const
     {
         return std::accumulate(h.begin(), h.end(), 0., [s](double x, HANDLEX hi) { 
-            return x + xll_cumulant(hi, s); });
+            return x + xll_probability_cumulant(hi, s); });
     }
 };
 

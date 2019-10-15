@@ -270,5 +270,8 @@
     <ClCompile Include="fms_probability_constant.t.cpp">
       <Filter>probability</Filter>
     </ClCompile>
+    <ClCompile Include="fms_Touchard.t.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

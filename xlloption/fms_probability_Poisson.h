@@ -2,6 +2,7 @@
 //  P(X = k) = exp(-lambda) lambda^k/k!
 #pragma once
 #include <cmath>
+#include "fms_Touchard.h"
 
 namespace fms::probability {
 
@@ -47,22 +48,25 @@ namespace fms::probability {
 		class moments {
 			friend class Poisson;
 			Poisson<X> P;
+			Touchard<X> T;
 		public:
 			moments(const Poisson<X>& P)
-				: P(P)
+				: P(P), T(lambda)
 			{ }
 			operator bool() const
 			{
 				return true;
 			}
 			// E X^n = sum_{k=0}^n {n;k} lambda^k
-			// where {n;k} are the Touchard polynomials
+			// where {n;k} are the Sterling numbers of the second kind.
 			X operator*() const
 			{
-				return 0; //??? for now
+				return *T;
 			}
 			moments& operator++()
 			{
+				++T;
+
 				return *this;
 			}
 		};

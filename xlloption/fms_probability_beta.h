@@ -46,7 +46,7 @@ namespace fms::probability {
 			return 0;
 		}
 		// moment generating function: E exp(t X)
-		X moment(const X& t, size_t n = 100) const
+		X moment(const X& t, long n = 100) const
 		{
 			using fms::sequence::sum;
 			using fms::sequence::epsilon;
@@ -60,7 +60,7 @@ namespace fms::probability {
 			friend class Beta<X>;
 			Beta<X> B;
 			X a_b = 1;
-			size_t n = 0;
+			long n = 0;
 		public:
 			moments(const Beta<X>& B)
 				: B(B)

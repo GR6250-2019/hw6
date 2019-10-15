@@ -1,6 +1,6 @@
 // xll_probability.h - Probability distributions for Excel
 #pragma once
-#include "xll_sequence.h"
+#include "xll_cumulant.h"
 
 namespace xll {
 
@@ -16,10 +16,16 @@ namespace xll {
 		{
 			return cumulant_(s);
 		}
+		/*
+		xll::cumulant<X>& cumulants() const
+		{
+			return cumulants_();
+		}
+		*/
 	private:
 		virtual X pdf_(const X&) const = 0;
 		virtual X cumulant_(const X&) const = 0;
-		//virtual sequence<X>* cumulants_() const = 0;
+		//virtual xll::cumulant<X>& cumulants_() const = 0;
 	};
 
 	// inherit from P to provide implementation???
@@ -40,6 +46,12 @@ namespace xll {
 		{
 			return p.cumulant(x);
 		}
+		/*
+		xll::cumulant_impl<P, X>& cumulants_() const override
+		{
+			return cumulant_impl(p.cumulants());
+		}
+		*/
 		
 	};
 
