@@ -1,5 +1,6 @@
 // fms_cumulant_constant.h - Cumulant of a constant random variable.
 #pragma once
+#include <compare>
 
 namespace fms::cumulant {
 
@@ -12,7 +13,8 @@ namespace fms::cumulant {
         constant(S c = 1)
             : c(c), n(0)
         { }
-        operator bool() const
+		const auto operator<=>(const constant&) const = default;
+		operator bool() const
         {
             return true;
         }

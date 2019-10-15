@@ -9,10 +9,10 @@ namespace fms::probability {
     class Poisson {
         X lambda;
     public:
-        Poisson(X lambda)
+        Poisson(const X& lambda)
             : lambda(lambda)
         { }
-        X pdf(X k) const
+        X pdf(const X& k) const
         {
             X k_;
             if (k < 0 || 0 != modf(k, &k_)) {
@@ -25,7 +25,7 @@ namespace fms::probability {
 
             return exp(-lambda) * l_k;
         }
-        X cdf(X x) const
+        X cdf(const X& x) const
         {
             if (x < 0) {
                 return X(0);
@@ -39,13 +39,57 @@ namespace fms::probability {
 
             return exp(-lambda) * p;
         }
-        X cumulant(X s) const
+		// Moment generating function: E exp(tX)
+		X moment(const X& t)
+		{
+			return exp(cumulant(t));
+		}
+		class moments {
+			friend class Poisson;
+			Poisson<X> P;
+		public:
+			moments(const Poisson<X>& P)
+				: P(P)
+			{ }
+			operator bool() const
+			{
+				return true;
+			}
+			// E X^n = sum_{k=0}^n {n;k} lambda^k
+			// where {n;k} are the Touchard polynomials
+			X operator*() const
+			{
+				return 0; //??? for now
+			}
+			moments& operator++()
+			{
+				return *this;
+			}
+		};
+        X cumulant(const X& s) const
         {
             return lambda * (exp(s) - 1);
         }
-        X cumulants(size_t n) const
-        {
-            return n == 0 ? X(0) : lambda;
-        }
+		class cumulants {
+			friend class Poisson;
+			Poisson<X> P;
+		public:
+			cumulants(const Poisson<X>& P)
+				: P(P)
+			{ }
+			operator bool() const
+			{
+				return true;
+			}
+			X operator*() const
+			{
+				return P.lambda;
+			}
+			cumulants& operator++()
+			{
+				return *this;
+			}
+		};
+        
     };
 }

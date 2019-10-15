@@ -139,6 +139,21 @@
     <ClInclude Include="fms_sequence_unique.h">
       <Filter>sequence</Filter>
     </ClInclude>
+    <ClInclude Include="fms_probability_beta.h">
+      <Filter>probability</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_probabilty.h">
+      <Filter>probability</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_probability_constant.h">
+      <Filter>probability</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_Touchard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="xll_probability.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -245,6 +260,15 @@
     </ClCompile>
     <ClCompile Include="..\xllblack\xll_black.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="xll_probability.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_probabilty_beta.t.cpp">
+      <Filter>probability</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_probability_constant.t.cpp">
+      <Filter>probability</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

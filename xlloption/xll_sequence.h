@@ -1,6 +1,5 @@
 // xll_sequence.h - Sequences for Excel
 #pragma once
-//#include "fms_sequence.h"
 
 namespace xll {
     // NVI type erasure for sequence

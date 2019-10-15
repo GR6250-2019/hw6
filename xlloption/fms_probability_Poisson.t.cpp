@@ -16,49 +16,35 @@ int test_fms_probability_poisson()
         assert(p.pdf(x) == 0);
         assert(p.cdf(x) == 0);
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
+		auto kappa = Poisson<X>::cumulants(p);
+        assert(*kappa == lambda);
+		++kappa;
+        assert(*kappa == lambda);
 
         x = X(0);
         assert(p.pdf(x) == exp(-lambda));
         assert(p.cdf(x) == exp(-lambda));
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
-
+ 
         x = X(0.5);
         assert(p.pdf(x) == 0);
         assert(p.cdf(x) == exp(-lambda));
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
 
         x = X(1);
         assert(p.pdf(x) == exp(-lambda)*lambda);
         assert(p.cdf(x) == exp(-lambda)*(1 + lambda));
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
 
         x = X(1.5);
         assert(p.pdf(x) == 0);
         assert(p.cdf(x) == exp(-lambda) * (1 + lambda));
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
 
         x = X(2);
         assert(p.pdf(x) == exp(-lambda)*lambda*lambda/2);
         assert(p.cdf(x) == exp(-lambda) * (1 + lambda + lambda*lambda/2));
         assert(p.cumulant(x) == lambda * (exp(x) - 1));
-        assert(p.cumulants(0) == 0);
-        assert(p.cumulants(1) == lambda);
-        assert(p.cumulants(2) == lambda);
 
     }
 
