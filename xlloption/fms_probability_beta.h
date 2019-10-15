@@ -1,24 +1,21 @@
 // fms_probability_beta.h - Beta distribution.
+// Density is f(x) = x^{alpha-1} (1 - x)^{beta-1} * Gamma(alpha) * Gamma(beta) / Gamma(alpha + beta)
 #pragma once
 #include <cmath>
 #include <stdexcept>
 #include "fms_sequence.h"
+#include "fms_Hypergeometric.h"
 
 namespace fms::probability {
 
 	template<class X = double>
 	class Beta {
 		X alpha, beta;
+        X Bab; // Beta(alpha,beta) = Gamma(alpha) Gamma(beta)/Gamma(alpha + bets)
 	public:
 		Beta(const X& alpha, const X& beta)
-			: alpha(alpha), beta(beta)
+			: alpha(alpha), beta(beta), Bab(exp(lgamma(alpha) + lgamma(beta) - lgamma(alpha + beta)))
 		{
-			if (alpha <= 0) {
-				throw std::domain_error("fms::probability::Beta: alpha must be positive");
-			}
-			if (beta <= 0) {
-				throw std::domain_error("fms::probability::Beta: beta must be positive");
-			}
 		}
 		X pdf(const X& x) const
 		{
@@ -26,27 +23,26 @@ namespace fms::probability {
 				throw std::domain_error("fms::probability::Beta::pdf: x must be between 0 and 1");
 			}
 
-			using std::pow;
-			using std::tgamma;
-
 			X xa_ = pow(x, alpha - 1);
-			X xb_ = pow(x, beta - 1);
-			X Bab = tgamma(alpha) * tgamma(beta) / tgamma(alpha + beta);
+			X xb_ = pow(1 - x, beta - 1);
 
-			return  xa_ * xb_ / Bab;
+            return  xa_ * xb_ / Bab;
 		}
-#pragma warning(push)
-#pragma warning(disable: 4702)
         X cdf(const X& x) const
 		{
 			if (x <= 0 || x >= 1) {
 				throw std::domain_error("fms::probability::Beta::pdf: x must be between 0 and 1");
 			}
 
-			throw std::domain_error("fms::probability::Beta::cdf: not implemented");
-			return 0;
+            auto [p,n] = fms::Hypergeometric(alpha, 1 - beta, alpha + 1, x);
+            p /= Bab;
+            p *= pow(x, alpha) / alpha;
+            auto [p2, n2] = fms::Hypergeometric(alpha + beta, 1., alpha + 1, x);
+            p2 /= Bab;
+            p2 *= pow(x, alpha)*pow(1 - x, beta) / alpha;
+
+			return p;
 		}
-#pragma warning(pop)
         // moment generating function: E exp(t X)
 		X moment(const X& t, long n = 100) const
 		{

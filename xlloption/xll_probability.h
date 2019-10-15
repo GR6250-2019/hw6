@@ -10,7 +10,7 @@ namespace xll {
 		{ }
         X cdf(const X& x) const
         {
-            return pdf_(x);
+            return cdf_(x);
         }
         X pdf(const X& x) const
 		{
