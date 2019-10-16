@@ -246,7 +246,7 @@ static AddIn xai_probability_cumulants(
 HANDLEX WINAPI xll_probability_cumulants(HANDLEX k)
 {
 #pragma XLLEXPORT
-    double result = std::numeric_limits<double>::quiet_NaN();
+    handlex result;
 
     try {
         handle<probability<>> k_(k);
