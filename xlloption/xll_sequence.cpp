@@ -17,9 +17,9 @@ static AddIn xai_sequence(
     .Documentation(
         PARA_(
             L"A sequence is a potentially infinite list of values. "
-            L"It terminates when BOOL returns false. "
-            L"The current value is STAR. "
-            L"The sequence moves to the next value when INCR is called. "
+            L"It terminates when " C_(L"BOOL") L" returns false. "
+            L"The current value is " C_(L"STAR") L". "
+            L"The sequence moves to the next value when " C_(L"INCR") L" is called. "
             L"The latter is a dangerous functions to call in Excel "
             L"because it modifies the underlying sequence "
             L"and breaks the Excel Zen of being purely functional. "
@@ -27,17 +27,17 @@ static AddIn xai_sequence(
             L"respect the Zen of Excel. "
         )
         PARA_(
-            L"Create sequences with FACTORIAL, IOTA, LIST, and POWER. "
-            L"Combine sequences with ADD, SUB, MUL, and DIV to perform "
+            L"Create sequences with " C_(L"FACTORIAL") L", " C_(L"IOTA") L", " C_(L"LIST") L", and " C_(L"POWER") L". "
+            L"Combine sequences with " C_(L"ADD") L", " C_(L"SUB") L", " C_(L"MUL") L", and " C_(L"DIV") L" to perform "
             L"arithmetic operations. "
-            L"Use CONCATENATE to combine one sequence with another. "
+            L"Use " C_(L"CONCATENATE") L" to combine one sequence with another. "
         )
         PARA_(
-            L"Use TAKE(n, sequence) to see the first n values of a sequence. "
-            L"Use SUM(sequence) to add up all the values in a sequence. "
-            L"Use EPSILON(sequence) to truncate the sequence when the values "
+            L"Use " C_(L"TAKE(n, sequence)") L" to see the first n values of a sequence. "
+            L"Use " C_(L"SUM(sequence)") L" to add up all the values in a sequence. "
+            L"Use " C_(L"EPSILON(sequence)") L" to truncate the sequence when the values "
             L"are smaller than machine epsilon. "
-            L"Use LENGTH(sequence) to find out how many elements there are. "
+            L"Use " C_(L"LENGTH(sequence)") L" to find out how many elements there are. "
         )
     )
 );
