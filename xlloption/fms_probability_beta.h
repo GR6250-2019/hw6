@@ -11,7 +11,7 @@ namespace fms::probability {
 	template<class X = double>
 	class Beta {
 		X alpha, beta;
-        X Bab; // Beta(alpha,beta) = Gamma(alpha) Gamma(beta)/Gamma(alpha + bets)
+        X Bab; // Beta(alpha,beta) = Gamma(alpha) Gamma(beta)/Gamma(alpha + beta)
 	public:
 		Beta(const X& alpha, const X& beta)
 			: alpha(alpha), beta(beta), Bab(exp(lgamma(alpha) + lgamma(beta) - lgamma(alpha + beta)))
