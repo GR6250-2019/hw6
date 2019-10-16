@@ -12,28 +12,31 @@ using namespace xll;
 using namespace fms::probability;
 
 static AddIn xai_distribution(
-    Document()
+    Document(CATEGORY)
     .Category(CATEGORY)
     .Documentation(
         PARA_(
+            L"This module implements probability distributions and associated functions. "
+        )
+        PARA_(
             L"A random variable is defined by its cumulative distribution function: "
-            L"CDF(x) is the probability the random variable is less than or equal to x. "
+            C_(L"CDF(x)") L" is the probability the random variable is less than or equal to " C_(L"x") L". "
         )
         PARA_(
             L"If a random variable is continuously distributed then the "
-            L"probability density function: PDF(x) is the derivative of the cumulative distribution. "
-            L"If the random variable is discrete it only takes on a finite or countable number "
-            L"of values and the PDF(x) is the probability it takes on the value x. "
+            L"probability density function: " C_(L"PDF(x)") L" is the derivative of the cumulative distribution. "
+            L"If the random variable is discrete if it only takes on a finite or countable number "
+            L"of values and the " C_(L"PDF(x)") L" is the probability it takes on the value " C_(L"x") L". "
         )
         PARA_(
-            L"The MOMENT generating function of a random variable is "
+            L"The " C_(L"MOMENTS") L" of the random variable X are E[X" SUP_(L"n") L"]. "
+            L"The " C_(L"MOMENT") L" generating function of a random variable is "
             L"E[exp(sX)] = " Sigma_ SUB_(L"n" ge_ L"0") L" E[X" SUP_(L"n") L"] s" SUP_(L"n") L"/n!. "
-            L"The MOMENTS are E[X^n]. "
         )
         PARA_(
-            L"The CUMULANT of a random variable is "
+            L"The " C_(L"CUMULANT") L" of a random variable is "
             L"log E[exp(sX)] = " Sigma_ SUB_(L"n" ge_ L"1") kappa_ SUB_(L"n") L"s" SUP_(L"n") L"/n! "
-            L"where " kappa_ SUB_(L"n") L" are the CUMULANTS. "
+            L"where " kappa_ SUB_(L"n") L" are the " C_(L"CUMULANTS") L". "
         )
     )
 );
@@ -46,8 +49,9 @@ static AddIn xai_probability_beta(
 	.Category(CATEGORY)
 	.FunctionHelp(L"Return a handle to a beta distribution.")
 	.Documentation(
-		L"The cumulants of a beta random variable are ..."
-		L"The cumulant is ..."
+        L"The Beta distribution has density function f(x) = x" SUP_(alpha_ L"-1") L"(1 - x)" SUP_(beta_ L"-1") 
+        L"/B(" alpha_ L"," beta_ L"), where B(" alpha_ L"," beta_ L") = " Gamma_ L"(" alpha_ L") " Gamma_ L"(" beta_ L")/"
+        Gamma_ L"(" alpha_ L" + " beta_ L")."
 	)
 );
 HANDLEX WINAPI xll_probability_beta(double alpha, double beta)

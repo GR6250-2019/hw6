@@ -5,6 +5,7 @@
 using namespace xll;
 using namespace fms::black;
 
+#ifdef _DEBUG
 test test_moneyness([]() {
 	double f = 100;
 	double sigma = 0.2;
@@ -27,6 +28,7 @@ test test_moneyness([]() {
     ensure(fabs(c - 4.5275) < 0.001);
 
 	});
+#endif // _DEBUG
 
 static AddIn xai_black_put(
 	Function(XLL_DOUBLE, L"?xll_black_put", L"XLL.BLACK.PUT")
@@ -35,7 +37,10 @@ static AddIn xai_black_put(
 	.Arg(XLL_DOUBLE, L"k", L"is the strike.", L"100")
 	.Arg(XLL_DOUBLE, L"t", L"is the time in years to expiration.", L"0.25")
 	.Category(L"XLL")
-	.FunctionHelp(L"Return Black put value.")
+	.FunctionHelp(L"Return Black put value. ")
+    .Documentation(
+        L"Returns the expected value of the put payoff. "
+    )
 );
 double WINAPI xll_black_put(double f, double sigma, double k, double t)
 {
@@ -59,6 +64,9 @@ static AddIn xai_black_put_delta(
     .Arg(XLL_DOUBLE, L"t", L"is the time in years to expiration.", L"0.25")
     .Category(L"XLL")
     .FunctionHelp(L"Return Black put delta value.")
+    .Documentation(
+        L"Returns derivative of the put value with respect to the forward. "
+    )
 );
 double WINAPI xll_black_put_delta(double f, double sigma, double k, double t)
 {
@@ -83,6 +91,9 @@ static AddIn xai_black_vega(
     .Arg(XLL_DOUBLE, L"t", L"is the time in years to expiration.", L"0.25")
     .Category(L"XLL")
     .FunctionHelp(L"Return Black put delta value.")
+    .Documentation(
+        L"Returns derivative of the put value with respect to the volatility, sigma. "
+    )
 );
 double WINAPI xll_black_vega(double f, double sigma, double k, double t)
 {
@@ -107,6 +118,7 @@ static AddIn xai_black_call(
     .Arg(XLL_DOUBLE, L"t", L"is the time in years to expiration.", L"0.25")
     .Category(L"XLL")
     .FunctionHelp(L"Return Black call value.")
+    .Documentation(L"Return Black call value.")
 );
 double WINAPI xll_black_call(double f, double sigma, double k, double t)
 {
@@ -123,6 +135,7 @@ double WINAPI xll_black_call(double f, double sigma, double k, double t)
     return result;
 }
 
+#ifdef _DEBUG
 test test_delta([]() {
 
     double f = 100;
@@ -145,7 +158,6 @@ test test_delta([]() {
     }
 
     });
-
 test test_vega([]() {
     //!!! Implement a test for vega
     double f = 100;
@@ -168,8 +180,7 @@ test test_vega([]() {
     }
 
     });
-
-//!!! Implement XLL.BLACK.PUT.IMPLIED(f, p, k, t) where p is the put value.
+#endif // _DEBUG
 
 static AddIn xai_black_put_implied(
     Function(XLL_DOUBLE, L"?xll_black_put_implied", L"XLL.BLACK.PUT.IMPLIED")
@@ -179,6 +190,7 @@ static AddIn xai_black_put_implied(
     .Arg(XLL_DOUBLE, L"t", L"is the time in years to expiration.", L"0.25")
     .Category(L"XLL")
     .FunctionHelp(L"Return Black put_implied value.")
+    .Documentation(L"Return the volatility having the specified Black put value.")
 );
 double WINAPI xll_black_put_implied(double f, double p, double k, double t)
 {

@@ -12,7 +12,7 @@ using namespace xll;
 #endif 
 
 static AddIn xai_sequence(
-    Document()
+    Document(CATEGORY)
     .Category(CATEGORY)
     .Documentation(
         PARA_(
@@ -274,7 +274,7 @@ static AddIn xai_sequence_concatenate(
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a sequence concatentaing s followed by t.")
+    .FunctionHelp(L"Return a sequence concatenating s followed by t.")
     .Documentation(
         L"Return a handle to the concatenation of two sequences. "
     )
@@ -336,6 +336,7 @@ static AddIn xai_sequence_factorial(
     .FunctionHelp(L"Return a handle to the sequence of factorials 1 = 0!, 1 = 1!, 2 = 2! ...")
     .Documentation(
         L"If n is not 0 then the Pochhammer sequence is returned. "
+        L"Use n = -1 to generate the falling Pochhammer sequence. "
     )
 );
 HANDLEX WINAPI xll_sequence_factorial(double x, LONG n)
@@ -370,7 +371,9 @@ static AddIn xai_sequence_list(
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a sequence of array values.")
-    .Documentation(L"Return a handle to a sequence of array values. ")
+    .Documentation(
+        L"Return a handle to a sequence of array values. "
+    )
 );
 HANDLEX WINAPI xll_sequence_list(const _FP12* pa)
 {
@@ -393,9 +396,10 @@ static AddIn xai_sequence_power(
     .Arg(XLL_DOUBLE, L"x", L"is the number whos powers form the sequence.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return a handle to the sequence 1, x, x^2, ...")
+    .FunctionHelp(L"Return a handle to the sequence of powers of x. ")
     .Documentation(
-        L"Return a handle to the sequence of powers of the number " MATH_(L"x") L". "
+        L"Return a handle to the sequence of powers of the number " MATH_(L"x") L": "
+        L"1, x, x" sup2_ ", x" sup3_ L", ..."
     )
 );
 HANDLEX WINAPI xll_sequence_power(double x)
@@ -415,7 +419,7 @@ static AddIn xai_sequence_length(
     .Category(CATEGORY)
     .FunctionHelp(L"Return the length of the sequence.")
     .Documentation(
-        L"Return  the length of a sequence. "
+        L"Return the length of a sequence. "
     )
 );
 double WINAPI xll_sequence_length(HANDLEX h)
@@ -437,7 +441,8 @@ static AddIn xai_sequence_sum(
     Function(XLL_DOUBLE, L"?xll_sequence_sum", L"XLL.SEQUENCE.SUM")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
     .Category(CATEGORY)
-    .FunctionHelp(L"Returns the sum of the sequence.")
+    .FunctionHelp(L"Returns the sum of the sequence. ")
+    .Documentation(L"Returns the sum of the sequence. ")
 );
 double WINAPI xll_sequence_sum(HANDLEX h)
 {
@@ -460,7 +465,7 @@ static AddIn xai_sequence_take(
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
 	.Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Returns count items from the sequence.")
+    .FunctionHelp(L"Returns the first count items from the sequence.")
     .Documentation(
         L"Take elements from a sequence. "
     )

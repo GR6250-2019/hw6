@@ -17,15 +17,24 @@ using namespace xll;
 using namespace fms::cumulant;
 
 static AddIn xai_cumulant_doc(
-    Document()
+    Document(CATEGORY)
     .Category(CATEGORY)
     .Documentation(
         PARA_(
-            L"The cumulant of a random variable X is " kappa_ L"(s) = log E[exp(sX)]. "
+            L"This module provides functions to " C_(L"SCALE") " and " C_(L"SUM") " cumulants "
+            L"in order to create linear combinations. "
+        )
+        PARA_(
+            L"The " C_(L"CUMULANT") L" of a random variable X is " kappa_ L"(s) = log E[exp(sX)]. "
             L"The cumulants are the coefficients of the Taylor series expansion: "
             kappa_ L"(s) = " Sigma_ SUB_(L"n" ge_ L"1") kappa_ SUB_(L"n") L"s" SUP_(L"n") L"/n!."
         )
 
+    )
+    .Remarks(
+        PARA_(
+            L"Cumulants are also sequences and can be used in all sequence functions. "
+        )
     )
 );
 
@@ -63,9 +72,9 @@ static AddIn xai_cumulant_normalize(
     .Arg(XLL_HANDLE, L"k", L"is a handle to a cumulant.")
     .Uncalced()
     .Category(CATEGORY)
-    .FunctionHelp(L"Return the mean, variance, and handle to remaining cumulant.")
+    .FunctionHelp(L"Return the mean, variance, and handle to remaining cumulants.")
     .Documentation(
-        L"Convert to a cumulants with mean 0 and variance 1. "
+        L"Convert to cumulants with mean 0 and variance 1. "
         L"Return the original mean and standard deviation, and a handle to the remaining normalized cumulants. "
     )
 );
@@ -93,7 +102,7 @@ static AddIn xai_cumulant_scale(
     .Arg(XLL_HANDLE, L"handle", L"is handle to a cumulant.")
     .Arg(XLL_DOUBLE, L"scale", L"is the scalar multiplier of the corresponding random variable.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to a scaled cumulant.")
     .Documentation(
         L"Return a handle to a scaled cumulant. "
@@ -178,7 +187,7 @@ static AddIn xai_cumulant_sum(
     Function(XLL_HANDLE, L"?xll_cumulant_sum", L"XLL.CUMULANT.SUM")
     .Arg(XLL_FP, L"handles", L"is an array of handles to cumulants.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the sum of the cumulants.")
     .Documentation(
         L"Return a handle to the sum of the cumulants. "
