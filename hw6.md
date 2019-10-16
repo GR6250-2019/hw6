@@ -22,8 +22,11 @@ The curve $f_\alpha(x) = x^\alpha$ has derivative 0 at $x = 0$ if $\alpha > 1$.
 The curve $f_{\alpha,a,b}(x) = x^\alpha b/a^\alpha$ has derivative 0 at $x = 0$ if $\alpha > 1$
 and $f_{\alpha,a,b}(a) = b$.
 
-We want to look at $G(x) = f_{\alpha,a,b}(x + a) 1(-a < x < 0) + (1 - b)1(x \ge 0)$.
-It is 0 for $x < a$, smoothly increases to $b$ at $x = 0$, then jumps to 1 for $x\ge0$.
+We want to look at shifting this function back by $a$ and adding the
+standard normal that keeps the variance (second cumulant) equal to
+1: $G(x) = f_{\alpha,a,b}(x + a) 1(-a < x < 0) + (1 - b)1(x \ge 0)$.
+It is 0 for $x < a$, smoothly increases to $b$ at $x = 0$, then jumps
+to 1 for $x\ge0$.
 
 You should plot this and note how it is a pertubation of the standard normal distribution.
 

@@ -5,11 +5,38 @@
 #include "xll_probability.h"
 
 #ifndef CATEGRORY
-#define CATEGORY L"XLL"
+#define CATEGORY L"Distribution"
 #endif
 
 using namespace xll;
 using namespace fms::probability;
+
+static AddIn xai_distribution(
+    Document()
+    .Category(CATEGORY)
+    .Documentation(
+        PARA_(
+            L"A random variable is defined by its cumulative distribution function: "
+            L"CDF(x) is the probability the random variable is less than or equal to x. "
+        )
+        PARA_(
+            L"If a random variable is continuously distributed then the "
+            L"probability density function: PDF(x) is the derivative of the cumulative distribution. "
+            L"If the random variable is discrete it only takes on a finite or countable number "
+            L"of values and the PDF(x) is the probability it takes on the value x. "
+        )
+        PARA_(
+            L"The MOMENT generating function of a random variable is "
+            L"E[exp(sX)] = " Sigma_ SUB_(L"n" ge_ L"0") L" E[X" SUP_(L"n") L"] s" SUP_(L"n") L"/n!. "
+            L"The MOMENTS are E[X^n]. "
+        )
+        PARA_(
+            L"The CUMULANT of a random variable is "
+            L"log E[exp(sX)] = " Sigma_ SUB_(L"n" ge_ L"1") kappa_ SUB_(L"n") L"s" SUP_(L"n") L"/n! "
+            L"where " kappa_ SUB_(L"n") L" are the CUMULANTS. "
+        )
+    )
+);
 
 static AddIn xai_probability_beta(
 	Function(XLL_HANDLE, L"?xll_probability_beta", L"XLL.PROBABILITY.BETA")

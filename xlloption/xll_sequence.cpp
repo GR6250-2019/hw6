@@ -7,10 +7,46 @@
 using namespace fms::sequence;
 using namespace xll;
 
+#ifndef CATEGORY
+#define CATEGORY L"Sequence"
+#endif 
+
+static AddIn xai_sequence(
+    Document()
+    .Category(CATEGORY)
+    .Documentation(
+        PARA_(
+            L"A sequence is a potentially infinite list of values. "
+            L"It terminates when BOOL returns false. "
+            L"The current value is STAR. "
+            L"The sequence moves to the next value when INCR is called. "
+            L"The latter is a dangerous functions to call in Excel "
+            L"because it modifies the underlying sequence "
+            L"and breaks the Excel Zen of being purely functional. "
+            L"Other sequence functions make copies of the sequence and "
+            L"respect the Zen of Excel. "
+        )
+        PARA_(
+            L"Create sequences with FACTORIAL, IOTA, LIST, and POWER. "
+            L"Combine sequences with ADD, SUB, MUL, and DIV to perform "
+            L"arithmetic operations. "
+            L"Use CONCATENATE to combine one sequence with another. "
+        )
+        PARA_(
+            L"Use TAKE(n, sequence) to see the first n values of a sequence. "
+            L"Use SUM(sequence) to add up all the values in a sequence. "
+            L"Use EPSILON(sequence) to truncate the sequence when the values "
+            L"are smaller than machine epsilon. "
+            L"Use LENGTH(sequence) to find out how many elements there are. "
+        )
+    )
+);
+
+
 static AddIn xai_sequence_bool(
     Function(XLL_BOOL, L"?xll_sequence_bool", L"XLL.SEQUENCE.BOOL")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return whether a sequence can be dereferrenced.")
     .Documentation(
         L"Call the correponding " C_(L"operator bool() const") L" for the sequence. "
@@ -35,7 +71,7 @@ BOOL WINAPI xll_sequence_bool(HANDLEX h)
 static AddIn xai_sequence_star(
     Function(XLL_DOUBLE, L"?xll_sequence_star", L"XLL.SEQUENCE.STAR")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return the current sequence value.")
     .Documentation(
         L"Call the correponding " C_(L"operator*() const") L" for the sequence. "
@@ -60,7 +96,7 @@ double WINAPI xll_sequence_star(HANDLEX h)
 static AddIn xai_sequence_incr(
     Function(XLL_HANDLE, L"?xll_sequence_incr", L"XLL.SEQUENCE.INCR")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Increment handle and return it. ")
     .Documentation(
         L"Call the correponding " C_(L"operator++() const") L" for the sequence. "
@@ -84,7 +120,7 @@ static AddIn xai_sequence_copy(
     Function(XLL_HANDLE, L"?xll_sequence_copy", L"XLL.SEQUENCE.COPY")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Copy a handle and return a new handle to it. ")
     .Documentation(
         L"Make a copy of a sequence and return the new handle. "
@@ -117,7 +153,7 @@ static AddIn xai_sequence_add(
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the sum of two sequences. ")
     .Documentation(
         L"Return a handle to the sum of two sequences. "
@@ -146,7 +182,7 @@ static AddIn xai_sequence_sub(
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the difference of two sequences. ")
     .Documentation(
         L"Return a handle to the difference of two sequences. "
@@ -175,7 +211,7 @@ static AddIn xai_sequence_mul(
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the product of two sequences. ")
     .Documentation(
         L"Return a handle to the product of two sequences. "
@@ -204,7 +240,7 @@ static AddIn xai_sequence_div(
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the quotient of two sequences. ")
     .Documentation(
         L"Return a handle to the quotient of two sequences. "
@@ -237,7 +273,7 @@ static AddIn xai_sequence_concatenate(
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
     .Arg(XLL_HANDLE, L"t", L"is a handle to a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a sequence concatentaing s followed by t.")
     .Documentation(
         L"Return a handle to the concatenation of two sequences. "
@@ -268,7 +304,7 @@ static AddIn xai_sequence_epsilon(
     .Arg(XLL_DOUBLE, L"scale", L"is the scale to use for machine epsilon. Default is 0.")
     .Arg(XLL_LONG, L"min", L"is the minimum number of terms to take. Default is 0.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a sequence that is truncated when x + scale == scale.")
     .Documentation(
         L"The sequence ends when the values are less than machine epsilon relative to scale. "
@@ -296,7 +332,7 @@ static AddIn xai_sequence_factorial(
     .Arg(XLL_DOUBLE, L"x", L"is the number whos factorials form the sequence. Default is 0. ")
     .Arg(XLL_LONG, L"n", L"is the integer increment to use for Pochhammer sequences. Default is 1.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the sequence of factorials 1 = 0!, 1 = 1!, 2 = 2! ...")
     .Documentation(
         L"If n is not 0 then the Pochhammer sequence is returned. "
@@ -315,7 +351,7 @@ static AddIn xai_sequence_iota(
     Function(XLL_HANDLE, L"?xll_sequence_iota", L"XLL.SEQUENCE.IOTA")
     .Arg(XLL_DOUBLE, L"start", L"is the starting value for iota. Default is 0.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the sequence start, start + 1, ...")
     .Documentation(
         L"Return a handle to a counter. "
@@ -332,7 +368,7 @@ static AddIn xai_sequence_list(
     Function(XLL_HANDLE, L"?xll_sequence_list", L"XLL.SEQUENCE.LIST")
     .Arg(XLL_FP, L"array", L"is a array of numbers to use for a sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a sequence of array values.")
     .Documentation(L"Return a handle to a sequence of array values. ")
 );
@@ -356,7 +392,7 @@ static AddIn xai_sequence_power(
     Function(XLL_HANDLE, L"?xll_sequence_power", L"XLL.SEQUENCE.POWER")
     .Arg(XLL_DOUBLE, L"x", L"is the number whos powers form the sequence.")
     .Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return a handle to the sequence 1, x, x^2, ...")
     .Documentation(
         L"Return a handle to the sequence of powers of the number " MATH_(L"x") L". "
@@ -376,7 +412,7 @@ HANDLEX WINAPI xll_sequence_power(double x)
 static AddIn xai_sequence_length(
     Function(XLL_DOUBLE, L"?xll_sequence_length", L"XLL.SEQUENCE.LENGTH")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Return the length of the sequence.")
     .Documentation(
         L"Return  the length of a sequence. "
@@ -400,7 +436,7 @@ double WINAPI xll_sequence_length(HANDLEX h)
 static AddIn xai_sequence_sum(
     Function(XLL_DOUBLE, L"?xll_sequence_sum", L"XLL.SEQUENCE.SUM")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Returns the sum of the sequence.")
 );
 double WINAPI xll_sequence_sum(HANDLEX h)
@@ -423,7 +459,7 @@ static AddIn xai_sequence_take(
     .Arg(XLL_LONG, L"count", L"is then number of items to take from the handle.")
     .Arg(XLL_HANDLE, L"handle", L"is a handle to a sequence.")
 	.Uncalced()
-    .Category(L"XLL")
+    .Category(CATEGORY)
     .FunctionHelp(L"Returns count items from the sequence.")
     .Documentation(
         L"Take elements from a sequence. "

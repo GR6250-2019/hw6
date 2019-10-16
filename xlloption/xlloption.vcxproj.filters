@@ -266,9 +266,6 @@
     <ClCompile Include="xll_probability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="fms_probabilty_beta.t.cpp">
-      <Filter>probability</Filter>
-    </ClCompile>
     <ClCompile Include="fms_probability_constant.t.cpp">
       <Filter>probability</Filter>
     </ClCompile>
@@ -277,6 +274,9 @@
     </ClCompile>
     <ClCompile Include="fms_Hyergeometric.t.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_probability_beta.t.cpp">
+      <Filter>probability</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -210,10 +210,10 @@
     <ClCompile Include="fms_option.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="fms_probability_beta.t.cpp" />
     <ClCompile Include="fms_probability_constant.t.cpp" />
     <ClCompile Include="fms_probability_normal.t.cpp" />
     <ClCompile Include="fms_probability_poisson.t.cpp" />
-    <ClCompile Include="fms_probabilty_beta.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />

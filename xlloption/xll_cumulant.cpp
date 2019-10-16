@@ -10,11 +10,24 @@
 #include "xll_cumulant.h"
 
 #ifndef CATEGORY
-#define CATEGORY L"XLL"
+#define CATEGORY L"Cumulant"
 #endif
 
 using namespace xll;
 using namespace fms::cumulant;
+
+static AddIn xai_cumulant_doc(
+    Document()
+    .Category(CATEGORY)
+    .Documentation(
+        PARA_(
+            L"The cumulant of a random variable X is " kappa_ L"(s) = log E[exp(sX)]. "
+            L"The cumulants are the coefficients of the Taylor series expansion: "
+            kappa_ L"(s) = " Sigma_ SUB_(L"n" ge_ L"1") kappa_ SUB_(L"n") L"s" SUP_(L"n") L"/n!."
+        )
+
+    )
+);
 
 static AddIn xai_cumulant(
     Function(XLL_DOUBLE, L"?xll_cumulant", L"XLL.CUMULANT")
