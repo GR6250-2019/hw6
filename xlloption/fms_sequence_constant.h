@@ -8,7 +8,7 @@ namespace fms::sequence {
     class constant {
         X x;
      public:
-        constant(X x)
+        constant(const X& x)
             : x(x)
         { }
         const auto operator<=>(const constant&) const = default;
@@ -24,7 +24,6 @@ namespace fms::sequence {
         {
             return *this;
         }
-
     };
 
 }

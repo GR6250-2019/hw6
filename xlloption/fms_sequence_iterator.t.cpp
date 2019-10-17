@@ -7,18 +7,20 @@ using namespace fms::sequence;
 
 int test_sequence_iterator()
 {
-    std::vector<int> v = { 1, 2, 3 };
-    auto i = make_iterator(v);
-    assert(i);
-    assert(*i == 1);
-    ++i;
-    assert(i);
-    assert(*i == 2);
-    ++i;
-    assert(i);
-    assert(*i == 3);
-    ++i;
-    assert(!i);
+    {
+        std::vector<int> v = { 1, 2, 3 };
+        auto i = make_iterator(v);
+        assert(i);
+        assert(*i == 1);
+        ++i;
+        assert(i);
+        assert(*i == 2);
+        ++i;
+        assert(i);
+        assert(*i == 3);
+        ++i;
+        assert(!i);
+    }
     {
         std::string s("ab");
         auto ss = make_iterator(s);

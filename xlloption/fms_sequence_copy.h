@@ -1,4 +1,4 @@
-// fms_sequence_copy.h - Copy one sequence to another and return number copied.
+// fms_sequence_copy.h - Copy one sequence to another and return the number copied.
 #pragma once
 
 namespace fms::sequence {

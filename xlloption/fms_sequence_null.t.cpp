@@ -1,6 +1,7 @@
 // fms_sequence_null.cpp - Zero terminated sequence.
 #include <cassert>
 #include "fms_sequence_null.h"
+#include "fms_sequence_equal.h"
 #include "fms_sequence_length.h"
 #include "fms_sequence_list.h"
 
@@ -12,6 +13,15 @@ int test_fms_sequence_null()
     {
         X x[] = { 1, 2, 0 };
         auto s = null(x);
+        auto s2(s);
+        s = s2;
+        assert(equal(s, s2));
+        assert(s == s2);
+        assert(!(s != s2));
+        assert(s <= s2);
+        assert(!(s < s2));
+        assert(s >= s2);
+        assert(!(s > s2));
         assert(2 == length(s));
         assert(s);
         assert(*s == 1);

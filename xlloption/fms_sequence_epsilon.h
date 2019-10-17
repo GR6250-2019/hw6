@@ -1,4 +1,5 @@
 // fms_sequence_epsilon.h - terminate at machine epsilon
+// ??? replace min by skip: the number of consecutive epsilons to ignore.
 #pragma once
 #include <compare>
 #include <limits>

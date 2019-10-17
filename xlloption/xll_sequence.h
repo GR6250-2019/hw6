@@ -54,16 +54,14 @@ namespace xll {
         }
     };
 
-    // Copies of a sequence.
+    // Manage the lifetime of a sequence.
     template<class X = double>
     class sequence_copy {
         sequence<X>* ps;
-    public:
-        
+    public:        
         sequence_copy(const sequence<X>& s)
             : ps(s.clone())
-        { }
-        
+        { }    
         sequence_copy(const sequence_copy& s)
             : ps(s.ps->clone())
         { }

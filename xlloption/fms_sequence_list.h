@@ -1,5 +1,6 @@
 // fms_sequence_list.h - sequence from initializer list
 #pragma once
+#include <compare>
 #include <initializer_list>
 #include <vector>
 
@@ -19,6 +20,7 @@ namespace fms::sequence {
         list(size_t n, const X* s)
             : s(s, s + n), n(0)
         { }
+        const auto operator<=>(const list&) const = default;
         size_t size() const
         {
             return s.size();

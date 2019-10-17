@@ -28,6 +28,8 @@ namespace fms::sequence {
             return *this;
         }
     };
+
+    // Prepend an item to a sequence.
     template<class S, class X = value_type<S>>
     inline auto cons(X x, S s)
     {

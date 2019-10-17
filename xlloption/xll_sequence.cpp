@@ -27,7 +27,7 @@ static AddIn xai_sequence(
             L"respect the Zen of Excel. "
         )
         PARA_(
-            L"Create sequences with " C_(L"FACTORIAL") L", " C_(L"IOTA") L", " C_(L"LIST") L", and " C_(L"POWER") L". "
+            L"Create sequences with " C_(L"CONSTANT") L", " C_(L"FACTORIAL") L", " C_(L"IOTA") L", " C_(L"LIST") L", and " C_(L"POWER") L". "
             L"Combine sequences with " C_(L"ADD") L", " C_(L"SUB") L", " C_(L"MUL") L", and " C_(L"DIV") L" to perform "
             L"arithmetic operations. "
             L"Use " C_(L"CONCATENATE") L" to combine one sequence with another. "
@@ -290,34 +290,57 @@ HANDLEX WINAPI xll_sequence_concatenate(HANDLEX s, HANDLEX t)
         handle<sequence<>> u(new sequence_impl(concatenate(sequence_copy(*s_), sequence_copy(*t_))));
         u_ = u.get();
     }
+
     catch (const std::exception & ex) {
         XLL_ERROR(ex.what());
     }
 
     return u_;
 }
+static AddIn xai_sequence_constant(
+    Function(XLL_HANDLE, L"?xll_sequence_constant", L"XLL.SEQUENCE.CONSTANT")
+    .Arg(XLL_DOUBLE, L"c", L"is the value of the sequence.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return a sequence that is constant. ")
+    .Documentation(
+        L"Return a handle to a sequence that is constant. "
+    )
+);
+HANDLEX WINAPI xll_sequence_constant(double c)
+{
+#pragma XLLEXPORT
+        return handle<sequence<>>(new sequence_impl(constant(c))).get();
+ }
 
 
 static AddIn xai_sequence_epsilon(
     Function(XLL_HANDLE, L"?xll_sequence_epsilon", L"XLL.SEQUENCE.EPSILON")
     .Arg(XLL_HANDLE, L"s", L"is a handle to a sequence.")
-    .Arg(XLL_DOUBLE, L"scale", L"is the scale to use for machine epsilon. Default is 0.")
+    .Arg(XLL_DOUBLE, L"scale", L"is the scale to use for machine epsilon. Default is 1.")
     .Arg(XLL_LONG, L"min", L"is the minimum number of terms to take. Default is 0.")
     .Uncalced()
     .Category(CATEGORY)
     .FunctionHelp(L"Return a sequence that is truncated when x + scale == scale.")
     .Documentation(
         L"The sequence ends when the values are less than machine epsilon relative to scale. "
+        L"Use scale < 0 to terminate at floating point 0. "
     )
 );
-HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double one, LONG min)
+HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double scale, LONG min)
 {
 #pragma XLLEXPORT
     handlex s_;
 
     try {
+        if (scale == 0) {
+            scale = 1;
+        }
+        else if (scale < 0) {
+            scale = 0;
+        }
         handle<sequence<>> h_(h);
-        handle<sequence<>> s(new sequence_impl(epsilon(sequence_copy(*h_), one, min)));
+        handle<sequence<>> s(new sequence_impl(epsilon(sequence_copy(*h_), scale, min)));
         s_ = s.get();
     }
     catch (const std::exception & ex) {
@@ -484,9 +507,9 @@ _FP12* WINAPI xll_sequence_take(LONG n, HANDLEX h)
         }
         
         result.resize(n, 1);
-        LONG m = (LONG)copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin());
+        RW m = static_cast<RW>(copy(take(n, sequence_copy(*handle<sequence<>>(h))), result.begin()));
         if (m < n) {
-            result.resize(RW(m), 1);
+            result.resize(m, 1);
         }
     }
     catch (const std::exception & ex) {

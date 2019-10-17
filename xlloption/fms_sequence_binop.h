@@ -12,7 +12,7 @@ namespace fms::sequence {
         S s;
         T t;
     public:
-        binop(S s, T t)
+        binop(const S& s, const T& t)
             : s(s), t(t)
         { }
         const auto operator<=>(const binop&) const = default;

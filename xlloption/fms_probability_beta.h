@@ -15,8 +15,7 @@ namespace fms::probability {
 	public:
 		Beta(const X& alpha, const X& beta)
 			: alpha(alpha), beta(beta), Bab(exp(lgamma(alpha) + lgamma(beta) - lgamma(alpha + beta)))
-		{
-		}
+		{ }
 		X pdf(const X& x) const
 		{
 			if (x <= 0 || x >= 1) {
