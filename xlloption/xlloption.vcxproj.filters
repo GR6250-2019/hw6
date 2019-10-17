@@ -156,6 +156,12 @@
     <ClInclude Include="fms_Hypergeometric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="fms_sequence_pair.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
+    <ClInclude Include="fms_sequence_back.h">
+      <Filter>sequence</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="fms_Hermite.t.cpp">
@@ -277,6 +283,12 @@
     </ClCompile>
     <ClCompile Include="fms_probability_beta.t.cpp">
       <Filter>probability</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_pair.t.cpp">
+      <Filter>sequence</Filter>
+    </ClCompile>
+    <ClCompile Include="fms_sequence_back.t.cpp">
+      <Filter>sequence</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

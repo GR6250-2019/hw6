@@ -1,4 +1,6 @@
 // fms_sequence_cache.h - Cache a sequence
+// Turns a forward iterator into an output iterator.
+// ??? fms_sequence_output
 #pragma once
 #include <compare>
 #include <vector>

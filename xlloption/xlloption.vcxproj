@@ -172,6 +172,7 @@
     <ClInclude Include="fms_sequence_length.h" />
     <ClInclude Include="fms_sequence_list.h" />
     <ClInclude Include="fms_sequence_null.h" />
+    <ClInclude Include="fms_sequence_pair.h" />
     <ClInclude Include="fms_sequence_pointer.h" />
     <ClInclude Include="fms_sequence_power.h" />
     <ClInclude Include="fms_sequence_reverse.h" />
@@ -183,6 +184,7 @@
     <ClInclude Include="fms_sequence_item.h" />
     <ClInclude Include="fms_sequence_unique.h" />
     <ClInclude Include="fms_Touchard.h" />
+    <ClInclude Include="fms_sequence_back.h" />
     <ClInclude Include="xlloption.h" />
     <ClInclude Include="xll_cumulant.h" />
     <ClInclude Include="xll_probability.h" />
@@ -215,6 +217,7 @@
     <ClCompile Include="fms_probability_normal.t.cpp" />
     <ClCompile Include="fms_probability_poisson.t.cpp" />
     <ClCompile Include="fms_sequence_apply.t.cpp" />
+    <ClCompile Include="fms_sequence_back.t.cpp" />
     <ClCompile Include="fms_sequence_binop.t.cpp" />
     <ClCompile Include="fms_sequence_cache.t.cpp" />
     <ClCompile Include="fms_sequence_choose.t.cpp" />
@@ -237,6 +240,7 @@
     <ClCompile Include="fms_sequence_iterator.t.cpp" />
     <ClCompile Include="fms_sequence_list.t.cpp" />
     <ClCompile Include="fms_sequence_null.t.cpp" />
+    <ClCompile Include="fms_sequence_pair.t.cpp" />
     <ClCompile Include="fms_sequence_reverse.t.cpp" />
     <ClCompile Include="fms_sequence_take.t.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>

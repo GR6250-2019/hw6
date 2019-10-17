@@ -20,7 +20,7 @@ static AddIn xai_sequence(
             L"It terminates when " C_(L"BOOL") L" returns false. "
             L"The current value is " C_(L"STAR") L". "
             L"The sequence moves to the next value when " C_(L"INCR") L" is called. "
-            L"The latter is a dangerous functions to call in Excel "
+            L"The latter is a dangerous function to call in Excel "
             L"because it modifies the underlying sequence "
             L"and breaks the Excel Zen of being purely functional. "
             L"Other sequence functions make copies of the sequence and "
