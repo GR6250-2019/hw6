@@ -35,7 +35,7 @@ We have $dG(x) = ((x + a)^{\alpha - 1} \alpha b/a^\alpha 1_{[-a,0)}(x) + (1 - b)
 &= (-1)^{n-2} \int_0^a x^{n-2} (-x + a)^{\alpha - 1} \, dx \\
 &= (-1)^{n-2} \int_0^1 (ax)^{n-2} (-ax + a)^{\alpha - 1} a\, dx \\
 &= (-1)^{n-2} a^{n-1 + \alpha - 1}\int_0^1 x^{n-2} (1 - x)^{\alpha - 1} \, dx \\
-&= (-1)^{n-2} a^{n-2} + \alpha}B(n-1,\alpha) \\
+&= (-1)^{n-2} a^{n-2 + \alpha}B(n-1,\alpha) \\
 \end{align*}
 where $B(\alpha,\beta) = \Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha + \beta)$ is the Beta function
 and $\Gamma(\alpha) = \int_0^\infty x^{\alpha-1} e^{-x}\,dx$ is the Gamma function.
