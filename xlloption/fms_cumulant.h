@@ -28,7 +28,7 @@ namespace fms::cumulant {
         { }
         operator bool() const
         {
-            return true; // Assumes all cumulants exist.
+            return k;
         }
         // kappa^{X_}_n = sum_{k >= 0} kappa_{n + k} s^k/k!
         S operator*() const
@@ -37,8 +37,9 @@ namespace fms::cumulant {
             using fms::sequence::epsilon;
             using fms::sequence::power;
             using fms::sequence::factorial;
-            K k2(k);
-            auto s2 = *++k2; // variance
+            //K k2(k);
+            //auto s2 = *++k2; // variance
+            S s2 = 1;
 
             return sum(epsilon(k * power(s) / factorial<S>{}, s2, 2));
         }

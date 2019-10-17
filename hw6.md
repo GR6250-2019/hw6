@@ -27,18 +27,34 @@ It is 0 for $x < a$, smoothly increases to $b$ at $x = 0$, then jumps to 1 for $
 
 You should plot this and note how it is a pertubation of the standard normal distribution.
 
-We have $dG(x) = ((x + a)^{\alpha - 1} b/a^{\alpha - 1} + (1 - b) \delta_0(x))\,dx$
+We have $dG(x) = ((x + a)^{\alpha - 1} \alpha b/a^\alpha 1_{[-a,0)}(x) + (1 - b) \delta_0(x))\,dx$
 
 \begin{align*}
 \int_{-a}^0 x^{n-2} (x + a)^{\alpha - 1} \, dx
 &= \int_{a}^0 (-x)^{n-2} (-x + a)^{\alpha - 1} \, (-dx) \\
 &= (-1)^{n-2} \int_0^a x^{n-2} (-x + a)^{\alpha - 1} \, dx \\
 &= (-1)^{n-2} \int_0^1 (ax)^{n-2} (-ax + a)^{\alpha - 1} a\, dx \\
-&= (-1)^{n-2} a^{n-2 + 2}\int_0^1 x^{n-2} (1 - x)^{\alpha - 1} \, dx \\
-&= (-1)^{n-2} a^{n}B(n-1,\alpha) \\
+&= (-1)^{n-2} a^{n-1 + \alpha - 1}\int_0^1 x^{n-2} (1 - x)^{\alpha - 1} \, dx \\
+&= (-1)^{n-2} a^{n-2} + \alpha}B(n-1,\alpha) \\
 \end{align*}
-where $B(a,b) = \Gamma(a)\Gamma(b)/\Gamma(a + b)$ is the Beta function
-and $\Gamma(a) = \int_0^\infty x^{a-1} e^{-x}\,dx$ is the Gamma function.
-If $a$ is a positive integer then $\Gamma(a) = (a - 1)!$.
+where $B(\alpha,\beta) = \Gamma(\alpha)\Gamma(\beta)/\Gamma(\alpha + \beta)$ is the Beta function
+and $\Gamma(\alpha) = \int_0^\infty x^{\alpha-1} e^{-x}\,dx$ is the Gamma function.
+If $\alpha$ is a positive integer then $\Gamma(\alpha) = (\alpha - 1)!$.
+This can be seen from the fact $\Gamma(0) = 1$ and $\Gamma(\alpha + 1) = \alpha\Gamma(\alpha)$.
+
+This shows the second cumulant is $\kappa_2 = b\alpha B(1,\alpha) + (1 - b) = 1$
+since $B(1,\alpha) = \Gamma(1)\Gamma(\alpha)/\Gamma(\alpha + 1) = 1/\alpha$.
+But we already know that since $\kappa_2 = \int_{-\infty}^\infty\,dG = G(\infty) - G(-\infty) = 1$.
+
+For $n > 2$ we have $\kappa_n = \alpha (-a)^{n - 2} b B(n - 1,\alpha)$.
+We have the recurrence $\kappa_{n+1} = -\kappa_n a(n - 1)/(n - 1 + alpha)$.
 
 
+## Hermite Polynomials
+
+$H_n(x) = (-1)^{n} \phi(x)^{-1}(d/dx)^n \phi(x)$, where $\phi(x) = exp(-x^2/2)$.
+
+
+$H_n(0) = (-1)^{n/2} (n-1)!!$ for $n$ even.
+
+$n!! = 2^{n/2} (n/2)!$ for $n$ even.

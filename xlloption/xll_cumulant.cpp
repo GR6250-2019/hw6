@@ -209,3 +209,63 @@ HANDLEX WINAPI xll_cumulant_sum(const _FP12* cs)
     return result;
 }
 
+class finite_cumulant {
+    std::vector<double> kappa;
+    size_t n; // current index
+public:
+    finite_cumulant(size_t n, const double* kappa)
+        : kappa(kappa, kappa + n), n(0)
+    { }
+    operator bool() const
+    {
+        return n < kappa.size();
+    }
+    double operator*() const
+    {
+        return kappa[n];
+    }
+    finite_cumulant& operator++()
+    {
+        if (n < kappa.size()) {
+            ++n;
+        }
+
+        return *this;
+    }
+    double operator()(double s) const
+    {
+        using fms::sequence::sum;
+        using fms::sequence::take;
+        using fms::sequence::power;
+        using fms::sequence::factorial;
+
+        return sum(take(kappa.size(), &kappa[0]) * power(s,s) / factorial(1.));
+    }
+};
+
+static AddIn xai_cumulant_finite(
+    Function(XLL_HANDLE, L"?xll_cumulant_finite", L"XLL.CUMULANT.FINITE")
+    .Arg(XLL_FP, L"kappa", L"is an array cumulants.")
+    .Uncalced()
+    .Category(CATEGORY)
+    .FunctionHelp(L"Return a handle to a finite cumulant.")
+    .Documentation(
+        L"Return a handle to a finite cumulant. "
+    )
+);
+HANDLEX WINAPI xll_cumulant_finite(const _FP12* pk)
+{
+#pragma XLLEXPORT
+    handlex result;
+
+    try {
+
+        result = handle<sequence<>>(new cumulant_impl(finite_cumulant(size(*pk), pk->array))).get();
+    }
+    catch (const std::exception & ex) {
+        XLL_ERROR(ex.what());
+    }
+
+    return result;
+}
+
