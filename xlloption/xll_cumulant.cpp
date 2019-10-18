@@ -239,7 +239,8 @@ public:
         using fms::sequence::power;
         using fms::sequence::factorial;
 
-        return sum(take(kappa.size(), &kappa[0]) * power(s,s) / factorial(1.));
+		// kappa(s) = sum_{n>=1} kappa_n s^n/n!
+        return sum(take((long)kappa.size(), &kappa[0]) * power(s,s) / factorial(1.));
     }
 };
 

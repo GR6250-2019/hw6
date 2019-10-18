@@ -324,7 +324,7 @@ static AddIn xai_sequence_epsilon(
     .FunctionHelp(L"Return a sequence that is truncated when x + scale == scale.")
     .Documentation(
         L"The sequence ends when the values are less than machine epsilon relative to scale. "
-        L"Use scale < 0 to terminate at floating point 0. "
+        L"Use scale &lt; 0 to terminate at floating point 0. "
     )
 );
 HANDLEX WINAPI xll_sequence_epsilon(HANDLEX h, double scale, LONG min)
