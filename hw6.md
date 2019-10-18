@@ -58,3 +58,23 @@ $H_n(x) = (-1)^{n} \phi(x)^{-1}(d/dx)^n \phi(x)$, where $\phi(x) = exp(-x^2/2)$.
 $H_n(0) = (-1)^{n/2} (n-1)!!$ for $n$ even.
 
 $n!! = 2^{n/2} (n/2)!$ for $n$ even.
+
+The Hankel matrix $M = [\kappa_{i+j}]_{i,j\ge 2}$ must be positive definite.
+This is true if and only if the principal submatrices
+$[\kappa_{i+j}]_{i,j\ge 2}^{i,j\le n}$ have positive determinant for all $n$.
+
+We assume $\kappa_2 = 1$.
+
+The 2 by 2 determinant being positive gives $\kappa_4 - \kappa_3^2 \ge 0$ we set $\kappa_4 = \alpha\kappa_3^2$
+where $\alpha\ge 1$.
+
+The 3 by 3 determinant being positive gives
+\begin{align*}
+\kappa_4\kappa_6 + 2\kappa_3\kappa_5\kappa_4 - \kappa_4^3 - \kappa_5^2 - \kappa_6\kappa_3^2 &\ge0\\
+\alpha\kappa_3^2\kappa_6 + 2\alpha\kappa_3^3\kappa_5 - \alpha^3\kappa_3^6 - \kappa_5^2 - \kappa_6\kappa_3^2 &\ge0\\
+(\alpha\kappa_3^2 - \kappa_3^2)\kappa_6 + 2\alpha\kappa_3^3\kappa_5 - \alpha^3\kappa_3^6 - \kappa_5^2 &\ge0\\
+(\alpha\kappa_3^2 - \kappa_3^2)\kappa_6 - (\kappa_5 - \alpha\kappa_3^3)^2 + \alpha^2\kappa_3^6 - \alpha^3\kappa_3^6 &\ge0\\
+(\alpha - 1)\kappa_3^2\kappa_6 - (\kappa_5 - \alpha\kappa_3^3)^2 + (\alpha^2 - \alpha^3)\kappa_3^6  &\ge0\\
+\kappa_6 &\ge [(\kappa_5 - \alpha\kappa_3^3)^2 - (\alpha^2 - \alpha^3)\kappa_3^6]/(\alpha - 1)\kappa_3^2   &\ge0\\
+\kappa_6 &\ge [(\kappa_5 - \alpha\kappa_3^3)^2/(\alpha - 1)\kappa_3^2 + \alpha^2\kappa_3^4\\
+\end{align*}
