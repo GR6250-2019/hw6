@@ -1,10 +1,12 @@
 // fms_sequence_pair.h - Return pairs from two sequences. 
 #pragma once
 #include <tuple>
+#include "fms_sequence_traits.h"
+#include "fms_sequence_list.h"
 
 namespace fms::sequence {
 
-    template<class S, class T>
+    template<class S, class T, class X = common_value_type<S,T>>
     class pair {
         S s;
         T t;
@@ -19,7 +21,7 @@ namespace fms::sequence {
         }
         auto operator*() const
         {
-            return std::pair{ *s, *t };
+            return list<X>({ *s, *t });
         }
         pair& operator++()
         {

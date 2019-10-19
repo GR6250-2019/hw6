@@ -1,6 +1,8 @@
 // fms_sequence_pair.t.cpp - Test sequences of pairs.
 #include <cassert>
 #include "fms_sequence_pair.h"
+#include "fms_sequence_equal.h"
+#include "fms_sequence_list.h"
 #include "fms_sequence_iota.h"
 
 using namespace fms::sequence;
@@ -13,12 +15,12 @@ int test_sequence_pair()
 
     auto p = pair(i0, i1);
     assert(p);
+
     auto p0 = std::pair(X(0), Y(0));
-    assert(p0 == *p);
+    assert(equal(list<X>({ 0, 0 }), *p));
 
     ++p;
-    auto p1 = std::pair(X(1), Y(1));
-    assert(p1 == *p);
+    assert(equal(list<X>({ 1, 1 }), *p));
 
     return 0;
 }

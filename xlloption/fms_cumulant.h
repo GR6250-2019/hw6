@@ -1,5 +1,4 @@
-// fms_cumulant.h - A cumulant is a sequence of cumulants, operator() for the cumulant
-// and _() for the sequence of cumulants
+// fms_cumulant.h - A cumulant is a sequence of cumulants and operator() for the cumulant
 #pragma once
 #include <cmath>
 #include <stdexcept>
@@ -19,7 +18,7 @@ namespace fms::cumulant {
 
     // Cumulants under the measure P_ with dP_/dP = exp(s X - kappa(s))
     template<class K, class S = value_type<K>>
-    class _ {
+    class _ { // ???Better name???
         K k;
         S s;
     public:
