@@ -59,8 +59,10 @@ $H_n(0) = (-1)^{n/2} (n-1)!!$ for $n$ even.
 
 $n!! = 2^{n/2} (n/2)!$ for $n$ even.
 
+## Hankel Matrix
+
 The Hankel matrix $M = [\kappa_{i+j}]_{i,j\ge 2}$ must be positive definite.
-This is true if and only if the principal submatrices
+This is true if and only if the principal minors
 $[\kappa_{i+j}]_{i,j\ge 2}^{i,j\le n}$ have positive determinant for all $n$.
 
 We assume $\kappa_2 = 1$.
@@ -72,6 +74,6 @@ The 3 by 3 determinant being positive gives
 \kappa_4\kappa_6 + 2\kappa_3\kappa_5\kappa_4 - \kappa_4^3 - \kappa_5^2 - \kappa_6\kappa_3^2 &\ge0 \\
 (\kappa_4 - \kappa_3^2)\kappa_6 - (\kappa_5 - \kappa_3\kappa_4)^2 + \kappa_3^2\kappa_4^2 - \kappa_4^3 &\ge0 \\
 (\kappa_4 - \kappa_3^2)\kappa_6 &\ge (\kappa_5 - \kappa_3\kappa_4)^2 - \kappa_3^2\kappa_4^2 + \kappa_4^3 \\
-(\kappa_4 - \kappa_3^2)\kappa_6 &\ge (\kappa_5 - \kappa_3\kappa_4)^2 + \kappa_4^2(\kappa_4^2 - \kappa_3^2) \\
+(\kappa_4 - \kappa_3^2)\kappa_6 &\ge (\kappa_5 - \kappa_3\kappa_4)^2 + \kappa_4^2(\kappa_4 - \kappa_3^2) \\
 \kappa_6 &\ge (\kappa_5 - \kappa_3\kappa_4)^2/(\kappa_4 - \kappa_3^2) + \kappa_4^2 \\
 \end{align*}
