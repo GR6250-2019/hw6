@@ -1,17 +1,6 @@
 // fms_sequence_flatten.t.cpp - Test flattening sequences.
 #include <cassert>
-#include "fms_sequence_flatten.h"
-#include "fms_sequence_apply.h"
-#include "fms_sequence_cache.h"
-#include "fms_sequence_concatenate.h"
-#include "fms_sequence_copy.h"
-#include "fms_sequence_equal.h"
-#include "fms_sequence_item.h"
-#include "fms_sequence_iterator.h"
-#include "fms_sequence_list.h"
-#include "fms_sequence_constant.h"
-#include "fms_sequence_null.h"
-#include "fms_sequence_skip.h"
+#include "fms_sequence.h"
 
 using namespace fms::sequence;
 
@@ -117,7 +106,16 @@ int test_fms_sequence_flatten()
         copy(fl, std::back_inserter(s));
         assert(s == "a,b");
     }
-
+    {
+        // using pair
+        auto l = null("ab");
+        auto p = pair(constant(','), l);
+        auto f = skip(1, cache(flatten(p)));
+        //!!!infinite loop!!!
+        //std::string s;
+        //copy(f, std::back_inserter(s));
+        //assert(s == "a,b");
+    }
 
     return 0;
 }

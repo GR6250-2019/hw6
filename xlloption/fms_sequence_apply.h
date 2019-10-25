@@ -1,6 +1,8 @@
 // fms_sequence_apply.h - map a function over a sequence
 #pragma once
 #include <compare>
+#include <functional>
+#include "fms_sequence_traits.h"
 
 namespace fms::sequence {
 
